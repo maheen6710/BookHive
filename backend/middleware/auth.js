@@ -8,7 +8,7 @@ const protect = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, "secretkey"); // must match exactly
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // must match exactly
 
     req.user = decoded; // 👈 this puts the seller's id into req.user._id
     next();
