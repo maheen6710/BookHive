@@ -1,0 +1,316 @@
+/* ─── Page ─────────────────────────────────────────── */
+.co-page {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 20px 60px;
+}
+
+.co-heading {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f0a500;
+}
+
+/* ─── Layout ────────────────────────────────────────── */
+.co-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+@media (max-width: 700px) {
+  .co-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .co-page {
+    padding: 0 14px 50px;
+    margin: 20px auto;
+  }
+
+  .co-heading {
+    font-size: 1.3rem;
+  }
+}
+
+/* ─── Shared card style ─────────────────────────────── */
+.co-summary,
+.co-form {
+  background: #12203a;
+  border: 1.5px solid #f0a500;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+/* ─── Section Titles ────────────────────────────────── */
+.co-section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid #f0a50033;
+  color: #f0f0f0;
+}
+
+/* ─── Book Card ─────────────────────────────────────── */
+.co-book-card {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.co-book-cover {
+  width: 85px;
+  height: 115px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 1px solid #f0a50055;
+}
+
+.co-cover-placeholder {
+  width: 85px;
+  height: 115px;
+  background: #1a2f4a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #f0a500;
+  flex-shrink: 0;
+  border: 1px solid #f0a50055;
+}
+
+.co-book-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.co-book-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+
+.co-book-author,
+.co-book-condition,
+.co-book-seller {
+  font-size: 0.85rem;
+  color: #9ab;
+}
+
+.co-book-condition span,
+.co-book-seller span {
+  color: #f0f0f0;
+  font-weight: 600;
+}
+
+/* ─── Price Row ─────────────────────────────────────── */
+.co-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid #f0a50033;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ccc;
+}
+
+.co-price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #4a9eff;
+}
+
+/* ─── Form Fields ───────────────────────────────────── */
+.co-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.co-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.co-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ccc;
+}
+
+.co-field input,
+.co-field textarea,
+.co-field select {
+  padding: 10px 14px;
+  border: 1.5px solid #1e3a5f;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.2s, background 0.2s;
+  font-family: inherit;
+  background: #0d1b2e;
+  color: #f0f0f0;
+}
+
+.co-field input::placeholder,
+.co-field textarea::placeholder {
+  color: #556;
+}
+
+.co-field input:focus,
+.co-field textarea:focus,
+.co-field select:focus {
+  border-color: #f0a500;
+  background: #0d1b2e;
+}
+
+.co-field select option {
+  background: #0d1b2e;
+  color: #f0f0f0;
+}
+
+/* ─── Message ───────────────────────────────────────── */
+.co-message {
+  font-size: 0.9rem;
+  color: #ff6b6b;
+  font-weight: 500;
+}
+
+/* ─── Confirm Button (matches Sign Up blue) ─────────── */
+.co-btn-confirm {
+  padding: 12px;
+  background: #1a6fd4;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.co-btn-confirm:hover    { background: #155bb5; }
+.co-btn-confirm:disabled { background: #1a4a80; cursor: not-allowed; opacity: 0.7; }
+
+/* ─── Go Back Button ────────────────────────────────── */
+.co-btn-back {
+  background: transparent;
+  border: 1.5px solid #1e3a5f;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #9ab;
+  transition: border-color 0.2s, color 0.2s;
+  font-family: inherit;
+}
+
+.co-btn-back:hover {
+  border-color: #f0a500;
+  color: #f0a500;
+}
+
+/* ─── Loading ───────────────────────────────────────── */
+.co-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 12px;
+  color: #9ab;
+}
+
+.co-spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid #1e3a5f;
+  border-top-color: #f0a500;
+  border-radius: 50%;
+  animation: co-spin 0.8s linear infinite;
+}
+
+@keyframes co-spin { to { transform: rotate(360deg); } }
+
+/* ─── Not Found ─────────────────────────────────────── */
+.co-notfound {
+  text-align: center;
+  padding: 60px 20px;
+  color: #9ab;
+}
+
+.co-notfound button {
+  margin-top: 12px;
+  padding: 8px 20px;
+  border: 1.5px solid #f0a500;
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  color: #f0a500;
+  font-family: inherit;
+}
+
+/* ─── Buy Now (BookProductPage) ─────────────────────── */
+.bpp-btn-buy {
+  width: 100%;
+  padding: 12px;
+  background: #1a6fd4;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+
+.bpp-btn-buy:hover    { background: #155bb5; }
+.bpp-btn-buy:disabled { background: #1a4a80; cursor: not-allowed; opacity: 0.7; }
+
+/* ─── Mobile tweaks ─────────────────────────────────── */
+@media (max-width: 480px) {
+  .co-summary,
+  .co-form {
+    padding: 18px 14px;
+  }
+
+  .co-book-cover,
+  .co-cover-placeholder {
+    width: 70px;
+    height: 95px;
+  }
+
+  .co-btn-confirm,
+  .co-btn-back {
+    font-size: 0.95rem;
+    padding: 11px;
+  }
+
+  .co-price {
+    font-size: 1.1rem;
+  }
+}
+.co-phone-error {
+  font-size: 0.8rem;
+  color: #ff4d4d;
+  margin-top: 2px;
+  font-weight: 500;
+}

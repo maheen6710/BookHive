@@ -1,0 +1,182 @@
+/* ===== CSS Variables (Dark Animetic Theme) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Nunito:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Core blues replacing orange */
+  --blue: #3b82f6;
+  --blue-bright: #60a5fa;
+  --blue-glow: #2563eb;
+  --blue-hover: #1d4ed8;
+
+  /* Golden hover effects */
+  --gold: #f59e0b;
+  --gold-bright: #fbbf24;
+  --gold-glow: #d97706;
+
+  /* Dark backgrounds */
+  --bg-void: #020617;         /* deepest black */
+  --bg-deep: #0a0f1e;         /* main bg navy */
+  --bg-surface: #0f172a;      /* card/panel bg */
+  --bg-elevated: #1e293b;     /* hover/active surface */
+  --bg-overlay: #334155;      /* borders, dividers */
+
+  /* Text */
+  --white: #f8fafc;
+  --text-primary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  /* Borders */
+  --border: #1e293b;
+  --border-bright: #334155;
+
+  /* Shadows — now glow-based */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 8px rgba(59, 130, 246, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 40px rgba(59, 130, 246, 0.12);
+  --glow-blue: 0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(59, 130, 246, 0.15);
+  --glow-gold: 0 0 20px rgba(245, 158, 11, 0.5), 0 0 40px rgba(245, 158, 11, 0.2);
+
+  --radius: 10px;
+  --radius-sm: 6px;
+
+  /* Legacy compat aliases (so you don't have to rename everything) */
+  --orange: var(--blue);
+  --orange-hover: var(--blue-hover);
+  --gray-bg: var(--bg-elevated);
+  --text-dark: var(--text-primary);
+}
+
+/* ===== Reset & Base ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Nunito", "Segoe UI", sans-serif;
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(59, 130, 246, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  background-color: transparent;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  color-scheme: dark;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
+  opacity: 1;
+}
+
+/* Kill browser autofill white flash globally */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+select option {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* ===== Shared / Reusable ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ===== Primary Button — Electric Blue with glow ===== */
+.btn-orange {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-glow) 100%);
+  color: #ffffff;
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-family: "Nunito", sans-serif;
+  letter-spacing: 0.3px;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease, color 0.3s ease;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-orange:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5), 0 0 40px rgba(245, 158, 11, 0.2);
+  transform: translateY(-2px);
+  color: #0f172a;
+}
+
+/* ===== Outline Button ===== */
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-bright);
+  color: var(--text-muted);
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+/* ===== Section Title ===== */
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+  font-family: "Cinzel", serif;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, var(--white) 0%, var(--blue-bright) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

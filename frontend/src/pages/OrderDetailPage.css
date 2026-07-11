@@ -1,0 +1,188 @@
+.od-page {
+  max-width: 860px;
+  margin: 36px auto;
+  padding: 0 20px 60px;
+}
+
+.od-back {
+  background: none;
+  border: 1.5px solid #1e3a5f;
+  color: #9ab;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  margin-bottom: 20px;
+  transition: border-color 0.2s, color 0.2s;
+  font-family: inherit;
+}
+.od-back:hover { border-color: #f0a500; color: #f0a500; }
+
+.od-heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #f0a500;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Cinzel", serif;
+}
+
+.od-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .od-layout { grid-template-columns: 1fr; }
+}
+
+.od-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 24px;
+}
+
+.od-card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  font-family: "Cinzel", serif;
+}
+
+/* Book row */
+.od-book-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.od-cover {
+  width: 70px;
+  height: 95px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.od-cover-placeholder {
+  width: 70px;
+  height: 95px;
+  background: #1a2f4a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #f0a500;
+  flex-shrink: 0;
+}
+
+.od-book-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.od-book-price {
+  font-size: 0.9rem;
+  color: #4a9eff;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* Info grid */
+.od-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.od-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.od-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  flex-shrink: 0;
+}
+
+.od-value {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  text-align: right;
+}
+
+.od-id {
+  font-size: 0.72rem;
+  color: #556;
+  word-break: break-all;
+  text-align: right;
+}
+
+.od-price {
+  color: #4ade80;
+  font-weight: 700;
+  font-size: 1rem !important;
+}
+
+/* Loading */
+.od-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 12px;
+  color: #9ab;
+}
+
+.od-spinner {
+  width: 34px;
+  height: 34px;
+  border: 4px solid #1e3a5f;
+  border-top-color: #f0a500;
+  border-radius: 50%;
+  animation: od-spin 0.8s linear infinite;
+}
+
+@keyframes od-spin { to { transform: rotate(360deg); } }
+
+.od-notfound {
+  text-align: center;
+  padding: 60px 20px;
+  color: #9ab;
+}
+
+.od-notfound button {
+  margin-top: 12px;
+  padding: 8px 20px;
+  border: 1.5px solid #f0a500;
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  color: #f0a500;
+  font-family: inherit;
+}
+
+/* badge-red for cancelled */
+.badge-red {
+  background: rgba(220,38,38,0.15);
+  color: #f87171;
+  border: 1px solid rgba(248,113,113,0.2);
+}

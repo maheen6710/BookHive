@@ -1,0 +1,135 @@
+/* ===== ConversationList.css ===== */
+
+.cl-page {
+  max-width: 720px;
+  margin: 30px auto;
+  padding: 0 16px;
+}
+
+.cl-header {
+  margin-bottom: 24px;
+}
+
+.cl-header h2 {
+  color: #e2e8f0;
+  font-size: 1.5rem;
+  margin: 0 0 4px;
+}
+
+.cl-subtitle {
+  color: #475569;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.cl-loading,
+.cl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40vh;
+  color: #475569;
+  gap: 10px;
+}
+
+.cl-empty span {
+  font-size: 2.5rem;
+}
+
+.cl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cl-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #111827;
+  border: 1px solid #1e2a3a;
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+
+.cl-item:hover {
+  border-color: #f59e0b55;
+  background: #131c2e;
+}
+
+.cl-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #0d1117;
+  flex-shrink: 0;
+}
+
+.cl-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cl-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.cl-name {
+  font-weight: 600;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+.cl-time {
+  font-size: 0.72rem;
+  color: #475569;
+  flex-shrink: 0;
+}
+
+.cl-book {
+  margin: 2px 0 4px;
+  font-size: 0.78rem;
+  color: #f59e0b;
+  opacity: 0.75;
+}
+
+.cl-last-msg {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+.cl-delete-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #475569;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.cl-delete-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+}

@@ -1,0 +1,145 @@
+.home-page { padding-bottom: 40px; }
+
+.section {
+  padding: 36px 16px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Countdown */
+.countdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+.countdown-label { color: var(--text-muted); }
+.countdown-blocks {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.countdown-blocks span:not(.sep) {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-bright);
+  color: var(--blue-bright);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  min-width: 32px;
+  text-align: center;
+  font-family: "Cinzel", serif;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
+  animation: pulseBlue 2s infinite alternate;
+}
+
+@keyframes pulseBlue {
+  from { box-shadow: 0 0 6px rgba(59, 130, 246, 0.2); }
+  to   { box-shadow: 0 0 14px rgba(59, 130, 246, 0.5); }
+}
+
+.sep { color: var(--blue-bright); font-weight: 700; }
+
+/* Books grid */
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+/* Categories grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+.category-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius);
+  padding: 20px 12px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(245, 158, 11, 0.2);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.cat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  font-size: 1.25rem;
+  transition: box-shadow 0.25s ease;
+}
+.category-card:hover .cat-icon {
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+}
+
+/* Dark versions of category icon colors */
+.cat-blue   { background: rgba(37,99,235,0.2);  color: #60a5fa; }
+.cat-green  { background: rgba(22,163,74,0.2);  color: #4ade80; }
+.cat-purple { background: rgba(124,58,237,0.2); color: #a78bfa; }
+.cat-yellow { background: rgba(202,138,4,0.2);  color: #fbbf24; }
+.cat-red    { background: rgba(220,38,38,0.2);  color: #f87171; }
+.cat-orange { background: rgba(59,130,246,0.2); color: #60a5fa; }
+
+/* Login cards (role selector) */
+.login-cards {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.login-card {
+  flex: 1;
+  padding: 24px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-bright);
+  color: var(--text-muted);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.3);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.seller {
+  border-left: 3px solid var(--blue);
+}
+
+.buyer {
+  border-left: 3px solid var(--blue-bright);
+}
+
+.seller:hover {
+  border-left-color: var(--gold);
+}
+
+.buyer:hover {
+  border-left-color: var(--gold-bright);
+}

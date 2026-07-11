@@ -1,0 +1,35 @@
+/* ============================================
+   BookHive — Navy + Gold Theme Variables
+   Import this in your main index.css or App.css
+   ============================================ */
+
+:root {
+  /* --- Core palette --- */
+  --navy-darkest:  #0f1d2e;   /* deepest bg (hero, footer) */
+  --navy-dark:     #1b2e4b;   /* navbar bg */
+  --navy-mid:      #2d4a7a;   /* hover states, card borders */
+  --navy-light:    #eef1f7;   /* page background */
+  --navy-lighter:  #dce5f0;   /* section dividers, subtle bg */
+
+  --gold:          #d4a017;   /* primary CTA, accents */
+  --gold-hover:    #b8880f;   /* button hover */
+  --gold-light:    #fdefc0;   /* tag/badge bg */
+  --gold-dark:     #7a5c00;   /* tag/badge text */
+
+  --text-heading:  #1b2e4b;   /* all headings */
+  --text-body:     #334866;   /* paragraphs */
+  --text-muted:    #5a7099;   /* labels, secondary info */
+  --text-on-navy:  #e8edf5;   /* text on dark bg */
+  --text-on-gold:  #1b2e4b;   /* text on gold buttons */
+
+  --white:         #ffffff;
+  --border:        #c5d3e8;   /* card borders */
+  --border-hover:  #2d4a7a;   /* on hover */
+
+  --radius-sm:     4px;
+  --radius:        10px;
+  --radius-lg:     14px;
+
+  --shadow-sm:     0 1px 3px rgba(27,46,75,0.08);
+  --shadow-md:     0 4px 12px rgba(27,46,75,0.12);
+}

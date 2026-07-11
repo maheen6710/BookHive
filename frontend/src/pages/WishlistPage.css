@@ -1,0 +1,263 @@
+/* ═══════════════════════════════════════════
+   WishlistPage — dark BookHive theme, OLX-style list
+   ═══════════════════════════════════════════ */
+
+.wl-page {
+  padding: 0;
+}
+
+/* ── header ─────────────────────────────────── */
+.wl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.wl-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wl-title i {
+  color: #f43f5e;
+}
+
+.wl-count {
+  font-size: 0.8rem;
+  color: #475569;
+  background: #1e2437;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* ── list of wishlist items ──────────────────── */
+.wl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── single item row ─────────────────────────── */
+.wl-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #151929;
+  border: 1.5px solid #1e2437;
+  border-radius: 12px;
+  padding: 14px;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.wl-item:hover {
+  border-color: #eab308;
+  transform: translateX(3px);
+}
+
+/* ── cover ───────────────────────────────────── */
+.wl-cover {
+  width: 70px;
+  height: 95px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1e2233;
+  border: 1px solid #2e3350;
+  cursor: pointer;
+}
+
+.wl-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wl-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #2e3350;
+}
+
+/* ── info ────────────────────────────────────── */
+.wl-info {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.wl-book-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wl-book-author {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0 0 8px;
+}
+
+.wl-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.wl-tag {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: #1e2437;
+  color: #64748b;
+}
+
+.wl-condition {
+  background: transparent;
+  font-weight: 600;
+}
+
+.wl-seller {
+  font-size: 0.72rem;
+  color: #475569;
+  margin: 0;
+}
+
+.wl-seller i {
+  color: #3b82f6;
+  margin-right: 4px;
+}
+
+/* ── right: price + buttons ──────────────────── */
+.wl-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.wl-price {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #3b82f6;
+  margin: 0;
+}
+
+.wl-view-btn,
+.wl-remove-btn {
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.wl-view-btn {
+  background: #1e2a45;
+  color: #60a5fa;
+  border: 1px solid #2e3a5a;
+}
+
+.wl-view-btn:hover {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.wl-remove-btn {
+  background: transparent;
+  color: #475569;
+  border: 1px solid #1e2437;
+}
+
+.wl-remove-btn:hover {
+  background: rgba(244, 63, 94, 0.1);
+  color: #f43f5e;
+  border-color: #f43f5e;
+}
+
+/* ── empty state ─────────────────────────────── */
+.wl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.wl-empty i {
+  font-size: 2.5rem;
+  color: #1e2437;
+}
+
+.wl-empty p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.wl-empty small {
+  font-size: 0.78rem;
+  color: #374151;
+}
+
+.wl-browse-btn {
+  margin-top: 6px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.wl-browse-btn:hover {
+  background: #2563eb;
+}
+
+/* ── loading ─────────────────────────────────── */
+.wl-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 50px;
+  color: #475569;
+}
+
+.wl-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #1e2437;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: wl-spin 0.7s linear infinite;
+}
+
+@keyframes wl-spin {
+  to { transform: rotate(360deg); }
+}
