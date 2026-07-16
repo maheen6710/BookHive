@@ -17,6 +17,8 @@ import ConversationList from "./pages/ConversationList";
 import ChatPage from "./pages/ChatPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
+import OrderDetailPage from "./pages/OrderDetailPage";
+
 
 import "./App.css";
 
@@ -96,6 +98,7 @@ function AppContent() {
           <Route path="/buyerdashboard" element={<BuyerDashboard />} />
           <Route path="/messages" element={<ConversationList />} />
           <Route path="/messages/:id" element={<ChatPage />} />
+          <Route path="/order/:orderId" element={<OrderDetailPage />} />
         </Routes>
       </main>
 

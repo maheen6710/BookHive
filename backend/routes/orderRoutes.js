@@ -4,6 +4,7 @@ import {
   placeOrder,
   getBuyerOrders,
   getSellerOrders,
+  getOrderById,
 } from "../controllers/orderController.js";
 
 const router = express.Router();
@@ -11,5 +12,6 @@ const router = express.Router();
 router.post("/",       auth, placeOrder);
 router.get("/my",      auth, getBuyerOrders);
 router.get("/seller",  auth, getSellerOrders);
+router.get("/:orderId", auth, getOrderById);
 
 export default router;

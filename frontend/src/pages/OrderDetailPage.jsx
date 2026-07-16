@@ -43,9 +43,6 @@ export default function OrderDetailPage() {
 
   return (
     <div className="od-page">
-      <button className="od-back" onClick={() => navigate(-1)}>
-        ← Back to Orders
-      </button>
 
       <h2 className="od-heading">
         <i className="fas fa-box-open"></i> Order Details
@@ -132,6 +129,9 @@ export default function OrderDetailPage() {
         </div>
 
       </div>
+      <button className="od-back" onClick={() => navigate(-1)}>
+        ← Back to Orders
+      </button>
     </div>
   );
 }

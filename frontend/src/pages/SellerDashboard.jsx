@@ -14,10 +14,9 @@ export default function SellerDashboard() {
   const [editForm, setEditForm] = useState({});
   const [editStatus, setEditStatus] = useState("");
   const [activeChatId, setActiveChatId] = useState(null); // ✅ tracks which convo is open
-  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
-
+  const navigate = useNavigate();
   let user = null;
   try {
     user = JSON.parse(localStorage.getItem("user"));
@@ -337,9 +336,9 @@ export default function SellerDashboard() {
           {[
             { key: "dashboard",     icon: "fas fa-tachometer-alt", label: "Dashboard" },
             { key: "add-book",      icon: "fas fa-plus-circle",    label: "Add New Book" },
-            { key: "orders", icon: "fas fa-box", label: "Orders" },
-            { key: "conversations", icon: "fas fa-comments",       label: "Conversations" }, // ✅ NEW
-            { key: "reviews", icon: "fas fa-star", label: "Reviews" },
+            { key: "orders",        icon: "fas fa-box",            label: "Orders" },
+            { key: "conversations", icon: "fas fa-comments",       label: "Conversations" }, 
+            { key: "reviews",       icon: "fas fa-star",           label: "Reviews" },
           ].map((item) => (
             <button
               key={item.key}

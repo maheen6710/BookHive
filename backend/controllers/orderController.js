@@ -63,3 +63,16 @@ export async function getSellerOrders(req, res) {
     res.status(500).json({ message: "Server error." });
   }
 }
+//get order details by orderId
+export async function getOrderById(req, res) {
+  try {
+    const order = await Order.findById(req.params.orderId)
+      .populate("book", "title coverImage price")
+      .populate("buyer", "name");
+
+    if (!order) return res.status(404).json({ message: "Order not found." });
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ message: "Server error." });
+  }
+}

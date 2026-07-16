@@ -92,7 +92,7 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
       formData.append("edition", form.edition);
       formData.append("price", form.price);
       formData.append("condition", form.condition);
-      formData.append("category", form.category);       // ✅ NEW: send to backend
+      formData.append("category", form.category);      
       formData.append("shopLocation", user.location);
       if (coverImage) formData.append("coverImage", coverImage);
 
@@ -136,7 +136,6 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
     }
   }
 
-  // ✅ NEW: category options list
   const categoryOptions = [
     "Fiction",
     "Non-Fiction",
@@ -224,7 +223,7 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
             {errors.price && <span className="field-error">{errors.price}</span>}
           </div>
 
-          {/* ✅ NEW: Category dropdown */}
+          {/*  Category dropdown */}
           <div className="form-group form-full">
             <label htmlFor="category">Category <span className="required">*</span></label>
             <select
@@ -233,6 +232,7 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
               value={form.category}
               onChange={handleChange}
               className="category-select"
+              style={{ color: form.category === "" ? "#64748b" : "#f8fafc"}}
             >
               <option value="" disabled>Select a category...</option>
               {categoryOptions.map((cat) => (
