@@ -1,6 +1,8 @@
-import { useState } from "react";
 import axios from "axios";
 import "./AddBookForm.css";
+import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import { useRef, useState, useCallback } from "react";
 
 export default function AddBookForm({ onBookAdded, bookToEdit }) {
   const isEditMode = !!bookToEdit;
@@ -20,6 +22,11 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
       ? `http://localhost:5000${bookToEdit.coverImage}`
       : null
   );
+  const [rawImageSrc, setRawImageSrc]   = useState(null); // original file as base64
+  const [crop, setCrop]                 = useState();
+  const [completedCrop, setCompletedCrop] = useState(null);
+  const [showCropper, setShowCropper]   = useState(false);
+  const imgRef                          = useRef(null);
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState({});
 
@@ -28,27 +35,73 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
     setErrors({ ...errors, [e.target.name]: "" });
   }
 
-  function handleImageChange(e) {
-    const file = e.target.files[0];
-    if (!file) return;
+function handleImageChange(e) {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      setErrors({ ...errors, image: "Please select a valid image file." });
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      setErrors({ ...errors, image: "Image must be under 5MB." });
-      return;
-    }
-
-    setCoverImage(file);
-    setErrors({ ...errors, image: "" });
-
-    const reader = new FileReader();
-    reader.onloadend = () => setPreview(reader.result);
-    reader.readAsDataURL(file);
+  if (!file.type.startsWith("image/")) {
+    setErrors({ ...errors, image: "Please select a valid image file." });
+    return;
   }
+  if (file.size > 5 * 1024 * 1024) {
+    setErrors({ ...errors, image: "Image must be under 5MB." });
+    return;
+  }
+
+  setErrors({ ...errors, image: "" });
+
+  // read as base64 and open cropper
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    setRawImageSrc(reader.result);
+    setShowCropper(true);
+  };
+  reader.readAsDataURL(file);
+}
+ function onImageLoad(e) {
+  const { width, height } = e.currentTarget;
+
+  // default crop: centered, 2:3 ratio (standard book cover)
+  const centeredCrop = centerCrop(
+    makeAspectCrop({ unit: "%", width: 80 }, 2 / 3, width, height),
+    width,
+    height
+  );
+  setCrop(centeredCrop);
+}
+
+async function handleCropDone() {
+  if (!completedCrop || !imgRef.current) return;
+
+  const image    = imgRef.current;
+  const canvas   = document.createElement("canvas");
+  const scaleX   = image.naturalWidth  / image.width;
+  const scaleY   = image.naturalHeight / image.height;
+
+  canvas.width  = completedCrop.width  * scaleX;
+  canvas.height = completedCrop.height * scaleY;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(
+    image,
+    completedCrop.x * scaleX,
+    completedCrop.y * scaleY,
+    completedCrop.width  * scaleX,
+    completedCrop.height * scaleY,
+    0, 0,
+    canvas.width,
+    canvas.height
+  );
+
+  // convert canvas to blob → File
+  canvas.toBlob((blob) => {
+    const croppedFile = new File([blob], "cover.jpg", { type: "image/jpeg" });
+    setCoverImage(croppedFile);
+    setPreview(canvas.toDataURL("image/jpeg"));
+    setShowCropper(false);
+    setRawImageSrc(null);
+  }, "image/jpeg", 0.95);
+}
 
   function handleRemoveImage() {
     setCoverImage(null);
@@ -286,16 +339,29 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
                       <p className="preview-size">{(coverImage.size / 1024).toFixed(1)} KB</p>
                     </>
                   )}
-                  <button type="button" className="btn-remove-image" onClick={handleRemoveImage}>
-                    <i className="fas fa-trash"></i> Remove
-                  </button>
-                  <label htmlFor="cover-upload" className="btn-change-image">
-                    <i className="fas fa-upload"></i> Change Image
-                    <input
-                      id="cover-upload" type="file" accept="image/*"
-                      onChange={handleImageChange} style={{ display: "none" }}
-                    />
-                  </label>
+                  <div className="preview-btn-row">
+                    <div className="preview-btn-stack">
+                      <button
+                        type="button"
+                        className="btn-change-image"
+                        onClick={() => { setShowCropper(true); setRawImageSrc(preview); }}
+                      >
+                        <i className="fas fa-crop-alt"></i> Re-crop
+                      </button>
+
+                      <label htmlFor="cover-upload" className="btn-change-image">
+                        <i className="fas fa-upload"></i> Change Image
+                        <input
+                          id="cover-upload" type="file" accept="image/*"
+                          onChange={handleImageChange} style={{ display: "none" }}
+                        />
+                      </label>
+                    </div>
+
+                    <button type="button" className="btn-remove-image" onClick={handleRemoveImage}>
+                      <i className="fas fa-trash"></i> Remove Image
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -332,6 +398,48 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
           </button>
         </div>
       </form>
+
+      {showCropper && (
+  <div className="crop-overlay">
+    <div className="crop-modal">
+      <div className="crop-modal-header">
+        <h3><i className="fas fa-crop-alt"></i> Crop Cover Image</h3>
+        <p>Drag to adjust. Default ratio is 2:3 (book cover).</p>
+      </div>
+
+      <div className="crop-canvas-wrap">
+        <ReactCrop
+          crop={crop}
+          onChange={(c) => setCrop(c)}
+          onComplete={(c) => setCompletedCrop(c)}
+          aspect={2 / 3}
+          minWidth={50}
+        >
+          <img
+            ref={imgRef}
+            src={rawImageSrc}
+            alt="Crop preview"
+            onLoad={onImageLoad}
+            className="crop-source-img"
+          />
+        </ReactCrop>
+      </div>
+
+      <div className="crop-actions">
+        <button type="button" className="btn-crop-done" onClick={handleCropDone}>
+          <i className="fas fa-check"></i> Use This Crop
+        </button>
+        <button
+          type="button"
+          className="btn-crop-cancel"
+          onClick={() => { setShowCropper(false); setRawImageSrc(null); }}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

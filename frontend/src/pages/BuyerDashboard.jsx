@@ -11,6 +11,8 @@ export default function BuyerDashboard() {
   const [books, setBooks]         = useState([]);
   const [activeChatId, setActiveChatId] = useState(null); // ✅ tracks which convo is open
   const navigate                  = useNavigate();
+  const [orders, setOrders]             = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/books")
@@ -28,6 +30,24 @@ useEffect(() => {
   }
 }, []);
 
+useEffect(() => {
+  fetch("http://localhost:5000/api/books")
+    .then((res) => res.json())
+    .then((data) => setBooks(data))
+    .catch((err) => console.error("Failed to fetch books:", err));
+
+  // fetch buyer orders
+  const token = localStorage.getItem("token");
+  if (token) {
+    fetch("http://localhost:5000/api/orders/my", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => { setOrders(data); setOrdersLoading(false); })
+      .catch((err) => { console.error("Orders fetch failed:", err); setOrdersLoading(false); });
+  }
+}, []);
+
   return (
     <div className="dashboard-layout">
 
@@ -40,6 +60,7 @@ useEffect(() => {
           {[
             { key: "discover",       icon: "fas fa-compass",    label: "Discover" },
             { key: "search",         icon: "fas fa-search",     label: "Search History" },
+            { key: "orders",         icon: "fas fa-box",        label: "My Orders"      },
             { key: "wishlist",       icon: "fas fa-heart",      label: "Wishlist" },
             { key: "conversations",  icon: "fas fa-comments",   label: "Conversations" }, // ✅ NEW
             { key: "settings",       icon: "fas fa-cog",        label: "Settings" },
@@ -94,6 +115,83 @@ useEffect(() => {
               </div>
             </div>
           </>
+        )}
+
+        {/* ── ORDERS TAB ── */}
+        {activeNav === "orders" && (
+          <div className="dashboard-card">
+            <div className="card-header">
+              <h2>📦 My Orders</h2>
+            </div>
+            <div className="card-body">
+              {ordersLoading ? (
+                <p className="orders-empty">Loading orders...</p>
+              ) : orders.length === 0 ? (
+                <p className="orders-empty">You haven't placed any orders yet 📭</p>
+              ) : (
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Book</th>
+                      <th>Total</th>
+                      <th>Payment</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map((order) => (
+                      <tr
+                        key={order._id}
+                        className="order-row"
+                        onClick={() => navigate(`/order/${order._id}`)}
+                      >
+                        <td>
+                          <div className="table-book">
+                            {order.book?.coverImage ? (
+                              <img
+                                src={`http://localhost:5000${order.book.coverImage}`}
+                                alt={order.book.title}
+                                className="book-thumb"
+                              />
+                            ) : (
+                              <div className="book-thumb-placeholder">
+                                <i className="fas fa-book"></i>
+                              </div>
+                            )}
+                            <div>
+                              <p className="book-name">{order.book?.title || "N/A"}</p>
+                              <p className="book-cat">
+                                Seller: {order.seller?.name || "N/A"}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="order-price">Rs. {order.totalPrice}</td>
+                        <td style={{ color: "#94a3b8", fontSize: "0.85rem" }}>
+                          {order.paymentMethod}
+                        </td>
+                        <td>
+                          <span className={`status-badge ${
+                            order.status === "confirmed" ? "badge-green"
+                            : order.status === "cancelled" ? "badge-red"
+                            : "badge-blue"
+                          }`}>
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="order-date">
+                          {new Date(order.createdAt).toLocaleDateString("en-PK", {
+                            day: "numeric", month: "short", year: "numeric"
+                          })}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
         )}
 
         {/* ── WISHLIST TAB ── */}
