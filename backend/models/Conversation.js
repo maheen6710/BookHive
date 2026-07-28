@@ -10,7 +10,8 @@ const MessageSchema = new mongoose.Schema(
 
 const ConversationSchema = new mongoose.Schema(
   {
-    book: { type: mongoose.Schema.Types.ObjectId, ref: "Book", required: true },
+    // 🔥 optional now — general "message this seller" chats have no book attached
+    book: { type: mongoose.Schema.Types.ObjectId, ref: "BookListing", required: false },
     buyer: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     seller: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     messages: [MessageSchema],

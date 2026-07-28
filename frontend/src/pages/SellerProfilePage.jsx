@@ -9,11 +9,41 @@ export default function SellerProfilePage() {
   const navigate     = useNavigate();
 
   const [seller, setSeller]         = useState(null);
-  const [books, setBooks]           = useState([]);
+  const [books, setBooks]           = useState([]); // array of LISTINGS now
   const [reviews, setReviews]       = useState([]);
   const [loading, setLoading]       = useState(true);
   const [reviewsLoading, setReviewsLoading] = useState(true);
   const [notFound, setNotFound]     = useState(false);
+  const [chatMessage, setChatMessage] = useState("");
+
+  async function handleChatWithSeller() {
+    const token = localStorage.getItem("token");
+    const user  = JSON.parse(localStorage.getItem("user"));
+
+    if (!token || !user) {
+      navigate("/login", { state: { from: `/seller/${sellerId}` } });
+      return;
+    }
+
+    if (user._id === sellerId) {
+      setChatMessage("This is your own profile!");
+      setTimeout(() => setChatMessage(""), 3000);
+      return;
+    }
+
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/api/conversations/start",
+        { sellerId }, // 🔥 no bookId — general seller inquiry
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      navigate("/buyerdashboard", { state: { openConvoId: data._id } });
+    } catch (err) {
+      console.error(err);
+      setChatMessage(err.response?.data?.message || "Could not start conversation.");
+      setTimeout(() => setChatMessage(""), 3000);
+    }
+  }
 
   useEffect(() => {
     async function fetchSellerData() {
@@ -25,9 +55,9 @@ export default function SellerProfilePage() {
         setSeller(sellerRes.data);
         setBooks(booksRes.data);
 
-        // fetch reviews for all seller's books in parallel
-        const bookIds = booksRes.data.map((b) => b._id);
-        const reviewRequests = bookIds.map((id) =>
+        // fetch reviews for all seller's listings in parallel
+        const listingIds = booksRes.data.map((b) => b._id);
+        const reviewRequests = listingIds.map((id) =>
           axios.get(`http://localhost:5000/api/reviews/${id}`)
         );
         const reviewResults = await Promise.all(reviewRequests);
@@ -123,7 +153,7 @@ export default function SellerProfilePage() {
             </div>
           )}
 
-          <button className="spp-chat-btn">
+          <button className="spp-chat-btn" onClick={handleChatWithSeller}>
             <i className="fas fa-comment-dots"></i> Chat with Seller
           </button>
 
@@ -142,33 +172,33 @@ export default function SellerProfilePage() {
               <p className="spp-none">This seller hasn't listed any books yet.</p>
             ) : (
               <div className="spp-books-grid">
-                {books.map((book) => (
+                {books.map((listing) => (
                   <div
-                    key={book._id}
+                    key={listing._id}
                     className="spp-book-card"
-                    onClick={() => navigate(`/book/${book._id}`)}
+                    onClick={() => navigate(`/book/${listing._id}`)}
                   >
                     <div className="spp-book-cover">
-                      {book.coverImage ? (
-                        <img src={`http://localhost:5000${book.coverImage}`} alt={book.title} />
+                      {listing.coverImage ? (
+                        <img src={`http://localhost:5000${listing.coverImage}`} alt={listing.book?.title} />
                       ) : (
                         <div className="spp-cover-placeholder">
                           <i className="fas fa-book"></i>
                         </div>
                       )}
-                      <span className={`spp-condition ${conditionBadgeClass(book.condition)}`}>
-                        {book.condition}
+                      <span className={`spp-condition ${conditionBadgeClass(listing.condition)}`}>
+                        {listing.condition}
                       </span>
                     </div>
                     <div className="spp-book-info">
-                      <p className="spp-book-title">{book.title}</p>
-                      <p className="spp-book-author">by {book.author}</p>
-                      {book.category && (
+                      <p className="spp-book-title">{listing.book?.title}</p>
+                      <p className="spp-book-author">by {listing.book?.author}</p>
+                      {listing.book?.category && (
                         <span className="spp-book-cat">
-                          <i className="fas fa-tag"></i> {book.category}
+                          <i className="fas fa-tag"></i> {listing.book.category}
                         </span>
                       )}
-                      <p className="spp-book-price">Rs. {book.price}</p>
+                      <p className="spp-book-price">Rs. {listing.price}</p>
                     </div>
                   </div>
                 ))}
@@ -186,6 +216,10 @@ export default function SellerProfilePage() {
 
         </div>
       </div>
+
+      {chatMessage && (
+        <div className="spp-toast">{chatMessage}</div>
+      )}
     </div>
   );
 }

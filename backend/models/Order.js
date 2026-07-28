@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema(
   {
     book: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Book",
+      ref: "BookListing", // 🔥 was "Book" — now points to the listing (has price/coverImage/etc)
       required: true,
     },
     buyer: {

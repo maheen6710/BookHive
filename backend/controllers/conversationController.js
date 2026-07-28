@@ -3,23 +3,28 @@ import Conversation from "../models/Conversation.js";
 // POST /api/conversations/start
 const startConversation = async (req, res) => {
   try {
-    const { bookId, sellerId } = req.body;
-    const buyerId = req.user.id; // ✅ fixed: was req.user._id
+    const { bookId, sellerId } = req.body; // 🔥 bookId is now optional
+    const buyerId = req.user.id;
 
     if (buyerId.toString() === sellerId) {
       return res.status(400).json({ message: "You can't chat with yourself." });
     }
 
-    let convo = await Conversation.findOne({
-      book: bookId,
+    // 🔥 if no bookId, look for an existing GENERAL conversation (book: null)
+    // between this buyer and seller, so clicking "chat" repeatedly doesn't
+    // spam new empty conversations
+    const findQuery = {
       buyer: buyerId,
       seller: sellerId,
       deletedByBuyer: false,
-    });
+    };
+    findQuery.book = bookId || null;
+
+    let convo = await Conversation.findOne(findQuery);
 
     if (!convo) {
       convo = await Conversation.create({
-        book: bookId,
+        book: bookId || null,
         buyer: buyerId,
         seller: sellerId,
       });
@@ -34,7 +39,7 @@ const startConversation = async (req, res) => {
 // GET /api/conversations/
 const getMyConversations = async (req, res) => {
   try {
-    const userId = req.user.id; // ✅ fixed
+    const userId = req.user.id;
 
     const convos = await Conversation.find({
       $or: [
@@ -42,7 +47,11 @@ const getMyConversations = async (req, res) => {
         { seller: userId, deletedBySeller: false },
       ],
     })
-      .populate("book", "title coverImage")
+      .populate({
+        path: "book",
+        select: "coverImage book", // listing fields
+        populate: { path: "book", select: "title" }, // 🔥 nested — actual Book title
+      })
       .populate("buyer", "name")
       .populate("seller", "name")
       .sort({ updatedAt: -1 });
@@ -56,9 +65,13 @@ const getMyConversations = async (req, res) => {
 // GET /api/conversations/:id
 const getConversation = async (req, res) => {
   try {
-    const userId = req.user.id; // ✅ fixed
+    const userId = req.user.id;
     const convo = await Conversation.findById(req.params.id)
-      .populate("book", "title coverImage price")
+      .populate({
+        path: "book",
+        select: "coverImage price book",
+        populate: { path: "book", select: "title" }, // 🔥 nested
+      })
       .populate("buyer", "name")
       .populate("seller", "name")
       .populate("messages.sender", "name");
@@ -85,7 +98,7 @@ const getConversation = async (req, res) => {
 // POST /api/conversations/:id/message
 const sendMessage = async (req, res) => {
   try {
-    const userId = req.user.id; // ✅ fixed
+    const userId = req.user.id;
     const { text } = req.body;
 
     const convo = await Conversation.findById(req.params.id);
@@ -112,7 +125,7 @@ const sendMessage = async (req, res) => {
 // DELETE /api/conversations/:id
 const deleteConversation = async (req, res) => {
   try {
-    const userId = req.user.id; // ✅ fixed
+    const userId = req.user.id;
     const convo = await Conversation.findById(req.params.id);
 
     if (!convo) return res.status(404).json({ message: "Conversation not found." });

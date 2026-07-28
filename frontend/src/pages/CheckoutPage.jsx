@@ -7,7 +7,7 @@ export default function CheckoutPage() {
   const { bookId }  = useParams();
   const navigate    = useNavigate();
 
-  const [book, setBook]       = useState(null);
+  const [book, setBook]       = useState(null); // this is actually the LISTING now
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
   const [message, setMessage] = useState("");
@@ -106,7 +106,7 @@ const [phoneError, setPhoneError] = useState("");
             {book.coverImage ? (
               <img
                 src={`http://localhost:5000${book.coverImage}`}
-                alt={book.title}
+                alt={book.book?.title}
                 className="co-book-cover"
               />
             ) : (
@@ -116,8 +116,8 @@ const [phoneError, setPhoneError] = useState("");
             )}
 
             <div className="co-book-info">
-              <p className="co-book-title">{book.title}</p>
-              <p className="co-book-author">by {book.author}</p>
+              <p className="co-book-title">{book.book?.title}</p>
+              <p className="co-book-author">by {book.book?.author}</p>
               <p className="co-book-condition">Condition: <span>{book.condition}</span></p>
               <p className="co-book-seller">
                 Seller: <span>{book.seller?.name || "Unknown"}</span>

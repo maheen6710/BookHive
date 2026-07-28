@@ -1,22 +1,18 @@
 import express from "express";
-import { signup, login } from "../controllers/userController.js";
-import User from "../models/User.js";
+import protect from "../middleware/auth.js";
+import {
+  getUserById,
+  getMyProfile,
+  updateMyProfile,
+} from "../controllers/profileController.js";
 
 const router = express.Router();
 
-router.post("/signup", signup);
-router.post("/login", login);
+// 🔥 specific routes BEFORE the /:id catch-all, or "/me" gets swallowed as an id
+router.get("/me", protect, getMyProfile);
+router.put("/me", protect, updateMyProfile);
 
-// GET /api/users/:id — public seller info
-router.get("/:id", async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id)
-      .select("name shopName shopAddress location role"); // no password!
-    if (!user) return res.status(404).json({ message: "Not found" });
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// GET /api/users/:id — public profile view (used by SellerProfilePage)
+router.get("/:id", getUserById);
 
 export default router;

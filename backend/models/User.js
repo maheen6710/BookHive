@@ -26,11 +26,8 @@ const userSchema = new mongoose.Schema({
   },
   shopAddress: String,
   location: String,
-  profileImage: String,  // 👈 add comma here
-  wishlist: [{           // 👈 wishlist is NOW inside the schema
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Book"
-  }]
+  profileImage: String,
+  // 🔥 wishlist removed — now lives in its own Wishlist model (see models/Wishlist.js)
 });             
 
 export default mongoose.model("User", userSchema);

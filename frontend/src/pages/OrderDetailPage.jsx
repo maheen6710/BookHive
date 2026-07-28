@@ -57,7 +57,7 @@ export default function OrderDetailPage() {
             {order.book?.coverImage ? (
               <img
                 src={`http://localhost:5000${order.book.coverImage}`}
-                alt={order.book.title}
+                alt={order.book?.book?.title}
                 className="od-cover"
               />
             ) : (
@@ -66,7 +66,7 @@ export default function OrderDetailPage() {
               </div>
             )}
             <div className="od-book-info">
-              <p className="od-book-title">{order.book?.title}</p>
+              <p className="od-book-title">{order.book?.book?.title}</p>
               <p className="od-book-price">Rs. {order.book?.price}</p>
             </div>
           </div>

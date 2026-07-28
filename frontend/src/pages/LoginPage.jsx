@@ -27,7 +27,7 @@ export default function LoginPage({ setCurrentPage, onLogin }) {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/users/login",
+        "http://localhost:5000/api/auth/login",
         { email, password }
       );
 
@@ -52,7 +52,7 @@ export default function LoginPage({ setCurrentPage, onLogin }) {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h2 className="auth-title">Login to BookFinder</h2>
+        <h2 className="auth-title">Login to BookHive</h2>
 
         {error && <div className="auth-error">{error}</div>}
 

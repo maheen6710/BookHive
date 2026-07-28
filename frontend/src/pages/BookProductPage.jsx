@@ -8,7 +8,7 @@ import ReviewForm from "../components/ReviewForm";
 export default function BookProductPage() {
   const { id }     = useParams();
   const navigate   = useNavigate();
-  const [book, setBook]             = useState(null);
+  const [book, setBook]             = useState(null); // this is actually the LISTING now
   const [loading, setLoading]       = useState(true);
   const [notFound, setNotFound]     = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
@@ -163,7 +163,7 @@ function showMessage(msg) {
         <div className="bpp-left">
           <div className="bpp-cover-wrap">
             {book.coverImage ? (
-              <img src={`http://localhost:5000${book.coverImage}`} alt={book.title} className="bpp-cover" />
+              <img src={`http://localhost:5000${book.coverImage}`} alt={book.book?.title} className="bpp-cover" />
             ) : (
               <div className="bpp-cover-placeholder"><i className="fas fa-book"></i></div>
             )}
@@ -195,8 +195,8 @@ function showMessage(msg) {
         {/* RIGHT */}
         <div className="bpp-right">
           <div className="bpp-hero">
-            <h1 className="bpp-title">{book.title}</h1>
-            <p className="bpp-author">Author: <span>{book.author}</span></p>
+            <h1 className="bpp-title">{book.book?.title}</h1>
+            <p className="bpp-author">Author: <span>{book.book?.author}</span></p>
           </div>
 
           <div className="bpp-price-row">
@@ -204,16 +204,16 @@ function showMessage(msg) {
           </div>
 
           <div className="bpp-details-grid">
-            {book.category && (
+            {book.book?.category && (
               <div className="bpp-detail-item">
                 <span className="bpp-detail-label"><i className="fas fa-tag"></i> Category</span>
-                <span className="bpp-detail-value">{book.category}</span>
+                <span className="bpp-detail-value">{book.book.category}</span>
               </div>
             )}
-            {book.edition && (
+            {book.book?.edition && (
               <div className="bpp-detail-item">
                 <span className="bpp-detail-label"><i className="fas fa-layer-group"></i> Edition</span>
-                <span className="bpp-detail-value">{book.edition}</span>
+                <span className="bpp-detail-value">{book.book.edition}</span>
               </div>
             )}
             <div className="bpp-detail-item">

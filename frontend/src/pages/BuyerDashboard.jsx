@@ -100,14 +100,14 @@ useEffect(() => {
                   <p>No books available yet.</p>
                 ) : (
                   <div className="books-grid-dash">
-                    {books.map((book) => (
+                    {books.map((listing) => (
                       <BookCard
-                        key={book._id}
-                        _id={book._id}
-                        title={book.title}
-                        price={book.price}
-                        location={book.shopLocation}
-                        coverImage={book.coverImage}
+                        key={listing._id}
+                        _id={listing._id}
+                        title={listing.book?.title}
+                        price={listing.price}
+                        location={listing.shopLocation}
+                        coverImage={listing.coverImage}
                       />
                     ))}
                   </div>
@@ -151,7 +151,7 @@ useEffect(() => {
                             {order.book?.coverImage ? (
                               <img
                                 src={`http://localhost:5000${order.book.coverImage}`}
-                                alt={order.book.title}
+                                alt={order.book?.book?.title}
                                 className="book-thumb"
                               />
                             ) : (
@@ -160,7 +160,7 @@ useEffect(() => {
                               </div>
                             )}
                             <div>
-                              <p className="book-name">{order.book?.title || "N/A"}</p>
+                              <p className="book-name">{order.book?.book?.title || "N/A"}</p>
                               <p className="book-cat">
                                 Seller: {order.seller?.name || "N/A"}
                               </p>

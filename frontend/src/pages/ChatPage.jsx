@@ -89,7 +89,9 @@ const ChatPage = ({ id, onBack }) => {
           <div className="chat-avatar">{otherUser.name[0].toUpperCase()}</div>
           <div>
             <p className="chat-other-name">{otherUser.name}</p>
-            <p className="chat-book-title">📖 {convo.book.title}</p>
+            {convo.book?.book?.title && (
+              <p className="chat-book-title">📖 {convo.book.book.title}</p>
+            )}
           </div>
         </div>
         <button className="chat-delete-btn" onClick={handleDelete} title="Delete conversation">

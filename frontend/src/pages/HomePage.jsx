@@ -6,10 +6,10 @@ import "./HomePage.css";
 import { useNavigate } from "react-router-dom";
 
 export default function HomePage({ setCurrentPage, user }) {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState([]); // array of LISTINGS now
   const navigate = useNavigate();
 
-  // 🔥 Fetch books from backend
+  // 🔥 Fetch listings from backend
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -35,18 +35,18 @@ export default function HomePage({ setCurrentPage, user }) {
 
         <div className="books-grid">
           {books.length > 0 ? (
-            books.map((book) => (
+            books.map((listing) => (
               <BookCard
-                key={book._id}
-                _id={book._id}     
-                title={book.title}
-                price={book.price}
-                location={book.shopLocation}
-                 coverImage={book.coverImage} 
+                key={listing._id}
+                _id={listing._id}     
+                title={listing.book?.title}
+                price={listing.price}
+                location={listing.shopLocation}
+                coverImage={listing.coverImage} 
               />
             ))
           ) : (
-            <p>No books available right now </p>
+            <p>Loading books...</p>
           )}
         </div>
       </section>

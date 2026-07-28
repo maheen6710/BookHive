@@ -191,7 +191,7 @@ export default function SellerDashboard() {
                       {order.book?.coverImage ? (
                         <img
                           src={`http://localhost:5000${order.book.coverImage}`}
-                          alt={order.book.title}
+                          alt={order.book?.book?.title}
                           className="book-thumb"
                         />
                       ) : (
@@ -200,7 +200,7 @@ export default function SellerDashboard() {
                         </div>
                       )}
                       <div>
-                        <p className="book-name">{order.book?.title || "N/A"}</p>
+                        <p className="book-name">{order.book?.book?.title || "N/A"}</p>
                         <p className="book-cat">Rs. {order.book?.price}</p>
                       </div>
                     </div>
@@ -276,11 +276,11 @@ export default function SellerDashboard() {
                                     ? `http://localhost:5000${book.coverImage}`
                                     : "/placeholder.png"
                                 }
-                                alt={book.title}
+                                alt={book.book?.title}
                                 className="book-thumb"
                               />
                               <div>
-                                <p className="book-name">{book.title}</p>
+                                <p className="book-name">{book.book?.title}</p>
                                 <p className="book-cat">{book.condition}</p>
                               </div>
                             </div>

@@ -1,90 +1,124 @@
 import Book from "../models/Book.js";
+import BookListing from "../models/BookListing.js";
 
-// 🔥 ADD BOOK
+// 🔥 ADD BOOK (creates/reuses Book, always creates a new Listing)
 export const addBook = async (req, res) => {
   try {
     const { title, author, edition, price, condition, category, shopLocation } = req.body;
     const coverImage = req.file ? `/uploads/${req.file.filename}` : "";
 
-    const book = new Book({
-      title,
-      author,
-      edition,
+    // normalize for matching (case-insensitive, trimmed)
+    const normTitle = title.trim();
+    const normAuthor = author.trim();
+    const normEdition = edition ? edition.trim() : "";
+
+    // 🔎 auto-detect: does this exact book (title+author+edition) already exist?
+    let book = await Book.findOne({
+      title: { $regex: `^${normTitle}$`, $options: "i" },
+      author: { $regex: `^${normAuthor}$`, $options: "i" },
+      edition: normEdition,
+    });
+
+    // if not found, create it
+    if (!book) {
+      book = new Book({
+        title: normTitle,
+        author: normAuthor,
+        edition: normEdition,
+        category,
+      });
+      await book.save();
+    }
+
+    // always create a fresh listing tied to that book
+    const listing = new BookListing({
+      book: book._id,
+      seller: req.user.id,
       price,
       condition,
-      category,
       shopLocation,
-      seller: req.user.id,
       coverImage,
     });
 
-    const saved = await book.save();
-    res.json(saved);
+    const savedListing = await listing.save();
+
+    // return listing populated with book info so frontend doesn't break
+    const populated = await savedListing.populate("book");
+    res.json(populated);
 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔥 GET ALL BOOKS — supports ?search= query param
+// 🔥 GET ALL LISTINGS — supports ?search= query param (searches Book fields)
 export const getBooks = async (req, res) => {
   try {
     const { search } = req.query;
 
-    let query = {};
+    let bookQuery = {};
 
     if (search && search.trim() !== "") {
       const words = search.trim().split(/\s+/);
 
-      // every word must match at least one of: title, author, category
-      query = {
+      bookQuery = {
         $and: words.map((word) => ({
           $or: [
-            { title:    { $regex: word, $options: "i" } },
-            { author:   { $regex: word, $options: "i" } },
+            { title: { $regex: word, $options: "i" } },
+            { author: { $regex: word, $options: "i" } },
             { category: { $regex: word, $options: "i" } },
           ],
         })),
       };
     }
 
-    const books = await Book.find(query)
-      .populate("seller", "name location") // 👈 adjust field names if yours differ
+    // find matching book IDs first, then find listings for those books
+    let listingQuery = {};
+    if (search && search.trim() !== "") {
+      const matchingBooks = await Book.find(bookQuery).select("_id");
+      const bookIds = matchingBooks.map((b) => b._id);
+      listingQuery = { book: { $in: bookIds } };
+    }
+
+    const listings = await BookListing.find(listingQuery)
+      .populate("book")
+      .populate("seller", "name location")
       .sort({ createdAt: -1 });
 
-    res.json(books);
+    res.json(listings);
 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔥 GET BOOKS BY SELLER (for dashboard)
+// 🔥 GET LISTINGS BY SELLER (for dashboard)
 export const getSellerBooks = async (req, res) => {
   try {
-    const books = await Book.find({ seller: req.params.id });
-    res.json(books);
+    const listings = await BookListing.find({ seller: req.params.id })
+      .populate("book");
+    res.json(listings);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔥 UPDATE BOOK
+// 🔥 UPDATE LISTING (price/condition/etc — NOT book identity fields)
 export const updateBook = async (req, res) => {
   try {
-    const { title, author, edition, price, condition, category } = req.body;
+    const { price, condition, shopLocation } = req.body;
 
-    const updateData = { title, author, edition, price, condition, category };
+    const updateData = { price, condition, shopLocation };
 
     if (req.file) {
       updateData.coverImage = `/uploads/${req.file.filename}`;
     }
 
-    const updated = await Book.findByIdAndUpdate(
+    const updated = await BookListing.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true }
-    );
+    ).populate("book");
 
     res.json(updated);
 
@@ -93,23 +127,24 @@ export const updateBook = async (req, res) => {
   }
 };
 
-// 🔥 DELETE BOOK
+// 🔥 DELETE LISTING
 export const deleteBook = async (req, res) => {
   try {
-    await Book.findByIdAndDelete(req.params.id);
-    res.json({ message: "Book deleted successfully" });
+    await BookListing.findByIdAndDelete(req.params.id);
+    res.json({ message: "Listing deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔥 GET SINGLE BOOK (for product page)
+// 🔥 GET SINGLE LISTING (for product page)
 export const getBookById = async (req, res) => {
   try {
-    const book = await Book.findById(req.params.id)
+    const listing = await BookListing.findById(req.params.id)
+      .populate("book")
       .populate("seller", "name location");
-    if (!book) return res.status(404).json({ message: "Not found" });
-    res.json(book);
+    if (!listing) return res.status(404).json({ message: "Not found" });
+    res.json(listing);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

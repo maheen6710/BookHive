@@ -53,6 +53,9 @@ const ConversationList = ({ onSelectConvo }) => {
       ) : (
         <div className="cl-list">
           {convos.map((convo) => {
+            // 🔥 guard against missing/deleted buyer or seller so it never crashes
+            if (!convo.buyer || !convo.seller) return null;
+
             const isBuyer = convo.buyer._id === currentUser._id;
             const otherUser = isBuyer ? convo.seller : convo.buyer;
             const lastMsg = convo.messages[convo.messages.length - 1];
@@ -63,7 +66,7 @@ const ConversationList = ({ onSelectConvo }) => {
                 className="cl-item"
                 onClick={() => onSelectConvo(convo._id)} // ✅ uses prop instead of navigate
               >
-                <div className="cl-avatar">{otherUser.name[0].toUpperCase()}</div>
+                <div className="cl-avatar">{otherUser.name?.[0]?.toUpperCase() || "?"}</div>
                 <div className="cl-info">
                   <div className="cl-top-row">
                     <span className="cl-name">{otherUser.name}</span>
@@ -73,7 +76,11 @@ const ConversationList = ({ onSelectConvo }) => {
                       </span>
                     )}
                   </div>
-                  <p className="cl-book">📖 {convo.book.title}</p>
+                  <p className="cl-book">
+                    {convo.book?.book?.title
+                      ? `📖 ${convo.book.book.title}`
+                      : "💬 General inquiry"}
+                  </p>
                   {lastMsg && (
                     <p className="cl-last-msg">{lastMsg.text}</p>
                   )}

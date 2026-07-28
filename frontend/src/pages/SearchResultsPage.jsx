@@ -8,7 +8,7 @@ export default function SearchResultsPage() {
   const query          = searchParams.get("q") || "";
   const navigate       = useNavigate();
 
-  const [results, setResults]   = useState([]);
+  const [results, setResults]   = useState([]); // array of LISTINGS now
   const [loading, setLoading]   = useState(false);
   const [searched, setSearched] = useState(false);
 
@@ -71,31 +71,31 @@ export default function SearchResultsPage() {
 
       {!loading && results.length > 0 && (
         <div className="srp-grid">
-          {results.map((book) => (
+          {results.map((listing) => (
             <div
-              key={book._id}
+              key={listing._id}
               className="srp-card"
-              onClick={() => navigate(`/book/${book._id}`)}
+              onClick={() => navigate(`/book/${listing._id}`)}
               style={{ cursor: "pointer" }}
             >
               <div className="srp-cover">
-                {book.coverImage ? (
-                  <img src={`http://localhost:5000${book.coverImage}`} alt={book.title} />
+                {listing.coverImage ? (
+                  <img src={`http://localhost:5000${listing.coverImage}`} alt={listing.book?.title} />
                 ) : (
                   <div className="srp-cover-placeholder"><i className="fas fa-book"></i></div>
                 )}
-                <span className={`srp-condition ${conditionBadgeClass(book.condition)}`}>
-                  {book.condition}
+                <span className={`srp-condition ${conditionBadgeClass(listing.condition)}`}>
+                  {listing.condition}
                 </span>
               </div>
 
               <div className="srp-info">
-                <h3 className="srp-title">{book.title}</h3>
-                <p className="srp-author">by {book.author}</p>
-                {book.edition && <p className="srp-edition">{book.edition}</p>}
-                {book.category && (
+                <h3 className="srp-title">{listing.book?.title}</h3>
+                <p className="srp-author">by {listing.book?.author}</p>
+                {listing.book?.edition && <p className="srp-edition">{listing.book.edition}</p>}
+                {listing.book?.category && (
                   <span className="srp-category">
-                    <i className="fas fa-tag"></i> {book.category}
+                    <i className="fas fa-tag"></i> {listing.book.category}
                   </span>
                 )}
               </div>
@@ -104,13 +104,13 @@ export default function SearchResultsPage() {
                 <div className="srp-seller">
                   <i className="fas fa-store"></i>
                   <div>
-                    <span className="srp-seller-name">{book.seller?.name || "Unknown Seller"}</span>
-                    {book.seller?.location && (
-                      <span className="srp-location">{book.seller.location}</span>
+                    <span className="srp-seller-name">{listing.seller?.name || "Unknown Seller"}</span>
+                    {listing.seller?.location && (
+                      <span className="srp-location">{listing.seller.location}</span>
                     )}
                   </div>
                 </div>
-                <span className="srp-price">Rs. {book.price}</span>
+                <span className="srp-price">Rs. {listing.price}</span>
               </div>
             </div>
           ))}

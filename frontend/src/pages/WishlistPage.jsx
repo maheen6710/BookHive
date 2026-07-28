@@ -4,7 +4,7 @@ import axios from "axios";
 import "./WishlistPage.css";
 
 export default function WishlistPage() {
-  const [wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState([]); // array of LISTINGS now
   const [loading, setLoading]   = useState(true);
   const navigate                = useNavigate();
 
@@ -26,13 +26,13 @@ export default function WishlistPage() {
     }
   }
 
-  async function handleRemove(bookId) {
+  async function handleRemove(listingId) {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/wishlist/${bookId}`, {
+      await axios.delete(`http://localhost:5000/api/wishlist/${listingId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setWishlist((prev) => prev.filter((b) => b._id !== bookId));
+      setWishlist((prev) => prev.filter((l) => l._id !== listingId));
     } catch (err) {
       console.error("Failed to remove:", err);
     }
@@ -70,15 +70,15 @@ export default function WishlistPage() {
         </div>
       ) : (
         <div className="wl-list">
-          {wishlist.map((book) => (
+          {wishlist.map((listing) => (
             <div
-              key={book._id}
+              key={listing._id}
               className="wl-item"
             >
               {/* cover — clicking navigates to product page */}
-              <div className="wl-cover" onClick={() => navigate(`/book/${book._id}`)}>
-                {book.coverImage ? (
-                  <img src={`http://localhost:5000${book.coverImage}`} alt={book.title} />
+              <div className="wl-cover" onClick={() => navigate(`/book/${listing._id}`)}>
+                {listing.coverImage ? (
+                  <img src={`http://localhost:5000${listing.coverImage}`} alt={listing.book?.title} />
                 ) : (
                   <div className="wl-cover-placeholder">
                     <i className="fas fa-book"></i>
@@ -87,48 +87,48 @@ export default function WishlistPage() {
               </div>
 
               {/* info */}
-              <div className="wl-info" onClick={() => navigate(`/book/${book._id}`)}>
-                <h3 className="wl-book-title">{book.title}</h3>
-                <p className="wl-book-author">by {book.author}</p>
+              <div className="wl-info" onClick={() => navigate(`/book/${listing._id}`)}>
+                <h3 className="wl-book-title">{listing.book?.title}</h3>
+                <p className="wl-book-author">by {listing.book?.author}</p>
 
                 <div className="wl-meta">
-                  {book.category && (
+                  {listing.book?.category && (
                     <span className="wl-tag">
-                      <i className="fas fa-tag"></i> {book.category}
+                      <i className="fas fa-tag"></i> {listing.book.category}
                     </span>
                   )}
                   <span
                     className="wl-tag wl-condition"
-                    style={{ color: conditionColor(book.condition) }}
+                    style={{ color: conditionColor(listing.condition) }}
                   >
-                    ● {book.condition}
+                    ● {listing.condition}
                   </span>
-                  {book.edition && (
-                    <span className="wl-tag">{book.edition}</span>
+                  {listing.book?.edition && (
+                    <span className="wl-tag">{listing.book.edition}</span>
                   )}
                 </div>
 
-                {book.seller && (
+                {listing.seller && (
                   <p className="wl-seller">
                     <i className="fas fa-store"></i>{" "}
-                    {book.seller.name}
-                    {book.seller.location && ` · ${book.seller.location}`}
+                    {listing.seller.name}
+                    {listing.seller.location && ` · ${listing.seller.location}`}
                   </p>
                 )}
               </div>
 
               {/* right: price + actions */}
               <div className="wl-right">
-                <p className="wl-price">Rs. {book.price}</p>
+                <p className="wl-price">Rs. {listing.price}</p>
                 <button
                   className="wl-view-btn"
-                  onClick={() => navigate(`/book/${book._id}`)}
+                  onClick={() => navigate(`/book/${listing._id}`)}
                 >
                   <i className="fas fa-eye"></i> View
                 </button>
                 <button
                   className="wl-remove-btn"
-                  onClick={() => handleRemove(book._id)}
+                  onClick={() => handleRemove(listing._id)}
                 >
                   <i className="fas fa-trash"></i> Remove
                 </button>

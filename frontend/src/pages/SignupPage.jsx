@@ -65,7 +65,7 @@ export default function SignupPage({ onLogin }) {
 
   try {
     const res = await axios.post(
-      "http://localhost:5000/api/users/signup",
+      "http://localhost:5000/api/auth/signup",
       {
         name: form.name,
         email: form.email,
