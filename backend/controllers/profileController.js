@@ -29,9 +29,14 @@ export const getMyProfile = async (req, res) => {
 // PUT /api/users/me — edit own profile
 export const updateMyProfile = async (req, res) => {
   try {
-    const { name, shopName, shopAddress, location, profileImage, password } = req.body;
+    const { name, username, shopName, shopAddress, location, password } = req.body;
 
-    const updateData = { name, shopName, shopAddress, location, profileImage };
+    const updateData = { name, username, shopName, shopAddress, location };
+
+    // 🔥 multer puts the uploaded file on req.file (same pattern as book covers)
+    if (req.file) {
+      updateData.profileImage = `/uploads/${req.file.filename}`;
+    }
 
     // only re-hash + update password if the user actually sent a new one
     if (password) {

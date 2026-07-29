@@ -233,7 +233,17 @@ function showMessage(msg) {
           <div className="bpp-divider"></div>
 
           <div className="bpp-seller-card">
-            <div className="bpp-seller-avatar"><i className="fas fa-user"></i></div>
+            <div className="bpp-seller-avatar">
+              {book.seller?.profileImage ? (
+                <img
+                  src={`http://localhost:5000${book.seller.profileImage}`}
+                  alt={book.seller?.name}
+                  className="bpp-seller-avatar-img"
+                />
+              ) : (
+                <i className="fas fa-user"></i>
+              )}
+            </div>
             <div className="bpp-seller-info">
               <div
                 className="bpp-seller-card bpp-seller-clickable"

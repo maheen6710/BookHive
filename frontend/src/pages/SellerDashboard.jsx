@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import AddBookForm from "../components/AddBookForm";
+import AddBookForm from "../pages/AddBookForm";
 import ConversationList from "../pages/ConversationList";
 import ChatPage from "../pages/ChatPage";
 import "./Dashboard.css";
@@ -339,11 +339,16 @@ export default function SellerDashboard() {
             { key: "orders",        icon: "fas fa-box",            label: "Orders" },
             { key: "conversations", icon: "fas fa-comments",       label: "Conversations" }, 
             { key: "reviews",       icon: "fas fa-star",           label: "Reviews" },
+            { key: "view-profile",  icon: "fas fa-user-circle",    label: "View Profile" },
           ].map((item) => (
             <button
               key={item.key}
               className={`nav-item ${activeNav === item.key ? "active" : ""}`}
               onClick={() => {
+                if (item.key === "view-profile") {
+                  navigate(`/seller/${user?._id}`);
+                  return;
+                }
                 setActiveNav(item.key);
                 setActiveChatId(null); // reset chat view when switching tabs
               }}

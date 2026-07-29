@@ -7,19 +7,16 @@ export const addBook = async (req, res) => {
     const { title, author, edition, price, condition, category, shopLocation } = req.body;
     const coverImage = req.file ? `/uploads/${req.file.filename}` : "";
 
-    // normalize for matching (case-insensitive, trimmed)
     const normTitle = title.trim();
     const normAuthor = author.trim();
     const normEdition = edition ? edition.trim() : "";
 
-    // 🔎 auto-detect: does this exact book (title+author+edition) already exist?
     let book = await Book.findOne({
       title: { $regex: `^${normTitle}$`, $options: "i" },
       author: { $regex: `^${normAuthor}$`, $options: "i" },
       edition: normEdition,
     });
 
-    // if not found, create it
     if (!book) {
       book = new Book({
         title: normTitle,
@@ -30,7 +27,6 @@ export const addBook = async (req, res) => {
       await book.save();
     }
 
-    // always create a fresh listing tied to that book
     const listing = new BookListing({
       book: book._id,
       seller: req.user.id,
@@ -41,8 +37,6 @@ export const addBook = async (req, res) => {
     });
 
     const savedListing = await listing.save();
-
-    // return listing populated with book info so frontend doesn't break
     const populated = await savedListing.populate("book");
     res.json(populated);
 
@@ -72,7 +66,6 @@ export const getBooks = async (req, res) => {
       };
     }
 
-    // find matching book IDs first, then find listings for those books
     let listingQuery = {};
     if (search && search.trim() !== "") {
       const matchingBooks = await Book.find(bookQuery).select("_id");
@@ -82,7 +75,7 @@ export const getBooks = async (req, res) => {
 
     const listings = await BookListing.find(listingQuery)
       .populate("book")
-      .populate("seller", "name location")
+      .populate("seller", "name location profileImage") // 🔥 added profileImage
       .sort({ createdAt: -1 });
 
     res.json(listings);
@@ -142,7 +135,7 @@ export const getBookById = async (req, res) => {
   try {
     const listing = await BookListing.findById(req.params.id)
       .populate("book")
-      .populate("seller", "name location");
+      .populate("seller", "name location profileImage"); // 🔥 added profileImage
     if (!listing) return res.status(404).json({ message: "Not found" });
     res.json(listing);
   } catch (err) {

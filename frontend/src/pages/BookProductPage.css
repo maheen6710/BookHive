@@ -364,6 +364,14 @@
   gap: 8px;
   transition: background 0.2s ease;
 }
+/* fix: seller profile pic should fill the circular avatar, not overflow it */
+.bpp-seller-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+ 
 
 .bpp-btn-buy:hover    { background: #1d4ed8; }
 .bpp-btn-buy:disabled { background: #93c5fd; cursor: not-allowed; }
