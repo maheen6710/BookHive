@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import AddBookForm from "../pages/AddBookForm";
 import ConversationList from "../pages/ConversationList";
@@ -17,6 +17,7 @@ export default function SellerDashboard() {
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
   let user = null;
   try {
     user = JSON.parse(localStorage.getItem("user"));
@@ -38,6 +39,15 @@ export default function SellerDashboard() {
 
   useEffect(() => {
     fetchBooks();
+  }, []);
+
+  // 🔥 if redirected here from "Chat with Seller" (seller-to-seller chat),
+  // auto-open the conversations tab with that chat active
+  useEffect(() => {
+    if (location.state?.openConvoId) {
+      setActiveNav("conversations");
+      setActiveChatId(location.state.openConvoId);
+    }
   }, []);
 
   const fetchOrders = async () => {

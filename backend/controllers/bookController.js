@@ -96,24 +96,78 @@ export const getSellerBooks = async (req, res) => {
   }
 };
 
-// 🔥 UPDATE LISTING (price/condition/etc — NOT book identity fields)
+// 🔥 UPDATE LISTING + book identity fields.
+// Editing title/author/edition/category NEVER mutates the shared Book doc
+// directly (that would silently change other sellers' listings too).
+// Instead: look for a matching existing Book and merge into it, or create
+// a brand new Book if no match — then re-point this listing at it.
 export const updateBook = async (req, res) => {
   try {
-    const { price, condition, shopLocation } = req.body;
+    const { price, condition, shopLocation, title, author, edition, category } = req.body;
 
-    const updateData = { price, condition, shopLocation };
-
+    const listingUpdate = { price, condition, shopLocation };
     if (req.file) {
-      updateData.coverImage = `/uploads/${req.file.filename}`;
+      listingUpdate.coverImage = `/uploads/${req.file.filename}`;
     }
 
-    const updated = await BookListing.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      { new: true }
-    ).populate("book");
+    const currentListing = await BookListing.findById(req.params.id);
+    if (!currentListing) {
+      return res.status(404).json({ message: "Listing not found" });
+    }
 
-    res.json(updated);
+    const oldBookId = currentListing.book;
+
+    // apply listing-level field changes
+    Object.assign(currentListing, listingUpdate);
+
+    const bookFieldsChanged =
+      title !== undefined || author !== undefined || edition !== undefined || category !== undefined;
+
+    if (bookFieldsChanged) {
+      const oldBook = await Book.findById(oldBookId);
+
+      const normTitle   = (title   !== undefined ? title   : oldBook.title).trim();
+      const normAuthor  = (author  !== undefined ? author  : oldBook.author).trim();
+      const normEdition = (edition !== undefined ? edition : (oldBook.edition || "")).trim();
+      const newCategory = category !== undefined ? category : oldBook.category;
+
+      // 🔎 does a DIFFERENT Book already match these values?
+      const matchedBook = await Book.findOne({
+        _id: { $ne: oldBookId },
+        title: { $regex: `^${normTitle}$`, $options: "i" },
+        author: { $regex: `^${normAuthor}$`, $options: "i" },
+        edition: normEdition,
+      });
+
+      if (matchedBook) {
+        // 🔥 merge into the existing matching Book — no data changes, just re-point
+        currentListing.book = matchedBook._id;
+      } else {
+        // 🔥 no match — spin off a BRAND NEW Book, never touch the old shared one
+        const newBook = new Book({
+          title: normTitle,
+          author: normAuthor,
+          edition: normEdition,
+          category: newCategory,
+        });
+        await newBook.save();
+        currentListing.book = newBook._id;
+      }
+
+      // clean up the old Book doc if nothing else points to it anymore
+      const remainingListings = await BookListing.countDocuments({
+        book: oldBookId,
+        _id: { $ne: currentListing._id },
+      });
+      if (remainingListings === 0) {
+        await Book.findByIdAndDelete(oldBookId);
+      }
+    }
+
+    await currentListing.save();
+
+    const populated = await BookListing.findById(currentListing._id).populate("book");
+    res.json(populated);
 
   } catch (err) {
     res.status(500).json({ error: err.message });

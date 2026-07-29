@@ -7,12 +7,12 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
   const isEditMode = !!bookToEdit;
 
   const [form, setForm] = useState({
-    title: bookToEdit?.title || "",
-    author: bookToEdit?.author || "",
-    edition: bookToEdit?.edition || "",
+    title: bookToEdit?.book?.title || "",
+    author: bookToEdit?.book?.author || "",
+    edition: bookToEdit?.book?.edition || "",
     price: bookToEdit?.price || "",
     condition: bookToEdit?.condition || "",
-    category: bookToEdit?.category || "",
+    category: bookToEdit?.book?.category || "",
   });
 
   const [coverImage, setCoverImage] = useState(null);
