@@ -1,0 +1,51 @@
+.slm-wrap {
+  width: 100%;
+  border-radius: var(--radius, 10px);
+  overflow: hidden;
+  border: 1px solid var(--border-bright, #334155);
+}
+
+.slm-empty {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--bg-elevated, #1e293b);
+  border-radius: var(--radius, 10px);
+  border: 1px solid var(--border-bright, #334155);
+  color: var(--text-dim, #64748b);
+}
+.slm-empty i {
+  font-size: 1.8rem;
+}
+.slm-empty p {
+  font-size: 0.9rem;
+}
+
+.slm-distance {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+/* "you are here" pulsing dot marker */
+.finder-location-marker {
+  background: transparent;
+  border: none;
+}
+.finder-dot {
+  width: 14px;
+  height: 14px;
+  background: #3b82f6;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 rgba(59, 130, 246, 0.5);
+  animation: finderPulse 2s infinite;
+}
+
+@keyframes finderPulse {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+  70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}

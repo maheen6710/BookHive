@@ -136,6 +136,49 @@ export default function SellerProfilePage() {
     }
   }
 
+  const [capturingLocation, setCapturingLocation] = useState(false);
+
+  async function captureShopLocation() {
+    if (!navigator.geolocation) {
+      showMessage("Your browser doesn't support location capture.");
+      return;
+    }
+
+    setCapturingLocation(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const token = localStorage.getItem("token");
+          const res = await axios.put(
+            "http://localhost:5000/api/users/me/location",
+            {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setSeller(res.data.user);
+          showMessage("📍 Shop location captured!");
+        } catch (err) {
+          console.error(err);
+          showMessage("❌ Failed to save location.");
+        } finally {
+          setCapturingLocation(false);
+        }
+      },
+      (err) => {
+        setCapturingLocation(false);
+        showMessage(
+          err.code === err.PERMISSION_DENIED
+            ? "Location access denied. Enable it in your browser settings."
+            : "Couldn't get your location. Try again."
+        );
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
+
   async function handlePicChange(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -309,6 +352,28 @@ export default function SellerProfilePage() {
             <EditableField field="location"    value={seller.location}    icon="fas fa-map-marker-alt" />
             <EditableField field="shopName"    value={seller.shopName}    icon="fas fa-store" />
             <EditableField field="shopAddress" value={seller.shopAddress} icon="fas fa-map-pin" />
+
+            {isOwner && (
+              <div className="spp-meta-item spp-location-capture">
+                <i className="fas fa-satellite-dish"></i>
+                <span>
+                  {seller.latitude != null
+                    ? "📍 Shop location set"
+                    : "Shop location not set"}
+                </span>
+                <button
+                  className="spp-capture-btn"
+                  onClick={captureShopLocation}
+                  disabled={capturingLocation}
+                >
+                  {capturingLocation
+                    ? "Capturing..."
+                    : seller.latitude != null
+                    ? "Update"
+                    : "Set Now"}
+                </button>
+              </div>
+            )}
 
             <div className="spp-meta-item">
               <i className="fas fa-book"></i>

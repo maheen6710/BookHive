@@ -1,5 +1,11 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // GET /api/users/:id — public profile view (used by SellerProfilePage)
 export const getUserById = async (req, res) => {
@@ -26,7 +32,28 @@ export const getMyProfile = async (req, res) => {
   }
 };
 
-// PUT /api/users/me — edit own profile
+// PUT /api/users/me/location — set shop coordinates directly from device GPS
+// (called from the frontend after navigator.geolocation captures the seller's
+// current position while they're standing at their shop)
+export const setShopLocation = async (req, res) => {
+  try {
+    const { latitude, longitude } = req.body;
+
+    if (typeof latitude !== "number" || typeof longitude !== "number") {
+      return res.status(400).json({ message: "latitude and longitude (numbers) are required." });
+    }
+
+    const updated = await User.findByIdAndUpdate(
+      req.user.id,
+      { latitude, longitude },
+      { new: true }
+    );
+
+    res.json({ message: "Shop location updated", user: updated });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 export const updateMyProfile = async (req, res) => {
   try {
     const { name, username, shopName, shopAddress, location, password } = req.body;
@@ -35,6 +62,15 @@ export const updateMyProfile = async (req, res) => {
 
     // 🔥 multer puts the uploaded file on req.file (same pattern as book covers)
     if (req.file) {
+      // delete the old profile pic file from disk before pointing at the new one
+      const currentUser = await User.findById(req.user.id).select("profileImage");
+      if (currentUser?.profileImage) {
+        const oldPath = path.join(__dirname, "..", currentUser.profileImage);
+        fs.unlink(oldPath, (err) => {
+          if (err) console.warn("Could not delete old profile pic:", err.message);
+        });
+      }
+
       updateData.profileImage = `/uploads/${req.file.filename}`;
     }
 

@@ -11,6 +11,7 @@ import wishlistRoutes from "./routes/wishlistRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import locationRoutes from "./routes/locationRoutes.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -31,6 +32,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);  
+app.use("/api/location", locationRoutes);
 
 //conversation routes
 app.use("/api/conversations", conversationRoutes);

@@ -46,44 +46,8 @@ export const addBook = async (req, res) => {
 };
 
 // 🔥 GET ALL LISTINGS — supports ?search= query param (searches Book fields)
-export const getBooks = async (req, res) => {
-  try {
-    const { search } = req.query;
-
-    let bookQuery = {};
-
-    if (search && search.trim() !== "") {
-      const words = search.trim().split(/\s+/);
-
-      bookQuery = {
-        $and: words.map((word) => ({
-          $or: [
-            { title: { $regex: word, $options: "i" } },
-            { author: { $regex: word, $options: "i" } },
-            { category: { $regex: word, $options: "i" } },
-          ],
-        })),
-      };
-    }
-
-    let listingQuery = {};
-    if (search && search.trim() !== "") {
-      const matchingBooks = await Book.find(bookQuery).select("_id");
-      const bookIds = matchingBooks.map((b) => b._id);
-      listingQuery = { book: { $in: bookIds } };
-    }
-
-    const listings = await BookListing.find(listingQuery)
-      .populate("book")
-      .populate("seller", "name location profileImage") // 🔥 added profileImage
-      .sort({ createdAt: -1 });
-
-    res.json(listings);
-
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+// (getBooks removed — GET /api/books is now fully handled by
+// searchController.js's searchListings, which also covers the no-search case)
 
 // 🔥 GET LISTINGS BY SELLER (for dashboard)
 export const getSellerBooks = async (req, res) => {
@@ -189,7 +153,7 @@ export const getBookById = async (req, res) => {
   try {
     const listing = await BookListing.findById(req.params.id)
       .populate("book")
-      .populate("seller", "name location profileImage"); // 🔥 added profileImage
+      .populate("seller", "name location profileImage latitude longitude"); // 🔥 added lat/lng for map
     if (!listing) return res.status(404).json({ message: "Not found" });
     res.json(listing);
   } catch (err) {

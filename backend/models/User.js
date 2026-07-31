@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
   },
   shopAddress: String,
   location: String,
+
+  // 🔥 geocoded coordinates for shopAddress — set automatically when a
+  // seller saves/updates their shopAddress (see profileController.js)
+  latitude: Number,
+  longitude: Number,
+
   profileImage: String,
   // 🔥 wishlist removed — now lives in its own Wishlist model (see models/Wishlist.js)
 });             
