@@ -1,5 +1,6 @@
 import Book from "../models/Book.js";
 import BookListing from "../models/BookListing.js";
+import { haversineDistanceKm } from "../utils/geoUtils.js";
 
 // GET /api/books/suggestions?search=rich — autocomplete dropdown
 export const getSuggestions = async (req, res) => {
@@ -24,10 +25,13 @@ export const getSuggestions = async (req, res) => {
   }
 };
 
-// GET /api/books?search=... — full search results (moved from bookController's getBooks)
+// GET /api/books?search=...&lat=..&lng=..&radiusKm=.. — full search results
+// (moved from bookController's getBooks). lat/lng/radiusKm are all optional —
+// if provided, results are filtered to sellers within that radius and
+// annotated with distanceKm, sorted nearest-first.
 export const searchListings = async (req, res) => {
   try {
-    const { search } = req.query;
+    const { search, lat, lng, radiusKm } = req.query;
 
     let bookQuery = {};
 
@@ -52,10 +56,42 @@ export const searchListings = async (req, res) => {
       listingQuery = { book: { $in: bookIds } };
     }
 
-    const listings = await BookListing.find(listingQuery)
+    let listings = await BookListing.find(listingQuery)
       .populate("book")
       .populate("seller", "name location profileImage latitude longitude")
       .sort({ createdAt: -1 });
+
+    // 🔥 optional distance filter + annotation, only when finder's location is provided
+    if (lat && lng) {
+      const finderLat = parseFloat(lat);
+      const finderLng = parseFloat(lng);
+      const maxRadius = radiusKm ? parseFloat(radiusKm) : null;
+
+      listings = listings
+        .map((listing) => {
+          const obj = listing.toObject();
+          if (listing.seller?.latitude != null && listing.seller?.longitude != null) {
+            obj.distanceKm = haversineDistanceKm(
+              finderLat,
+              finderLng,
+              listing.seller.latitude,
+              listing.seller.longitude
+            );
+          } else {
+            obj.distanceKm = null; // seller hasn't set their location yet
+          }
+          return obj;
+        })
+        // only filter out listings whose seller HAS a location but is too far.
+        // listings from sellers with no location set are kept (can't be excluded
+        // by distance we can't calculate) but sort to the end.
+        .filter((l) => maxRadius == null || l.distanceKm == null || l.distanceKm <= maxRadius)
+        .sort((a, b) => {
+          if (a.distanceKm == null) return 1;
+          if (b.distanceKm == null) return -1;
+          return a.distanceKm - b.distanceKm;
+        });
+    }
 
     res.json(listings);
 

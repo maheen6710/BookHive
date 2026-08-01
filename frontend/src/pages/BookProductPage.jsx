@@ -4,6 +4,7 @@ import axios from "axios";
 import "./BookProductPage.css";
 import ReviewList from "../components/ReviewList";
 import ReviewForm from "../components/ReviewForm";
+import SellerDistanceBlock from "../components/SellerDistanceBlock";
 
 export default function BookProductPage() {
   const { id }     = useParams();
@@ -230,6 +231,8 @@ function showMessage(msg) {
                 <span className="bpp-detail-value">{book.shopLocation}</span>
               </div>
             )}
+
+            <SellerDistanceBlock seller={book.seller} />
           </div>
 
           <div className="bpp-divider"></div>

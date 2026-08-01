@@ -257,3 +257,44 @@ overflow: hidden;
   font-size: 0.8rem;
   color: #374151;
 }
+/* ══════════ LOCATION / MAP FEATURES ══════════ */
+
+.srp-map-toggle {
+  background: none;
+  border: 1px solid var(--blue, #3b82f6);
+  color: var(--blue-bright, #60a5fa);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  margin-left: auto;
+}
+.srp-map-toggle:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: #f59e0b;
+  color: #0f172a;
+}
+
+.srp-geo-notice {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+.srp-map-wrap {
+  margin-bottom: 20px;
+}
+
+.srp-distance {
+  display: block;
+  font-size: 0.75rem;
+  color: #4ade80;
+  font-weight: 600;
+  margin-top: 2px;
+}
