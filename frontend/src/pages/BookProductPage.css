@@ -189,19 +189,20 @@
   gap: 4px;
 }
 .bpp-detail-label {
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   color: #1778e8;    /* change this to match author color */
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 700;
 }
 .bpp-detail-label i {
   margin-right: 5px;
   color: #64748b;   /* 👈 icon same color too */
 }
 .bpp-detail-value {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: #64748b;    /* 👈 same color as .bpp-author */
+  color: #f1f5f9;    /* 🔥 white for readability, was muted gray */
   text-transform: capitalize;
   display: inline;
 }

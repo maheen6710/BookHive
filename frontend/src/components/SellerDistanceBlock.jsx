@@ -50,7 +50,7 @@ export default function SellerDistanceBlock({ seller }) {
     <div className="sdb-box">
       <div className="sdb-header">
         <span className="sdb-label">
-          <i className="fas fa-location-arrow"></i> Distance
+          <i className="fas fa-location-arrow"></i> Location
         </span>
         {distanceKm != null ? (
           <span className="sdb-distance">{distanceKm.toFixed(1)} km away</span>
@@ -64,7 +64,7 @@ export default function SellerDistanceBlock({ seller }) {
       <SellerLocationMap
         sellers={[{ ...seller, distanceKm }]}
         finderLocation={finderLocation}
-        height="180px"
+        height="90px"
       />
 
       <button className="sdb-directions-btn" onClick={openInGoogleMaps}>

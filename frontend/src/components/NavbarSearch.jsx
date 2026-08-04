@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaCamera } from "react-icons/fa";
+import ImageSearchModal from "./ImageSearchModal";
 import "./NavbarSearch.css";
 
 export default function NavbarSearch() {
@@ -8,6 +10,7 @@ export default function NavbarSearch() {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading]     = useState(false);
   const [showDrop, setShowDrop]   = useState(false);
+  const [showImageSearch, setShowImageSearch] = useState(false); // NEW
 
   const wrapperRef  = useRef(null);
   const debounceRef = useRef(null);
@@ -111,6 +114,17 @@ export default function NavbarSearch() {
         >
           <i className="fas fa-search"></i>
         </button>
+
+        {/* NEW: camera icon for image search, sits right next to the search button */}
+        <button
+          className="ns-camera-btn"
+          type="button"
+          title="Search by cover photo"
+          aria-label="Search by cover photo"
+          onClick={() => setShowImageSearch(true)}
+        >
+          <FaCamera />
+        </button>
       </div>
 
       {/* dropdown suggestions */}
@@ -139,6 +153,11 @@ export default function NavbarSearch() {
           ))}
 
         </div>
+      )}
+
+      {/* NEW: image search popup */}
+      {showImageSearch && (
+        <ImageSearchModal onClose={() => setShowImageSearch(false)} />
       )}
     </div>
   );

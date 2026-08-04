@@ -227,7 +227,7 @@ function showMessage(msg) {
             </div>
             {book.shopLocation && (
               <div className="bpp-detail-item">
-                <span className="bpp-detail-label"><i className="fas fa-map-marker-alt"></i> Location</span>
+                <span className="bpp-detail-label"><i className="fas fa-map-marker-alt"></i> Address</span>
                 <span className="bpp-detail-value">{book.shopLocation}</span>
               </div>
             )}
@@ -257,9 +257,6 @@ function showMessage(msg) {
                 <p className="bpp-seller-label">Listed by</p>
                 <p className="bpp-seller-name">{book.seller?.name || "Unknown Seller"}</p>
               </div>
-              {book.seller?.location && (
-                <p className="bpp-seller-loc"><i className="fas fa-store"></i> {book.seller.location}</p>
-              )}
             </div>
           </div>
 

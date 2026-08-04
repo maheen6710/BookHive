@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate  } fro
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -18,10 +17,7 @@ import ChatPage from "./pages/ChatPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
-
-
 import "./App.css";
-
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -42,7 +38,7 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ✅ login handler
+  //  login handler
   function handleLogin(name, email, accountType, from) {
     const newUser = {
       name: name || email.split("@")[0],
@@ -62,7 +58,6 @@ function AppContent() {
     }
   }
 
-  // ✅ logout
   function handleLogout() {
     setUser(null);
     localStorage.removeItem("user");
@@ -81,8 +76,8 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage user={user} />} />
           <Route path="/home" element={<Navigate to="/" />} />
-          <Route path="/search" element={<SearchResultsPage />} /> ///idk if I should add this here
-          <Route path="/book/:id" element={<BookProductPage />} /> //same for this one
+          <Route path="/search" element={<SearchResultsPage />} /> 
+          <Route path="/book/:id" element={<BookProductPage />} /> 
           <Route path="/seller/:sellerId" element={<SellerProfilePage />} />
           <Route path="/checkout/:bookId" element={<CheckoutPage />} />
           <Route path="/order-success" element={<OrderSuccessPage />} />
