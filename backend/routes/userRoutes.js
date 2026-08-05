@@ -6,6 +6,8 @@ import {
   getMyProfile,
   updateMyProfile,
   setShopLocation,
+  changePassword,       
+  updatePreferences,
 } from "../controllers/profileController.js";
 
 const router = express.Router();
@@ -17,5 +19,8 @@ router.put("/me/location", protect, setShopLocation);
 
 // GET /api/users/:id — public profile view (used by SellerProfilePage)
 router.get("/:id", getUserById);
+
+router.put("/me/password", protect, changePassword);
+router.put("/me/preferences", protect, updatePreferences);
 
 export default router;

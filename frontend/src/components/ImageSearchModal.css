@@ -10,7 +10,7 @@
 
 .imgsearch-modal {
   background: #12203a;
-  border: 1px solid #f0a500;
+  border: 1px solid #2563eb;
   border-radius: 12px;
   padding: 32px;
   width: 90%;
@@ -28,7 +28,7 @@
   right: 16px;
   background: none;
   border: none;
-  color: #f0a500;
+  color: #f5f5f5;
   font-size: 28px;
   cursor: pointer;
   line-height: 1;
@@ -36,8 +36,8 @@
 
 .imgsearch-title {
   font-family: "Cinzel", serif;
-  color: #f0a500;
-  font-size: 22px;
+  color: #f5f5f5;
+  font-size: 26px;
   margin-bottom: 8px;
   text-align: center;
 }
@@ -56,9 +56,9 @@
 }
 
 .imgsearch-option-btn {
-  background: transparent;
-  border: 1.5px solid #f0a500;
-  color: #f0a500;
+  background: #2563eb;
+  border: 1.5px solid #2563eb;;
+  color: #f5f5f5;;
   padding: 14px;
   border-radius: 8px;
   font-size: 15px;
@@ -69,6 +69,7 @@
 
 .imgsearch-option-btn:hover {
   background: #f0a500;
+  border: #d97706;
   color: #12203a;
 }
 

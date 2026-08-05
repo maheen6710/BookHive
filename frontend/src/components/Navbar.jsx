@@ -32,7 +32,7 @@ export default function Navbar({ user, setCurrentPage, onLogout }) {
             <span className="logo-dark">Hive</span>
           </div>
           {/* Search Bar */}
-         <NavbarSearch />
+         <NavbarSearch user={user} />
 
           {/* Auth Buttons or User Menu */}
           <div className="nav-actions">
@@ -66,7 +66,7 @@ export default function Navbar({ user, setCurrentPage, onLogout }) {
                         }
                       }}
                     >
-                      Profile
+                      View Dashboard
                     </a>
                     <button onClick={() => { onLogout(); setDropdownOpen(false); }}>
                       Logout

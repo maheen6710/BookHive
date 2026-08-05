@@ -6,6 +6,7 @@ import ConversationList from "../pages/ConversationList";
 import ChatPage from "../pages/ChatPage";
 import "./Dashboard.css";
 import SellerReviews from "../pages/SellerReviews";
+import Settings from "./Settings";
 
 export default function SellerDashboard() {
   const [activeNav, setActiveNav] = useState("dashboard");
@@ -13,7 +14,7 @@ export default function SellerDashboard() {
   const [editingBook, setEditingBook] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [editStatus, setEditStatus] = useState("");
-  const [activeChatId, setActiveChatId] = useState(null); // ✅ tracks which convo is open
+  const [activeChatId, setActiveChatId] = useState(null); //  tracks which convo is open
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const navigate = useNavigate();
@@ -333,6 +334,8 @@ export default function SellerDashboard() {
             </div>
           </>
         );
+        case "settings":
+        return <Settings />; 
     }
   }
 
@@ -350,6 +353,7 @@ export default function SellerDashboard() {
             { key: "conversations", icon: "fas fa-comments",       label: "Conversations" }, 
             { key: "reviews",       icon: "fas fa-star",           label: "Reviews" },
             { key: "view-profile",  icon: "fas fa-user-circle",    label: "View Profile" },
+            { key: "settings",      icon: "fas fa-cog",            label: "Settings" },
           ].map((item) => (
             <button
               key={item.key}

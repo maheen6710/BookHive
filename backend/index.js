@@ -13,6 +13,7 @@ import conversationRoutes from "./routes/conversationRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import locationRoutes from "./routes/locationRoutes.js";
 import imageSearchRoutes from "./routes/imageSearchRoutes.js";
+import searchHistoryRoutes from './routes/searchHistoryRoutes.js';
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -41,6 +42,8 @@ app.use("/api/conversations", conversationRoutes);
 //order routes
 app.use("/api/orders", orderRoutes);
 app.use("/api/imagesearch", imageSearchRoutes);
+
+app.use('/api/search-history', searchHistoryRoutes);
 
 // test route
 app.get("/", (req, res) => {

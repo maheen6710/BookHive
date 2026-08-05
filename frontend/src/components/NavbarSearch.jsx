@@ -5,12 +5,12 @@ import { FaCamera } from "react-icons/fa";
 import ImageSearchModal from "./ImageSearchModal";
 import "./NavbarSearch.css";
 
-export default function NavbarSearch() {
+export default function NavbarSearch({ user }) {  // ✅ added user prop
   const [query, setQuery]         = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading]     = useState(false);
   const [showDrop, setShowDrop]   = useState(false);
-  const [showImageSearch, setShowImageSearch] = useState(false); // NEW
+  const [showImageSearch, setShowImageSearch] = useState(false);
 
   const wrapperRef  = useRef(null);
   const debounceRef = useRef(null);
@@ -25,6 +25,24 @@ export default function NavbarSearch() {
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
   }, []);
+
+  // ── save search history ──
+  async function saveSearchQuery(queryStr) {
+    if (!user || user.role !== "finder") return; // only finders
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      await axios.post(
+        "http://localhost:5000/api/search-history",
+        { query: queryStr.trim() },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      // non‑critical – just log
+      console.error("Failed to save search history:", err);
+    }
+  }
 
   // debounced typing handler — waits 300ms before hitting the API
   function handleChange(e) {
@@ -41,7 +59,7 @@ export default function NavbarSearch() {
     debounceRef.current = setTimeout(() => fetchSuggestions(val.trim()), 300);
   }
 
-  // calls the new /api/books/suggestions endpoint — returns unique title strings
+  // calls the /api/books/suggestions endpoint — returns unique title strings
   async function fetchSuggestions(term) {
     try {
       setLoading(true);
@@ -62,13 +80,16 @@ export default function NavbarSearch() {
   function handleSelect(title) {
     setQuery(title);
     setShowDrop(false);
+    saveSearchQuery(title); // ✅ save before navigation
     navigate(`/search?q=${encodeURIComponent(title)}`);
   }
 
   function handleKeyDown(e) {
     if (e.key === "Enter" && query.trim()) {
       setShowDrop(false);
-      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+      const q = query.trim();
+      saveSearchQuery(q); // ✅ save before navigation
+      navigate(`/search?q=${encodeURIComponent(q)}`);
     }
     if (e.key === "Escape") setShowDrop(false);
   }
@@ -108,14 +129,16 @@ export default function NavbarSearch() {
           onClick={() => {
             if (query.trim()) {
               setShowDrop(false);
-              navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+              const q = query.trim();
+              saveSearchQuery(q); // ✅ save before navigation
+              navigate(`/search?q=${encodeURIComponent(q)}`);
             }
           }}
         >
           <i className="fas fa-search"></i>
         </button>
 
-        {/* NEW: camera icon for image search, sits right next to the search button */}
+        {/* camera icon for image search */}
         <button
           className="ns-camera-btn"
           type="button"
@@ -155,7 +178,7 @@ export default function NavbarSearch() {
         </div>
       )}
 
-      {/* NEW: image search popup */}
+      {/* image search popup */}
       {showImageSearch && (
         <ImageSearchModal onClose={() => setShowImageSearch(false)} />
       )}

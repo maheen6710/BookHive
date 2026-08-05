@@ -1,0 +1,103 @@
+.search-history-page {
+  padding: 8px 0;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.history-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.clear-all-btn {
+  background: transparent;
+  border: 1.5px solid #1d4ed8;
+  color: #f1f5f9;
+  padding: 4px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.clear-all-btn:hover {
+  border-color: #fbbf24;
+  color: #fbbf24;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.history-message {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid #22c55e;
+  color: #86efac;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.history-empty {
+  color: #697a91;
+  font-size: 0.9rem;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #1e2437;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-query {
+  flex: 1;
+  cursor: pointer;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+.history-query:hover {
+  color: #f59e0b;
+}
+.history-query i {
+  margin-right: 8px;
+  color: #3b82f6;
+}
+
+.history-time {
+  font-size: 0.85rem;
+  color: #f8fafc;
+  white-space: nowrap;
+}
+
+.history-delete {
+  background: transparent;
+  border: 2px solid black;
+  color: #f1f5f9;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 4px;
+}
+.history-delete:hover {
+  color: #f59e0b;
+}
+
+.history-loading {
+  color: #475569;
+}

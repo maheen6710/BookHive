@@ -4,14 +4,16 @@ import BookCard from "../components/BookCard";
 import WishlistPage from "./WishlistPage";
 import ConversationList from "../pages/ConversationList";
 import ChatPage from "../pages/ChatPage";
+import Settings from "./Settings";
+import SearchHistoryPage from "./SearchHistoryPage";
 import "./Dashboard.css";
 
 export default function BuyerDashboard() {
   const [activeNav, setActiveNav] = useState("discover");
-  const [books, setBooks]         = useState([]);
-  const [activeChatId, setActiveChatId] = useState(null); // ✅ tracks which convo is open
-  const navigate                  = useNavigate();
-  const [orders, setOrders]             = useState([]);
+  const [books, setBooks] = useState([]);
+  const [activeChatId, setActiveChatId] = useState(null); //  tracks which convo is open
+  const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
 
   useEffect(() => {
@@ -62,7 +64,7 @@ useEffect(() => {
             { key: "search",         icon: "fas fa-search",     label: "Search History" },
             { key: "orders",         icon: "fas fa-box",        label: "My Orders"      },
             { key: "wishlist",       icon: "fas fa-heart",      label: "Wishlist" },
-            { key: "conversations",  icon: "fas fa-comments",   label: "Conversations" }, // ✅ NEW
+            { key: "conversations",  icon: "fas fa-comments",   label: "Conversations" }, 
             { key: "settings",       icon: "fas fa-cog",        label: "Settings" },
           ].map((item) => (
             <button
@@ -212,9 +214,9 @@ useEffect(() => {
             <div className="card-header">
               <h2>Search History</h2>
             </div>
-            <div className="card-body">
-              <p style={{ color: "#475569" }}>Search history coming soon.</p>
-            </div>
+           <div className="card-body">
+            <SearchHistoryPage />
+          </div>
           </div>
         )}
 
@@ -240,16 +242,7 @@ useEffect(() => {
         )}
 
         {/* ── SETTINGS TAB ── */}
-        {activeNav === "settings" && (
-          <div className="dashboard-card">
-            <div className="card-header">
-              <h2>Settings</h2>
-            </div>
-            <div className="card-body">
-              <p style={{ color: "#475569" }}>Settings coming soon.</p>
-            </div>
-          </div>
-        )}
+        {activeNav === "settings" && <Settings />}
 
       </div>
     </div>

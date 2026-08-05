@@ -9,7 +9,7 @@ export default function HomePage({ setCurrentPage, user }) {
   const [books, setBooks] = useState([]); // array of LISTINGS now
   const navigate = useNavigate();
 
-  // 🔥 Fetch listings from backend
+  //  Fetch listings from backend
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -58,7 +58,7 @@ export default function HomePage({ setCurrentPage, user }) {
       <>
         <div className="login-card seller" onClick={() => navigate("/login")}>
           <h3>Login as Seller</h3>
-          <p>Add and manage your books</p>
+          <p>Sell and manage your books</p>
         </div>
         <div className="login-card buyer" onClick={() => navigate("/login")}>
           <h3>Login as Buyer</h3>
@@ -80,9 +80,8 @@ export default function HomePage({ setCurrentPage, user }) {
         <p>Create a seller account and list your books</p>
       </div>
     )}
-  </div>
-</section>
-
+        </div>
+      </section>
     </div>
   );
 }

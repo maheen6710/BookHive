@@ -37,7 +37,7 @@ export default function ImageSearchModal({ onClose }) {
       }
 
       if (data.extracted?.title || data.extracted?.author) {
-        // Success — skip the extra screen, go straight to search results
+        // Success
         const query = [data.extracted.title, data.extracted.author].filter(Boolean).join(" ");
         navigate(`/search?q=${encodeURIComponent(query)}`);
         onClose();
