@@ -247,6 +247,116 @@
   border-radius: 50%;
   animation: wl-spin 0.7s linear infinite;
 }
+/* ─── Toast ─── */
+.wl-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #151929;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #e2e8f0;
+  padding: 12px 22px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(245,158,11,0.15);
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 1000;
+  animation: wlToastIn 0.25s ease, wlToastOut 0.25s ease 2.8s;
+}
+
+@keyframes wlToastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+@keyframes wlToastOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ─── Custom Confirm Modal ─── */
+/* ─── Custom Confirm Modal ─── */
+.wl-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);     
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: wlModalFadeIn 0.2s ease;
+}
+
+.wl-modal {
+  background: #151929;
+  border: 1.5px solid #0173ff;           
+  border-radius: 16px;
+  padding: 32px 36px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.wl-modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 12px 0;
+}
+
+.wl-modal-message {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.wl-modal-message strong {
+  color: #e2e8f0;
+}
+
+.wl-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.wl-modal-btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.wl-modal-cancel {
+  background: transparent;
+  color: #f8fafc;                 
+  border: 1.5px solid #0173ff;      
+}
+.wl-modal-cancel:hover {
+  background: rgba(1, 115, 255, 0.08);
+  color: #f8fafc;
+}
+
+.wl-modal-confirm {
+  background: #ef4444;
+  color: #fff;
+}
+.wl-modal-confirm:hover {
+  background: #dc2626;
+}
+
+@keyframes wlModalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
 
 @keyframes wl-spin {
   to {

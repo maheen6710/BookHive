@@ -21,6 +21,12 @@ export default function SellerDashboard() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
+  // ── modal state for book deletion ──
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: "" });
+
   let user = null;
   try {
     user = JSON.parse(localStorage.getItem("user"));
@@ -71,23 +77,53 @@ export default function SellerDashboard() {
     fetchOrders();
   }, []);
 
+  // ── show toast ──
+  function showToast(message) {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: "" }), 3000);
+  }
+
+  // ── open delete modal ──
+  function openDeleteModal(bookId) {
+    setBookToDelete(bookId);
+    setDeleteModalOpen(true);
+  }
+
+  // ── confirm delete ──
+  async function confirmDelete() {
+    if (!bookToDelete) return;
+    setDeleteLoading(true);
+    const token = localStorage.getItem("token");
+    try {
+      await axios.delete(`http://localhost:5000/api/books/${bookToDelete}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchBooks();
+      showToast("Book deleted successfully");
+      setDeleteModalOpen(false);
+      setBookToDelete(null);
+    } catch (err) {
+      console.error("Delete failed:", err);
+      showToast("Failed to delete book");
+    } finally {
+      setDeleteLoading(false);
+    }
+  }
+
+  // ── close modal ──
+  function closeDeleteModal() {
+    setDeleteModalOpen(false);
+    setBookToDelete(null);
+  }
+
   function handleEditClick(book) {
     setEditingBook(book);
     setActiveNav("edit-book");
   }
 
-  async function handleDelete(bookId) {
-    const confirmed = window.confirm("Are you sure you want to delete this book?");
-    if (!confirmed) return;
-    const token = localStorage.getItem("token");
-    try {
-      await axios.delete(`http://localhost:5000/api/books/${bookId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchBooks();
-    } catch (err) {
-      console.error("Delete failed:", err);
-    }
+  // ── removed window.confirm, now using modal ──
+  function handleDelete(bookId) {
+    openDeleteModal(bookId);
   }
 
   function renderContent() {
@@ -330,7 +366,6 @@ export default function SellerDashboard() {
                 }
                 setActiveNav(item.key);
                 setActiveChatId(null);
-                // Update URL when switching tabs
                 navigate(`?tab=${item.key}`);
               }}
             >
@@ -348,6 +383,35 @@ export default function SellerDashboard() {
         </div>
         {renderContent()}
       </div>
+
+      {/* ── TOAST ── */}
+      {toast.show && (
+        <div className="db-toast">{toast.message}</div>
+      )}
+
+      {/* ── DELETE MODAL ── */}
+      {deleteModalOpen && (
+        <div className="db-modal-overlay" onClick={closeDeleteModal}>
+          <div className="db-modal" onClick={(e) => e.stopPropagation()}>
+            <h3 className="db-modal-title">Delete Book</h3>
+            <p className="db-modal-message">
+              Are you sure you want to permanently delete this book listing?
+            </p>
+            <div className="db-modal-actions">
+              <button className="db-modal-btn db-modal-cancel" onClick={closeDeleteModal}>
+                Cancel
+              </button>
+              <button
+                className="db-modal-btn db-modal-confirm"
+                onClick={confirmDelete}
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

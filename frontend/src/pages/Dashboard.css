@@ -522,3 +522,112 @@
   font-family: inherit;
   font-size: inherit;
 }
+/* ─── Toast for dashboard ─── */
+.db-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #151929;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #e2e8f0;
+  padding: 12px 22px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(245,158,11,0.15);
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 1000;
+  animation: dbToastIn 0.25s ease, dbToastOut 0.25s ease 2.8s;
+}
+
+@keyframes dbToastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+@keyframes dbToastOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ─── Custom Delete Modal ─── */
+.db-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: dbModalFadeIn 0.2s ease;
+}
+
+.db-modal {
+  background: #151929;
+  border: 1.5px solid #0173ff;
+  border-radius: 16px;
+  padding: 32px 36px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.db-modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 12px 0;
+}
+
+.db-modal-message {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.db-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.db-modal-btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.db-modal-cancel {
+  background: transparent;
+  color: #f8fafc;
+  border: 1.5px solid #0173ff;
+}
+.db-modal-cancel:hover {
+  background: rgba(1, 115, 255, 0.08);
+  color: #f8fafc;
+}
+
+.db-modal-confirm {
+  background: #ef4444;
+  color: #fff;
+}
+.db-modal-confirm:hover {
+  background: #dc2626;
+}
+.db-modal-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes dbModalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}

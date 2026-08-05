@@ -289,13 +289,14 @@
 }
 
 /* ─── Custom Confirm Modal ─── */
+/* ─── Custom Confirm Modal ─── */
 .od-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.5);        /* reduced opacity (was 0.7) */
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -303,10 +304,9 @@
   z-index: 999;
   animation: odModalFadeIn 0.2s ease;
 }
-
 .od-modal {
   background: #151929;
-  border: 1.5px solid #2e3350;
+  border: 1.5px solid #0173ff;            /* blue border */
   border-radius: 16px;
   padding: 32px 36px;
   max-width: 440px;
@@ -346,12 +346,11 @@
 
 .od-modal-cancel {
   background: transparent;
-  color: #94a3b8;
-  border: 1.5px solid #2e3350;
+  color: #f8fafc;                  
+  border: 1.5px solid #0173ff;      
 }
 .od-modal-cancel:hover {
-  background: #1e2437;
-  color: #e2e8f0;
+  background: rgba(1, 115, 255, 0.08);
 }
 
 .od-modal-confirm {

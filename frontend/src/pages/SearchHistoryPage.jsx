@@ -41,18 +41,20 @@ export default function SearchHistoryPage() {
     }
   };
 
+  // ── updated clearAll: no confirm, direct delete ──
   const clearAll = async () => {
-    if (!window.confirm('Clear all search history?')) return;
     try {
       const token = localStorage.getItem('token');
       await axios.delete('http://localhost:5000/api/search-history', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setHistory([]);
-      setMessage('All searches cleared');
+      setMessage('Search history cleared');
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
       console.error(err);
+      setMessage('Failed to clear history');
+      setTimeout(() => setMessage(''), 3000);
     }
   };
 
