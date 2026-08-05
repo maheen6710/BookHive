@@ -1,23 +1,10 @@
-// migrateOrdersConvosSplit.js
-// 🔥 ONE-TIME SCRIPT — run once, then archive/delete this file.
-// Fixes old Order/Conversation docs whose "book" field still points at
-// pre-split Book IDs, so they now point at the correct BookListing instead.
-//
-// Matches by (old Book ID + seller) since the first migration created
-// exactly one BookListing per old Book doc, tagged with that seller.
-//
-// SAFE: only updates docs where "book" doesn't already resolve to a
-// valid BookListing. Already-correct docs (created after the split) are skipped.
-//
-// Run with: node migrateOrdersConvosSplit.js
-
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-import Order from "./models/Order.js";
-import Conversation from "./models/Conversation.js";
-import BookListing from "./models/BookListing.js";
+import Order from "../../models/Order.js";
+import Conversation from "../../models/Conversation.js";
+import BookListing from "../../models/BookListing.js";
 
 const MONGO_URI = process.env.MONGO_URI;
 

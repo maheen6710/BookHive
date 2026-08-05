@@ -1,20 +1,9 @@
-// migrateWishlistSplit.js
-// 🔥 ONE-TIME SCRIPT — run once, then archive/delete this file.
-// Moves old User.wishlist arrays (old Book IDs) into the new Wishlist
-// collection (BookListing IDs).
-//
-// SAFE: only reads old wishlist data from User docs directly via the raw
-// db driver (since the field no longer exists on the Mongoose schema).
-// Skips users who already have a Wishlist doc.
-//
-// Run with: node migratewishlistsplit.js
-
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-import Wishlist from "./models/Wishlist.js";
-import BookListing from "./models/BookListing.js";
+import Wishlist from "../../models/Wishlist.js";
+import BookListing from "../../models/BookListing.js";
 
 const MONGO_URI = process.env.MONGO_URI;
 

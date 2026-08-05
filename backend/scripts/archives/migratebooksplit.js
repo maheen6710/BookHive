@@ -1,13 +1,3 @@
-// migrateBookSplit.js
-// 🔥 ONE-TIME SCRIPT — run once, then archive/delete this file.
-// Splits the old merged "books" collection into new "books" (Book) +
-// "booklistings" (BookListing) collections.
-//
-// SAFE-GUARD: renames the OLD collection to "books_backup_pre_split"
-// before doing anything, so if this goes wrong your data is untouched.
-//
-// Run with: node migrateBookSplit.js
-
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
