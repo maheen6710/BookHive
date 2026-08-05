@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import NavbarSearch from "./NavbarSearch";
 import "./Navbar.css";
 
@@ -7,11 +7,18 @@ const categories = [
   "Fiction", "Non-Fiction", "Academic",
   "Children's Books", "Textbooks",
   "Biographies", "Science Fiction", "Mystery & Thriller",
+  "Poetry", "Self-Help", "Comics & Graphic Novels",
 ];
 
 export default function Navbar({ user, setCurrentPage, onLogout }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate(); //adding it here cuz it suggested
+  const location = useLocation();
+
+  // if we're on /category/:categoryName, decode it so we can match + highlight the right nav link
+  const activeCategory = location.pathname.startsWith("/category/")
+    ? decodeURIComponent(location.pathname.split("/category/")[1])
+    : null;
 
   return (
     <nav className="navbar">
@@ -74,7 +81,17 @@ export default function Navbar({ user, setCurrentPage, onLogout }) {
         {/* Category Links */}
         <div className="category-menu">
           {categories.map((cat) => (
-            <a key={cat} href="#" className="category-link">{cat}</a>
+            <a
+              key={cat}
+              href={`/category/${encodeURIComponent(cat)}`}
+              className={`category-link ${activeCategory === cat ? "active" : ""}`}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(`/category/${encodeURIComponent(cat)}`);
+              }}
+            >
+              {cat}
+            </a>
           ))}
         </div>
       </div>

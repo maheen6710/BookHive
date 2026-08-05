@@ -160,3 +160,25 @@ export const getBookById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// for listing books by category
+export const getBooksByCategory = async (req, res) => {
+  try {
+    const { categoryName } = req.params;
+
+    // find shared Book docs that match this category
+    const books = await Book.find({ category: categoryName });
+    const bookIds = books.map((b) => b._id);
+
+    // find seller listings pointing at those books, populated with book info
+    // (same shape as getSellerBooks / getBookById, so BookCard renders it the same way)
+    const listings = await BookListing.find({ book: { $in: bookIds } })
+      .populate("book")
+      .populate("seller", "name location profileImage");
+
+    res.status(200).json(listings);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching books by category" });
+  }
+};

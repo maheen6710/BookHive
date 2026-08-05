@@ -17,6 +17,7 @@ import ChatPage from "./pages/ChatPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
+import CategoryPage from "./pages/CategoryPage";
 import "./App.css";
 
 function ScrollToTop() {
@@ -94,6 +95,7 @@ function AppContent() {
           <Route path="/messages" element={<ConversationList />} />
           <Route path="/messages/:id" element={<ChatPage />} />
           <Route path="/order/:orderId" element={<OrderDetailPage />} />
+          <Route path="/category/:categoryName" element={<CategoryPage />} />
         </Routes>
       </main>
 

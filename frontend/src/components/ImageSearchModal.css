@@ -72,32 +72,6 @@
   color: #12203a;
 }
 
-.imgsearch-camera {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-
-.imgsearch-video {
-  width: 100%;
-  max-height: 320px;
-  border-radius: 8px;
-  border: 1px solid #f0a500;
-  background: #000;
-  object-fit: cover;
-}
-
-.imgsearch-camera-controls {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-}
-
-.imgsearch-camera-controls .imgsearch-option-btn {
-  flex: 1;
-}
-
 .imgsearch-loading {
   display: flex;
   flex-direction: column;
@@ -139,76 +113,11 @@
   }
 }
 
-.imgsearch-extracted {
-  background: rgba(240, 165, 0, 0.1);
-  border-left: 3px solid #f0a500;
-  padding: 10px 14px;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 16px;
-}
-
 .imgsearch-error {
   color: #ff8080;
   font-size: 14px;
   text-align: center;
   margin-bottom: 12px;
-}
-
-.imgsearch-no-results {
-  text-align: center;
-  color: #cfd6e4;
-  font-size: 14px;
-  margin: 16px 0;
-}
-
-.imgsearch-match-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 320px;
-  overflow-y: auto;
-}
-
-.imgsearch-match-card {
-  display: flex;
-  gap: 12px;
-  text-decoration: none;
-  color: inherit;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 8px;
-  padding: 8px;
-  transition: background 0.2s ease;
-}
-
-.imgsearch-match-card:hover {
-  background: rgba(240, 165, 0, 0.12);
-}
-
-.imgsearch-match-card img {
-  width: 50px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.imgsearch-match-title {
-  font-weight: 600;
-  font-size: 14px;
-  margin: 0;
-}
-
-.imgsearch-match-author {
-  font-size: 12px;
-  color: #cfd6e4;
-  margin: 2px 0;
-}
-
-.imgsearch-match-price {
-  font-size: 13px;
-  color: #f0a500;
-  font-weight: 600;
-  margin: 0;
 }
 
 .imgsearch-retry-btn {

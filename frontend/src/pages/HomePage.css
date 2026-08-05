@@ -4,6 +4,10 @@
   padding: 36px 16px;
 }
 
+.home-page .section:first-of-type {
+  padding-top: 10px;
+}
+
 .section-header {
   display: flex;
   justify-content: space-between;

@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import "./ImageSearchModal.css";
 
-// STAGES: "choose" -> "camera" -> "loading" -> "results"
+// STAGES: "choose" -> "loading" -> "results"
 export default function ImageSearchModal({ onClose }) {
   const [stage, setStage] = useState("choose");
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -11,56 +11,6 @@ export default function ImageSearchModal({ onClose }) {
   const navigate = useNavigate();
 
   const uploadInputRef = useRef(null);
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const streamRef = useRef(null);
-
-  // Always stop the webcam when the modal unmounts, so the camera light
-  // doesn't stay on after the user closes the popup
-  useEffect(() => {
-    return () => stopCamera();
-  }, []);
-
-  const stopCamera = () => {
-    streamRef.current?.getTracks().forEach((track) => track.stop());
-    streamRef.current = null;
-  };
-
-  const openCamera = async () => {
-    setErrorMsg(null);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" }, // prefers rear camera on devices that have one
-      });
-      streamRef.current = stream;
-      setStage("camera");
-      // videoRef isn't attached to the DOM yet on this same tick, so wait a beat
-      setTimeout(() => {
-        if (videoRef.current) videoRef.current.srcObject = stream;
-      }, 0);
-    } catch (err) {
-      console.error("Camera access error:", err);
-      setErrorMsg(
-        "Couldn't access your camera — check that you allowed permission, or upload a photo instead"
-      );
-      setStage("results");
-    }
-  };
-
-  const capturePhoto = () => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    if (!video || !canvas) return;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0);
-
-    canvas.toBlob((blob) => {
-      stopCamera();
-      handleFileSelected(blob);
-    }, "image/jpeg", 0.9);
-  };
 
   const handleFileSelected = async (file) => {
     if (!file) return;
@@ -71,7 +21,7 @@ export default function ImageSearchModal({ onClose }) {
 
     try {
       const formData = new FormData();
-      formData.append("coverImage", file, file.name || "capture.jpg");
+      formData.append("coverImage", file);
 
       const res = await fetch("http://localhost:5000/api/imagesearch", {
         method: "POST",
@@ -121,18 +71,15 @@ export default function ImageSearchModal({ onClose }) {
           <>
             <h2 className="imgsearch-title">Search by Cover</h2>
             <p className="imgsearch-subtitle">
-              Snap or upload a photo of a book cover and we'll find it for you
+              Upload a photo of a book cover and we'll find it for you
             </p>
 
             <div className="imgsearch-options">
-              <button className="imgsearch-option-btn" onClick={openCamera}>
-                📷 Take a Photo
-              </button>
               <button
                 className="imgsearch-option-btn"
                 onClick={() => uploadInputRef.current.click()}
               >
-                🖼️ Upload from Gallery
+                🖼️ Upload a Photo
               </button>
             </div>
 
@@ -144,28 +91,6 @@ export default function ImageSearchModal({ onClose }) {
               onChange={(e) => handleFileSelected(e.target.files[0])}
             />
           </>
-        )}
-
-        {stage === "camera" && (
-          <div className="imgsearch-camera">
-            <video ref={videoRef} autoPlay playsInline className="imgsearch-video" />
-            <canvas ref={canvasRef} style={{ display: "none" }} />
-
-            <div className="imgsearch-camera-controls">
-              <button className="imgsearch-option-btn" onClick={capturePhoto}>
-                📸 Capture
-              </button>
-              <button
-                className="imgsearch-retry-btn"
-                onClick={() => {
-                  stopCamera();
-                  setStage("choose");
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
         )}
 
         {stage === "loading" && (

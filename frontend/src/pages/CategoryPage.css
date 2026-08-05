@@ -1,0 +1,17 @@
+.category-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.category-page h1 {
+  font-family: "Cinzel", serif;
+  color: #12203a;
+  margin-bottom: 24px;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+}
