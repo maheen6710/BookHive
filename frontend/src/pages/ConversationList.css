@@ -48,7 +48,7 @@
   align-items: center;
   gap: 14px;
   background: #111827;
-  border: 1px solid #1e2a3a;
+  border: 1px solid #053d81;
   border-radius: 14px;
   padding: 14px 16px;
   cursor: pointer;
@@ -73,6 +73,14 @@
   font-size: 1.1rem;
   color: #0d1117;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.cl-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .cl-info {
@@ -94,8 +102,8 @@
 }
 
 .cl-time {
-  font-size: 0.72rem;
-  color: #475569;
+  font-size: 0.85rem;
+  color: #fff;
   flex-shrink: 0;
 }
 
@@ -117,19 +125,141 @@
 }
 
 .cl-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
-  border: 1px solid transparent;
-  color: #475569;
-  padding: 6px 8px;
+  border: 1.5px solid #0173ff;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.95rem;
   transition: all 0.2s;
   flex-shrink: 0;
 }
 
 .cl-delete-btn:hover {
   border-color: #ef4444;
-  color: #ef4444;
   background: rgba(239, 68, 68, 0.08);
+}
+
+.cl-delete-btn:hover .cl-delete-icon {
+  color: #ef4444;
+}
+
+.cl-delete-btn:active {
+  transform: scale(0.94);
+}
+
+.cl-delete-icon {
+  width: 15px;
+  height: 15px;
+  color: #fff;
+}
+
+/* ---- Toast ---- */
+.cl-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #151929;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #e2e8f0;
+  padding: 12px 22px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 20px rgba(245,158,11,0.15);
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 1000;
+  animation: clToastIn 0.25s ease, clToastOut 0.25s ease 2.8s;
+}
+
+@keyframes clToastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+@keyframes clToastOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ---- Delete Confirmation Modal ---- */
+.cl-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: clModalFadeIn 0.2s ease;
+}
+
+.cl-modal {
+  background: #151929;
+  border: 1.5px solid #0173ff;
+  border-radius: 16px;
+  padding: 32px 36px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.cl-modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 12px 0;
+}
+
+.cl-modal-message {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.cl-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.cl-modal-btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cl-modal-cancel {
+  background: transparent;
+  color: #f8fafc;
+  border: 1.5px solid #0173ff;
+}
+.cl-modal-cancel:hover {
+  background: rgba(1, 115, 255, 0.08);
+  color: #f8fafc;
+}
+
+.cl-modal-confirm {
+  background: #ef4444;
+  color: #fff;
+}
+.cl-modal-confirm:hover {
+  background: #dc2626;
+}
+
+@keyframes clModalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
 }

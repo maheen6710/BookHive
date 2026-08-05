@@ -1,0 +1,46 @@
+/* ===== ChatMessage.css — single chat bubble ===== */
+
+.chat-bubble-wrap {
+  display: flex;
+}
+
+.chat-bubble-wrap.mine {
+  justify-content: flex-end;
+}
+
+.chat-bubble-wrap.theirs {
+  justify-content: flex-start;
+}
+
+.chat-bubble {
+  max-width: 68%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  position: relative;
+}
+
+.chat-bubble p {
+  margin: 0 0 4px;
+  color: #e2e8f0;
+}
+
+.bubble-mine {
+  background: linear-gradient(135deg, #f59e0b22, #d97706aa);
+  border: 1px solid #f59e0b55;
+  border-bottom-right-radius: 4px;
+}
+
+.bubble-theirs {
+  background: #1e2a3a;
+  border: 1px solid #2d3f55;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-time {
+  font-size: 0.7rem;
+  color: #475569;
+  display: block;
+  text-align: right;
+}

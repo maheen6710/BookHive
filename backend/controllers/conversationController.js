@@ -52,8 +52,8 @@ const getMyConversations = async (req, res) => {
         select: "coverImage book", // listing fields
         populate: { path: "book", select: "title" }, // 🔥 nested — actual Book title
       })
-      .populate("buyer", "name")
-      .populate("seller", "name")
+      .populate("buyer", "name profileImage")
+      .populate("seller", "name profileImage")
       .sort({ updatedAt: -1 });
 
     res.status(200).json(convos);
@@ -72,8 +72,8 @@ const getConversation = async (req, res) => {
         select: "coverImage price book",
         populate: { path: "book", select: "title" }, // 🔥 nested
       })
-      .populate("buyer", "name")
-      .populate("seller", "name")
+      .populate("buyer", "name profileImage")
+      .populate("seller", "name profileImage")
       .populate("messages.sender", "name");
 
     if (!convo) return res.status(404).json({ message: "Conversation not found." });

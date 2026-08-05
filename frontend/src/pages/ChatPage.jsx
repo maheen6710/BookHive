@@ -1,14 +1,19 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { FaTrashAlt } from "react-icons/fa";
+import Message from "../components/Message";
 import "./ChatPage.css";
 
-// ✅ id and onBack are props — no useParams/useNavigate needed
 const ChatPage = ({ id, onBack }) => {
   const [convo, setConvo] = useState(null);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const bottomRef = useRef(null);
+
+  // ── modal & toast state ──
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: "" });
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
@@ -33,6 +38,35 @@ const ChatPage = ({ id, onBack }) => {
       setLoading(false);
     }
   };
+
+  function showToast(message) {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: "" }), 3000);
+  }
+
+  function openDeleteModal() {
+    setDeleteModalOpen(true);
+  }
+
+  async function confirmDelete() {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:5000/api/conversations/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      showToast("Conversation deleted");
+      setDeleteModalOpen(false);
+      onBack();
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to delete conversation");
+      setDeleteModalOpen(false);
+    }
+  }
+
+  function closeDeleteModal() {
+    setDeleteModalOpen(false);
+  }
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -60,18 +94,8 @@ const ChatPage = ({ id, onBack }) => {
     }
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm("Delete this conversation from your end?")) return;
-    try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/conversations/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      onBack();
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // ── NO window.confirm here ──
+  const handleDelete = openDeleteModal;
 
   if (loading) return <div className="chat-loading">Loading conversation...</div>;
   if (!convo) return <div className="chat-loading">Conversation not found.</div>;
@@ -95,7 +119,7 @@ const ChatPage = ({ id, onBack }) => {
           </div>
         </div>
         <button className="chat-delete-btn" onClick={handleDelete} title="Delete conversation">
-          🗑️
+          <FaTrashAlt className="chat-delete-icon" />
         </button>
       </div>
 
@@ -107,19 +131,7 @@ const ChatPage = ({ id, onBack }) => {
           const isMine =
             msg.sender._id === currentUser._id ||
             msg.sender === currentUser._id;
-          return (
-            <div key={i} className={`chat-bubble-wrap ${isMine ? "mine" : "theirs"}`}>
-              <div className={`chat-bubble ${isMine ? "bubble-mine" : "bubble-theirs"}`}>
-                <p>{msg.text}</p>
-                <span className="chat-time">
-                  {new Date(msg.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
-              </div>
-            </div>
-          );
+          return <Message key={i} msg={msg} isMine={isMine} />;
         })}
         <div ref={bottomRef} />
       </div>
@@ -137,6 +149,31 @@ const ChatPage = ({ id, onBack }) => {
           {sending ? "..." : "Send"}
         </button>
       </form>
+
+      {/* ── TOAST ── */}
+      {toast.show && (
+        <div className="chat-toast">{toast.message}</div>
+      )}
+
+      {/* ── DELETE MODAL ── */}
+      {deleteModalOpen && (
+        <div className="chat-modal-overlay" onClick={closeDeleteModal}>
+          <div className="chat-modal" onClick={(e) => e.stopPropagation()}>
+            <h3 className="chat-modal-title">Delete Conversation</h3>
+            <p className="chat-modal-message">
+              Are you sure you want to delete this conversation from your end?
+            </p>
+            <div className="chat-modal-actions">
+              <button className="chat-modal-btn chat-modal-cancel" onClick={closeDeleteModal}>
+                Cancel
+              </button>
+              <button className="chat-modal-btn chat-modal-confirm" onClick={confirmDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
