@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation  } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom"; // changed
 import BookCard from "../components/BookCard";
 import WishlistPage from "./WishlistPage";
 import ConversationList from "../pages/ConversationList";
@@ -11,11 +11,26 @@ import "./Dashboard.css";
 export default function BuyerDashboard() {
   const [activeNav, setActiveNav] = useState("discover");
   const [books, setBooks] = useState([]);
-  const [activeChatId, setActiveChatId] = useState(null); //  tracks which convo is open
+  const [activeChatId, setActiveChatId] = useState(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams(); // new
+
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
 
+  // Read tab from URL query params
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "orders") setActiveNav("orders");
+    if (tab === "conversations") {
+      setActiveNav("conversations");
+      const convoId = searchParams.get("convo");
+      if (convoId) setActiveChatId(convoId);
+    }
+    // if tab is not set, default to "discover" (already the default)
+  }, [searchParams]);
+
+  // Fetch books (same as before)
   useEffect(() => {
     fetch("http://localhost:5000/api/books")
       .then((res) => res.json())
@@ -23,36 +38,21 @@ export default function BuyerDashboard() {
       .catch((err) => console.error("Failed to fetch books:", err));
   }, []);
 
-  const location = useLocation();
-
-useEffect(() => {
-  if (location.state?.openConvoId) {
-    setActiveNav("conversations");
-    setActiveChatId(location.state.openConvoId);
-  }
-}, []);
-
-useEffect(() => {
-  fetch("http://localhost:5000/api/books")
-    .then((res) => res.json())
-    .then((data) => setBooks(data))
-    .catch((err) => console.error("Failed to fetch books:", err));
-
-  // fetch buyer orders
-  const token = localStorage.getItem("token");
-  if (token) {
-    fetch("http://localhost:5000/api/orders/my", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => { setOrders(data); setOrdersLoading(false); })
-      .catch((err) => { console.error("Orders fetch failed:", err); setOrdersLoading(false); });
-  }
-}, []);
+  // Fetch orders (same as before)
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch("http://localhost:5000/api/orders/my", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((data) => { setOrders(data); setOrdersLoading(false); })
+        .catch((err) => { console.error("Orders fetch failed:", err); setOrdersLoading(false); });
+    }
+  }, []);
 
   return (
     <div className="dashboard-layout">
-
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-header">
@@ -72,7 +72,9 @@ useEffect(() => {
               className={`nav-item ${activeNav === item.key ? "active" : ""}`}
               onClick={() => {
                 setActiveNav(item.key);
-                setActiveChatId(null); // reset chat view when switching tabs
+                setActiveChatId(null);
+                // Optionally update URL when user clicks tab (optional)
+                navigate(`?tab=${item.key}`);
               }}
             >
               <i className={item.icon}></i>
@@ -84,15 +86,12 @@ useEffect(() => {
 
       {/* Main content */}
       <div className="dashboard-main">
-
-        {/* ── DISCOVER TAB ── */}
         {activeNav === "discover" && (
           <>
             <div className="dashboard-header">
               <h1>Book Finder Dashboard</h1>
               <p>Find your next favorite book from thousands of options.</p>
             </div>
-
             <div className="dashboard-card">
               <div className="card-header">
                 <h2>Recommended For You</h2>
@@ -119,7 +118,6 @@ useEffect(() => {
           </>
         )}
 
-        {/* ── ORDERS TAB ── */}
         {activeNav === "orders" && (
           <div className="dashboard-card">
             <div className="card-header">
@@ -196,7 +194,6 @@ useEffect(() => {
           </div>
         )}
 
-        {/* ── WISHLIST TAB ── */}
         {activeNav === "wishlist" && (
           <div className="dashboard-card">
             <div className="card-header">
@@ -208,19 +205,17 @@ useEffect(() => {
           </div>
         )}
 
-        {/* ── SEARCH HISTORY TAB ── */}
         {activeNav === "search" && (
           <div className="dashboard-card">
             <div className="card-header">
               <h2>Search History</h2>
             </div>
-           <div className="card-body">
-            <SearchHistoryPage />
-          </div>
+            <div className="card-body">
+              <SearchHistoryPage />
+            </div>
           </div>
         )}
 
-        {/* ── CONVERSATIONS TAB ── */}
         {activeNav === "conversations" && (
           <div className="dashboard-card">
             <div className="card-header">
@@ -228,22 +223,26 @@ useEffect(() => {
             </div>
             <div className="card-body" style={{ padding: 0 }}>
               {activeChatId ? (
-                // Show the chat when a convo is clicked
                 <ChatPage
                   id={activeChatId}
-                  onBack={() => setActiveChatId(null)}
+                  onBack={() => {
+                    setActiveChatId(null);
+                    navigate(`?tab=conversations`);
+                  }}
                 />
               ) : (
-                // Show the conversations list
-                <ConversationList onSelectConvo={(id) => setActiveChatId(id)} />
+                <ConversationList 
+                  onSelectConvo={(id) => {
+                    setActiveChatId(id);
+                    navigate(`?tab=conversations&convo=${id}`);
+                  }} 
+                />
               )}
             </div>
           </div>
         )}
 
-        {/* ── SETTINGS TAB ── */}
         {activeNav === "settings" && <Settings />}
-
       </div>
     </div>
   );

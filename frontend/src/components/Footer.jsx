@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="footer-grid">
 
           <div>
-            <h3 className="footer-brand">BookFinder</h3>
+            <h3 className="footer-brand">BookHive</h3>
             <p className="footer-desc">
               Your one-stop destination for buying and selling books in Pakistan.
             </p>
@@ -26,7 +26,7 @@ export default function Footer() {
           <div>
             <h4 className="footer-heading">About Us</h4>
             <ul className="footer-links">
-              <li><a href="#">About BookFinder</a></li>
+              <li><a href="#">About BookHive</a></li>
               <li><a href="#">Careers</a></li>
               <li><a href="#">Terms & Conditions</a></li>
               <li><a href="#">Privacy Policy</a></li>
@@ -55,7 +55,7 @@ export default function Footer() {
 
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2024 BookFinder. All rights reserved.</p>
+          <p>&copy; 2026 BookHive. All rights reserved.</p>
         </div>
       </div>
     </footer>

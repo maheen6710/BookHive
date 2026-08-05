@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 export const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select(
-      "name role shopName shopAddress location profileImage"
+      "name role shopName shopAddress location profileImage latitude longitude"
       // 🔥 deliberately NOT sending email/password — public view only
     );
     if (!user) return res.status(404).json({ message: "User not found" });

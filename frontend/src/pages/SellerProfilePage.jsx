@@ -358,7 +358,7 @@ export default function SellerProfilePage() {
                 <i className="fas fa-satellite-dish"></i>
                 <span>
                   {seller.latitude != null
-                    ? "📍 Shop location set"
+                    ? "📍 Shop location already set"
                     : "Shop location not set"}
                 </span>
                 <button

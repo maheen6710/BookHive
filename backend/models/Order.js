@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema(
   {
     book: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "BookListing", // 🔥 was "Book" — now points to the listing (has price/coverImage/etc)
+      ref: "BookListing",
       required: true,
     },
     buyer: {
@@ -32,7 +32,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type:    String,
-      enum:    ["pending", "confirmed", "cancelled"],
+      enum:    ["pending", "on the way", "delivered", "unavailable", "cancelled"],
       default: "pending",
     },
   },

@@ -1,12 +1,7 @@
-/* ═══════════════════════════════════════════
-   WishlistPage — dark BookHive theme, OLX-style list
-   ═══════════════════════════════════════════ */
-
 .wl-page {
   padding: 0;
 }
 
-/* ── header ─────────────────────────────────── */
 .wl-header {
   display: flex;
   align-items: center;
@@ -29,27 +24,26 @@
 }
 
 .wl-count {
-  font-size: 0.8rem;
-  color: #475569;
+  font-size: 1rem;
+  color: #f8fafc;
   background: #1e2437;
   padding: 4px 10px;
   border-radius: 20px;
+  font-weight: 600;
 }
 
-/* ── list of wishlist items ──────────────────── */
 .wl-list {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-/* ── single item row ─────────────────────────── */
 .wl-item {
   display: flex;
   align-items: center;
   gap: 16px;
   background: #151929;
-  border: 1.5px solid #1e2437;
+  border: 1.5px solid #014ca7;
   border-radius: 12px;
   padding: 14px;
   transition: border-color 0.2s, transform 0.15s;
@@ -60,7 +54,6 @@
   transform: translateX(3px);
 }
 
-/* ── cover ───────────────────────────────────── */
 .wl-cover {
   width: 70px;
   height: 95px;
@@ -88,7 +81,6 @@
   color: #2e3350;
 }
 
-/* ── info ────────────────────────────────────── */
 .wl-info {
   flex: 1;
   min-width: 0;
@@ -107,7 +99,7 @@
 
 .wl-book-author {
   font-size: 0.78rem;
-  color: #64748b;
+  color: #f8fafc;
   margin: 0 0 8px;
 }
 
@@ -119,21 +111,22 @@
 }
 
 .wl-tag {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   padding: 2px 8px;
   border-radius: 20px;
   background: #1e2437;
-  color: #64748b;
+  color: #f8fafc;
+  font-weight: 600;
 }
 
 .wl-condition {
   background: transparent;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .wl-seller {
   font-size: 0.72rem;
-  color: #475569;
+  color: #f8fafc;
   margin: 0;
 }
 
@@ -142,7 +135,6 @@
   margin-right: 4px;
 }
 
-/* ── right: price + buttons ──────────────────── */
 .wl-right {
   display: flex;
   flex-direction: column;
@@ -162,8 +154,8 @@
 .wl-remove-btn {
   padding: 6px 14px;
   border-radius: 7px;
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 700;
   cursor: pointer;
   border: none;
   display: flex;
@@ -175,7 +167,7 @@
 
 .wl-view-btn {
   background: #1e2a45;
-  color: #60a5fa;
+  color: #f8fafc;
   border: 1px solid #2e3a5a;
 }
 
@@ -186,7 +178,7 @@
 
 .wl-remove-btn {
   background: transparent;
-  color: #475569;
+  color: #f8fafc;
   border: 1px solid #1e2437;
 }
 
@@ -196,7 +188,6 @@
   border-color: #f43f5e;
 }
 
-/* ── empty state ─────────────────────────────── */
 .wl-empty {
   display: flex;
   flex-direction: column;
@@ -239,7 +230,6 @@
   background: #2563eb;
 }
 
-/* ── loading ─────────────────────────────────── */
 .wl-loading {
   display: flex;
   flex-direction: column;
@@ -259,5 +249,7 @@
 }
 
 @keyframes wl-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -66,13 +66,13 @@
 .app-btn:hover { background-color: #4b5563; }
 .app-btn i { font-size: 1.2rem; }
 .app-btn div { display: flex; flex-direction: column; }
-.app-btn small { font-size: 0.7rem; color: #9ca3af; }
+.app-btn small { font-size: 0.8rem; color: #d2d5db; }
 .app-btn span { font-weight: 600; }
 
 .footer-bottom {
   border-top: 1px solid #374151;
   padding-top: 20px;
   text-align: center;
-  color: #9ca3af;
+  color: #c6cacf;
   font-size: 0.875rem;
 }

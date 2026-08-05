@@ -120,30 +120,16 @@
   text-align: center;
   background: var(--bg-surface);
   border: 1px solid var(--border-bright);
-  color: var(--text-muted);
+  color: var(--white);
   font-weight: 600;
   transition: all 0.3s ease;
+  border-left: 3px solid var(--blue);
 }
 
 .login-card:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 0 24px rgba(245, 158, 11, 0.3);
   border-color: var(--gold);
-  color: var(--gold);
-}
-
-.seller {
-  border-left: 3px solid var(--blue);
-}
-
-.buyer {
-  border-left: 3px solid var(--blue-bright);
-}
-
-.seller:hover {
   border-left-color: var(--gold);
-}
-
-.buyer:hover {
-  border-left-color: var(--gold-bright);
+  color: var(--gold);
 }

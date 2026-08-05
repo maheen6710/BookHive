@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import AddBookForm from "../pages/AddBookForm";
 import ConversationList from "../pages/ConversationList";
@@ -14,11 +14,13 @@ export default function SellerDashboard() {
   const [editingBook, setEditingBook] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [editStatus, setEditStatus] = useState("");
-  const [activeChatId, setActiveChatId] = useState(null); //  tracks which convo is open
+  const [activeChatId, setActiveChatId] = useState(null);
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+
   let user = null;
   try {
     user = JSON.parse(localStorage.getItem("user"));
@@ -38,37 +40,36 @@ export default function SellerDashboard() {
     }
   };
 
+  const fetchOrders = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.get("http://localhost:5000/api/orders/seller", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setOrders(res.data);
+    } catch (err) {
+      console.error("Orders fetch failed:", err);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+
+  // Read tab from URL
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "orders") setActiveNav("orders");
+    if (tab === "conversations") {
+      setActiveNav("conversations");
+      const convoId = searchParams.get("convo");
+      if (convoId) setActiveChatId(convoId);
+    }
+  }, [searchParams]);
+
+  // Initial data fetch
   useEffect(() => {
     fetchBooks();
+    fetchOrders();
   }, []);
-
-  // 🔥 if redirected here from "Chat with Seller" (seller-to-seller chat),
-  // auto-open the conversations tab with that chat active
-  useEffect(() => {
-    if (location.state?.openConvoId) {
-      setActiveNav("conversations");
-      setActiveChatId(location.state.openConvoId);
-    }
-  }, []);
-
-  const fetchOrders = async () => {
-  const token = localStorage.getItem("token");
-  try {
-        const res = await axios.get("http://localhost:5000/api/orders/seller", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setOrders(res.data);
-      } catch (err) {
-        console.error("Orders fetch failed:", err);
-      } finally {
-        setOrdersLoading(false);
-      }
-    };
-
-    useEffect(() => {
-      fetchBooks();
-      fetchOrders();
-    }, []);
 
   function handleEditClick(book) {
     setEditingBook(book);
@@ -78,7 +79,6 @@ export default function SellerDashboard() {
   async function handleDelete(bookId) {
     const confirmed = window.confirm("Are you sure you want to delete this book?");
     if (!confirmed) return;
-
     const token = localStorage.getItem("token");
     try {
       await axios.delete(`http://localhost:5000/api/books/${bookId}`, {
@@ -87,35 +87,6 @@ export default function SellerDashboard() {
       fetchBooks();
     } catch (err) {
       console.error("Delete failed:", err);
-    }
-  }
-
-  function handleCloseModal() {
-    setEditingBook(null);
-    setEditForm({});
-    setEditStatus("");
-  }
-
-  function handleEditChange(e) {
-    setEditForm({ ...editForm, [e.target.name]: e.target.value });
-  }
-
-  async function handleEditSubmit(e) {
-    e.preventDefault();
-    setEditStatus("loading");
-    try {
-      await axios.put(
-        `http://localhost:5000/api/books/${editingBook._id}`,
-        editForm
-      );
-      setEditStatus("success");
-      await fetchBooks();
-      setTimeout(() => {
-        handleCloseModal();
-      }, 1000);
-    } catch (err) {
-      console.error(err);
-      setEditStatus("error");
     }
   }
 
@@ -128,7 +99,6 @@ export default function SellerDashboard() {
             fetchBooks();
           }} />
         );
-
       case "edit-book":
         return (
           <AddBookForm
@@ -140,8 +110,6 @@ export default function SellerDashboard() {
             }}
           />
         );
-
-      // ✅ CONVERSATIONS TAB
       case "conversations":
         return (
           <div className="dashboard-card">
@@ -150,99 +118,104 @@ export default function SellerDashboard() {
             </div>
             <div className="card-body" style={{ padding: 0 }}>
               {activeChatId ? (
-                // Show the chat when a convo is clicked
                 <ChatPage
                   id={activeChatId}
-                  onBack={() => setActiveChatId(null)}
+                  onBack={() => {
+                    setActiveChatId(null);
+                    navigate(`?tab=conversations`);
+                  }}
                 />
               ) : (
-                // Show the conversations list
-                <ConversationList onSelectConvo={(id) => setActiveChatId(id)} />
+                <ConversationList 
+                  onSelectConvo={(id) => {
+                    setActiveChatId(id);
+                    navigate(`?tab=conversations&convo=${id}`);
+                  }} 
+                />
               )}
             </div>
           </div>
         );
-         case "reviews":
+      case "reviews":
         return <SellerReviews />;
-
-
       case "orders":
-  return (
-    <div className="dashboard-card">
-      <div className="card-header">
-        <h2>📦 Incoming Orders</h2>
-      </div>
-      <div className="card-body">
-        {ordersLoading ? (
-          <p className="orders-empty">Loading orders...</p>
-        ) : orders.length === 0 ? (
-          <p className="orders-empty">No orders yet 📭</p>
-        ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Book</th>
-                <th>Buyer</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr
-                  key={order._id}
-                  className="order-row"
-                  onClick={() => navigate(`/order/${order._id}`)}
-                >
-                  <td>
-                    <div className="table-book">
-                      {order.book?.coverImage ? (
-                        <img
-                          src={`http://localhost:5000${order.book.coverImage}`}
-                          alt={order.book?.book?.title}
-                          className="book-thumb"
-                        />
-                      ) : (
-                        <div className="book-thumb-placeholder">
-                          <i className="fas fa-book"></i>
-                        </div>
-                      )}
-                      <div>
-                        <p className="book-name">{order.book?.book?.title || "N/A"}</p>
-                        <p className="book-cat">Rs. {order.book?.price}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="order-buyer">{order.buyer?.name || "N/A"}</td>
-                  <td>{order.buyerDetails?.phone}</td>
-                  <td className="order-address">{order.buyerDetails?.address}</td>
-                  <td className="order-price">Rs. {order.totalPrice}</td>
-                  <td>
-                    <span className={`status-badge ${
-                      order.status === "confirmed" ? "badge-green"
-                      : order.status === "cancelled" ? "badge-red"
-                      : "badge-blue"
-                    }`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="order-date">
-                    {new Date(order.createdAt).toLocaleDateString("en-PK", {
-                      day: "numeric", month: "short", year: "numeric"
-                    })}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-    </div>
-  );
-
+        return (
+          <div className="dashboard-card">
+            <div className="card-header">
+              <h2>📦 Incoming Orders</h2>
+            </div>
+            <div className="card-body">
+              {ordersLoading ? (
+                <p className="orders-empty">Loading orders...</p>
+              ) : orders.length === 0 ? (
+                <p className="orders-empty">No orders yet 📭</p>
+              ) : (
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Book</th>
+                      <th>Buyer</th>
+                      <th>Phone</th>
+                      <th>Address</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map((order) => (
+                      <tr
+                        key={order._id}
+                        className="order-row"
+                        onClick={() => navigate(`/order/${order._id}`)}
+                      >
+                        <td>
+                          <div className="table-book">
+                            {order.book?.coverImage ? (
+                              <img
+                                src={`http://localhost:5000${order.book.coverImage}`}
+                                alt={order.book?.book?.title}
+                                className="book-thumb"
+                              />
+                            ) : (
+                              <div className="book-thumb-placeholder">
+                                <i className="fas fa-book"></i>
+                              </div>
+                            )}
+                            <div>
+                              <p className="book-name">{order.book?.book?.title || "N/A"}</p>
+                              <p className="book-cat">Rs. {order.book?.price}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="order-buyer">{order.buyer?.name || "N/A"}</td>
+                        <td>{order.buyerDetails?.phone}</td>
+                        <td className="order-address">{order.buyerDetails?.address}</td>
+                        <td className="order-price">Rs. {order.totalPrice}</td>
+                        <td>
+                          <span className={`status-badge ${
+                            order.status === "confirmed" ? "badge-green"
+                            : order.status === "cancelled" ? "badge-red"
+                            : "badge-blue"
+                          }`}>
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="order-date">
+                          {new Date(order.createdAt).toLocaleDateString("en-PK", {
+                            day: "numeric", month: "short", year: "numeric"
+                          })}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        );
+      case "settings":
+        return <Settings />;
       case "dashboard":
       default:
         return (
@@ -258,12 +231,10 @@ export default function SellerDashboard() {
                 </div>
               </div>
             </div>
-
             <div className="dashboard-card">
               <div className="card-header">
                 <h2>Your Books</h2>
               </div>
-
               <div className="card-body">
                 <table className="data-table">
                   <thead>
@@ -274,7 +245,6 @@ export default function SellerDashboard() {
                       <th>Action</th>
                     </tr>
                   </thead>
-
                   <tbody>
                     {books.length > 0 ? (
                       books.map((book) => (
@@ -296,15 +266,12 @@ export default function SellerDashboard() {
                               </div>
                             </div>
                           </td>
-
                           <td>Rs. {book.price}</td>
-
                           <td>
                             <span className="status-badge badge-green">
                               Active
                             </span>
                           </td>
-
                           <td>
                             <div className="action-btns">
                               <button
@@ -334,8 +301,6 @@ export default function SellerDashboard() {
             </div>
           </>
         );
-        case "settings":
-        return <Settings />; 
     }
   }
 
@@ -364,7 +329,9 @@ export default function SellerDashboard() {
                   return;
                 }
                 setActiveNav(item.key);
-                setActiveChatId(null); // reset chat view when switching tabs
+                setActiveChatId(null);
+                // Update URL when switching tabs
+                navigate(`?tab=${item.key}`);
               }}
             >
               <i className={item.icon}></i>

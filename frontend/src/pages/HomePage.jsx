@@ -56,11 +56,11 @@ export default function HomePage({ setCurrentPage, user }) {
   <div className="login-cards">
     {!user && (
       <>
-        <div className="login-card seller" onClick={() => navigate("/login")}>
+        <div className="login-card" onClick={() => navigate("/login")}>
           <h3>Login as Seller</h3>
           <p>Sell and manage your books</p>
         </div>
-        <div className="login-card buyer" onClick={() => navigate("/login")}>
+        <div className="login-card" onClick={() => navigate("/login")}>
           <h3>Login as Buyer</h3>
           <p>Find books near you</p>
         </div>
@@ -68,14 +68,14 @@ export default function HomePage({ setCurrentPage, user }) {
     )}
 
     {user?.role === "seller" && (
-      <div className="login-card buyer" onClick={() => navigate("/signup")}>
+      <div className="login-card" onClick={() => navigate("/signup")}>
         <h3>Signup as Buyer</h3>
         <p>Create a buyer account and find books near you</p>
       </div>
     )}
 
     {user?.role === "finder" && (
-      <div className="login-card seller" onClick={() => navigate("/signup")}>
+      <div className="login-card" onClick={() => navigate("/signup")}>
         <h3>Signup as Seller</h3>
         <p>Create a seller account and list your books</p>
       </div>

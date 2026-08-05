@@ -88,7 +88,7 @@
 
 .history-delete {
   background: transparent;
-  border: 2px solid black;
+  border: 3px solid black;
   color: #f1f5f9;
   cursor: pointer;
   transition: color 0.2s;
