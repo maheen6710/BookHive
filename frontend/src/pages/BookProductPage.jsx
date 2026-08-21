@@ -9,7 +9,7 @@ import SellerDistanceBlock from "../components/SellerDistanceBlock";
 export default function BookProductPage() {
   const { id }     = useParams();
   const navigate   = useNavigate();
-  const [book, setBook]             = useState(null); // this is actually the LISTING now
+  const [book, setBook]             = useState(null);
   const [loading, setLoading]       = useState(true);
   const [notFound, setNotFound]     = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
@@ -28,7 +28,6 @@ useEffect(() => {
       setReviews(reviewRes.data);
       setReviewsLoading(false);
 
-      // ✅ FIX: separate try/catch so wishlist 401 doesn't trigger "Book not found"
       const token = localStorage.getItem("token");
       if (token) {
         try {
@@ -129,9 +128,8 @@ function showMessage(msg) {
         { bookId: book._id, sellerId: book.seller?._id || book.seller },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // 🔥 redirect based on the CURRENT user's actual role, not an assumption
       const dashboardPath = user.role === "seller" ? "/sellerdashboard" : "/buyerdashboard";
-      navigate(dashboardPath, { state: { openConvoId: data._id } });
+      navigate(`${dashboardPath}?tab=conversations&convo=${data._id}`);
     } catch (err) {
       console.error(err);
       showMessage(err.response?.data?.message || "Could not start conversation.");

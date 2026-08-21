@@ -36,17 +36,17 @@ export default function Footer() {
           <div>
             <h4 className="footer-heading">Download App</h4>
             <div className="app-buttons">
-              <button className="app-btn">
+              <button className="app-btn app-btn-disabled" disabled>
                 <i className="fab fa-google-play"></i>
                 <div>
-                  <small>Get it on</small>
+                  <small>Coming Soon</small>
                   <span>Google Play</span>
                 </div>
               </button>
-              <button className="app-btn">
+              <button className="app-btn app-btn-disabled" disabled>
                 <i className="fab fa-apple"></i>
                 <div>
-                  <small>Download on the</small>
+                  <small>Coming Soon</small>
                   <span>App Store</span>
                 </div>
               </button>

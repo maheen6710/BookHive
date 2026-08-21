@@ -77,6 +77,34 @@ export default function SellerDashboard() {
     fetchOrders();
   }, []);
 
+  // Read tab from URL (fully synced both ways — back button works)
+useEffect(() => {
+  const tab = searchParams.get("tab");
+  const convoId = searchParams.get("convo");
+
+  switch (tab) {
+    case "add-book":
+      setActiveNav("add-book");
+      break;
+    case "orders":
+      setActiveNav("orders");
+      break;
+    case "reviews":
+      setActiveNav("reviews");
+      break;
+    case "settings":
+      setActiveNav("settings");
+      break;
+    case "conversations":
+      setActiveNav("conversations");
+      setActiveChatId(convoId || null);
+      return; // skip the chat reset below
+    default:
+      setActiveNav("dashboard");
+  }
+
+  setActiveChatId(null);
+}, [searchParams]);
   // ── show toast ──
   function showToast(message) {
     setToast({ show: true, message });
@@ -328,7 +356,7 @@ export default function SellerDashboard() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="4">No books added yet 😢</td>
+                        <td colSpan="4">No books added yet </td>
                       </tr>
                     )}
                   </tbody>

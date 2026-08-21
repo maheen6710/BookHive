@@ -51,6 +51,35 @@ export default function BuyerDashboard() {
     }
   }, []);
 
+  // Read tab from URL query params (now fully synced both ways — back button works)
+useEffect(() => {
+  const tab = searchParams.get("tab");
+  const convoId = searchParams.get("convo");
+
+  switch (tab) {
+    case "orders":
+      setActiveNav("orders");
+      break;
+    case "wishlist":
+      setActiveNav("wishlist");
+      break;
+    case "search":
+      setActiveNav("search");
+      break;
+    case "settings":
+      setActiveNav("settings");
+      break;
+    case "conversations":
+      setActiveNav("conversations");
+      setActiveChatId(convoId || null);
+      return; // skip the chat reset below
+    default:
+      setActiveNav("discover");
+  }
+
+  setActiveChatId(null);
+}, [searchParams]);
+
   return (
     <div className="dashboard-layout">
       {/* Sidebar */}

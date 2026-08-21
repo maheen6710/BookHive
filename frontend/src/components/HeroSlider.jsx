@@ -13,7 +13,7 @@ const slides = [
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
 
-  // Auto-advance every 3 seconds — same as your original setInterval
+  // Auto-advance every 3 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);

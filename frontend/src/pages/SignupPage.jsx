@@ -8,6 +8,9 @@ export default function SignupPage({ onLogin }) {
 
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -59,35 +62,39 @@ export default function SignupPage({ onLogin }) {
   }
 
   // Final submit (called from step 2 for buyers, step 3 for sellers)
- async function handleSubmit(e) {
-  if (e) e.preventDefault();
-  setError("");
+  async function handleSubmit(e) {
+    if (e) e.preventDefault();
+    setError("");
 
-  try {
-    const res = await axios.post(
-      "http://localhost:5000/api/auth/signup",
-      {
-        name: form.name,
-        email: form.email,
-        password: form.password,
-        role: form.accountType === "buyer" ? "finder" : "seller",
-         username: form.username,
-        shopName: form.shopName,
-        sellerId: form.sellerId,
-        shopAddress: form.shopAddress,
-        location: form.location,
-        // profilePic skipped for now, we'll add multer separately
-      }
-    );
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/signup",
+        {
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          role: form.accountType === "buyer" ? "finder" : "seller",
+          username: form.username,
+          shopName: form.shopName,
+          sellerId: form.sellerId,
+          shopAddress: form.shopAddress,
+          location: form.location,
+          // profilePic skipped for now, we'll add multer separately
+        }
+      );
 
-    alert("Signup successful");
-    localStorage.setItem("user", JSON.stringify(res.data.user));
-    onLogin(form.name, form.email, form.accountType);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
-  } catch (err) {
-    setError(err.response?.data?.message || "Signup failed");
+      // ── show custom success overlay instead of browser alert ──
+      setShowSuccess(true);
+      setTimeout(() => {
+        onLogin(form.name, form.email, form.accountType);
+      }, 1500);
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Signup failed");
+    }
   }
-}
 
   return (
     <div className="auth-page">
@@ -160,26 +167,46 @@ export default function SignupPage({ onLogin }) {
 
             <div className="form-group">
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Create a password"
-                value={form.password}
-                onChange={handleChange}
-                required
-              />
+              <div className="password-field-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Create a password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                </button>
+              </div>
             </div>
 
             <div className="form-group">
               <label>Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm your password"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                required
-              />
+              <div className="password-field-wrapper">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Confirm your password"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  tabIndex={-1}
+                >
+                  <i className={showConfirmPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                </button>
+              </div>
             </div>
 
             <div className="step-btns">
@@ -292,6 +319,19 @@ export default function SignupPage({ onLogin }) {
           </button>
         </p>
       </div>
+
+      {/* ── SUCCESS OVERLAY ── */}
+      {showSuccess && (
+        <div className="signup-success-overlay">
+          <div className="signup-success-card">
+            <div className="signup-success-icon">
+              <i className="fas fa-check"></i>
+            </div>
+            <h3>Signup Successful!</h3>
+            <p>Taking you to your dashboard...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

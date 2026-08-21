@@ -63,6 +63,11 @@
   font-size: 0.875rem;
   transition: background-color 0.2s;
 }
+.app-btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 .app-btn:hover { background-color: #4b5563; }
 .app-btn i { font-size: 1.2rem; }
 .app-btn div { display: flex; flex-direction: column; }

@@ -84,9 +84,9 @@ export default function SellerProfilePage() {
         { sellerId }, // general seller inquiry, no bookId
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // 🔥 redirect based on the CURRENT user's actual role, not an assumption
+
       const dashboardPath = user.role === "seller" ? "/sellerdashboard" : "/buyerdashboard";
-      navigate(dashboardPath, { state: { openConvoId: data._id } });
+      navigate(`${dashboardPath}?tab=conversations&convo=${data._id}`);
     } catch (err) {
       console.error(err);
       showMessage(err.response?.data?.message || "Could not start conversation.");
