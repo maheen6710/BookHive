@@ -6,9 +6,11 @@ import {
   getMyProfile,
   updateMyProfile,
   setShopLocation,
-  changePassword,       
-  updatePreferences,
 } from "../controllers/profileController.js";
+import {
+  changePassword,
+  updatePreferences,
+} from "../controllers/userController.js";
 
 const router = express.Router();
 

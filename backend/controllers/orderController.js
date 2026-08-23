@@ -4,7 +4,7 @@ import BookListing from "../models/BookListing.js";
 // ─── Place Order (buyer) ──────────────────────────────────────
 export async function placeOrder(req, res) {
   try {
-    const { bookId, sellerId, buyerDetails, paymentMethod, totalPrice } = req.body;
+    const { bookId, buyerDetails, paymentMethod } = req.body;
 
     const listing = await BookListing.findById(bookId);
     if (!listing) return res.status(404).json({ message: "Listing not found." });
@@ -13,17 +13,17 @@ export async function placeOrder(req, res) {
       return res.status(403).json({ message: "Only buyers can place orders." });
     }
 
-    if (req.user.id === sellerId) {
+    if (req.user.id === listing.seller.toString()) {
       return res.status(400).json({ message: "You cannot buy your own book." });
     }
 
     const order = new Order({
       book: bookId,
       buyer: req.user.id,
-      seller: sellerId,
+      seller: listing.seller,
       buyerDetails,
       paymentMethod: paymentMethod || "COD",
-      totalPrice,
+      totalPrice: listing.price,
       status: "pending",
     });
 
@@ -82,6 +82,14 @@ export async function getOrderById(req, res) {
       .populate("buyer", "name")        .populate("seller", "name");
 
     if (!order) return res.status(404).json({ message: "Order not found." });
+
+    const buyerId = order.buyer?._id ? order.buyer._id.toString() : order.buyer?.toString();
+    const sellerId = order.seller?._id ? order.seller._id.toString() : order.seller?.toString();
+
+    if (buyerId !== req.user.id && sellerId !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized to view this order." });
+    }
+
     res.json(order);
   } catch (err) {
     res.status(500).json({ message: "Server error." });

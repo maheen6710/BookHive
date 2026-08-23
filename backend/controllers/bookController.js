@@ -141,7 +141,16 @@ export const updateBook = async (req, res) => {
 // 🔥 DELETE LISTING
 export const deleteBook = async (req, res) => {
   try {
-    await BookListing.findByIdAndDelete(req.params.id);
+    const listing = await BookListing.findByIdAndDelete(req.params.id);
+    if (!listing) {
+      return res.status(404).json({ message: "Listing not found" });
+    }
+
+    const remainingListings = await BookListing.countDocuments({ book: listing.book });
+    if (remainingListings === 0) {
+      await Book.findByIdAndDelete(listing.book);
+    }
+
     res.json({ message: "Listing deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });

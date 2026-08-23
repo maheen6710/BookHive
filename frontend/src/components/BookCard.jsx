@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./BookCard.css";
 
 
-export default function BookCard({ _id, title, price, originalPrice, discount, location, coverImage }) {
+export default function BookCard({ _id, title, price, location, coverImage }) {
   const navigate = useNavigate();
 
   return (
@@ -24,12 +24,6 @@ export default function BookCard({ _id, title, price, originalPrice, discount, l
 
         <div className="book-price">
           <span className="price-main">Rs. {price}</span>
-          {originalPrice && (
-            <span className="price-original">Rs. {originalPrice}</span>
-          )}
-          {discount && (
-            <span className="price-discount">{discount}% off</span>
-          )}
         </div>
 
         <div className="book-location">

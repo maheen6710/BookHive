@@ -1,75 +1,38 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
-export const signup = async (req, res) => {
+export const changePassword = async (req, res) => {
   try {
-    const { 
-      name,
-      username,
-      email, 
-      password, 
-      role, 
-      shopName, 
-      shopAddress,
-      location,
-    } = req.body;
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const userId = req.user.id;
+    const { currentPassword, newPassword } = req.body;
 
-    const user = new User({
-      name,
-      username,       // only sellers will send this, buyers send undefined (schema allows it)
-      email,
-      password: hashedPassword,
-      role,
-      shopName,
-      shopAddress,
-      location,
-    });
+    const user = await User.findById(userId).select('+password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) return res.status(400).json({ message: 'Current password is incorrect' });
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    user.password = hashed;
     await user.save();
 
-    res.status(201).json({
-      message: "User registered successfully",
-      user
-    });
-
+    res.json({ message: 'Password updated successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-export const login = async (req, res) => {
+export const updatePreferences = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const userId = req.user.id;
+    const { emailNotifications } = req.body;
 
-    const user = await User.findOne({ email }).select("+password");
-
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({ message: "Wrong password" });
-    }
-
-      const token = jwt.sign(
-  { id: user._id, role: user.role }, // ✅ add role here
-  process.env.JWT_SECRET,
-  { expiresIn: "1d" }
-);
-
-    const { password: _, ...userData } = user._doc;
-
-    res.json({
-      message: "Login successful 😎",
-      token,
-      user: userData
-    });
-
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { preferences: { emailNotifications } },
+      { new: true }
+    );
+    res.json({ user });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

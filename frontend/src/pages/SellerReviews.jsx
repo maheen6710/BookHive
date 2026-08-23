@@ -33,7 +33,7 @@ export default function SellerReviews() {
               // tag each review with the book title
               res.data.map((review) => ({
                 ...review,
-                bookTitle: book.title,
+                bookTitle: book.book?.title,
               }))
             )
             .catch(() => []) // if one book fails, don't break everything

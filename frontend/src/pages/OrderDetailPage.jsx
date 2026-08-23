@@ -182,8 +182,8 @@ export default function OrderDetailPage() {
   );
 
   // ── NEW LOGIC for Cancel button ──
-  const isCancellable = ["pending", "unavailable", "blocked"].includes(order.status);
-  const showCancel = isBuyerOwner && !["delivered", "cancelled"].includes(order.status); // show for pending, on the way, unavailable, blocked
+  const isCancellable = ["pending", "unavailable" ].includes(order.status);
+  const showCancel = isBuyerOwner && !["delivered", "cancelled"].includes(order.status); // show for pending, on the way, unavailable
   const showDelete = (isBuyerOwner || isSellerOwner) && ["delivered", "cancelled"].includes(order.status);
   const showStatusDropdown = isSellerOwner && !["delivered", "cancelled"].includes(order.status);
 
@@ -290,7 +290,6 @@ export default function OrderDetailPage() {
                 <option value="on the way">on the way</option>
                 <option value="delivered">delivered</option>
                 <option value="unavailable">unavailable</option>
-                <option value="blocked">blocked</option>
               </select>
             ) : (
               <span className={`status-badge ${
@@ -303,7 +302,7 @@ export default function OrderDetailPage() {
             )}
           </div>
         </div>
-      </div> {/* end od-layout */}
+      </div>
 
       <div className="od-bottom-row">
         <button

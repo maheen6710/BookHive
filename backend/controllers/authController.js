@@ -30,9 +30,11 @@ export const signup = async (req, res) => {
 
     await user.save();
 
+    const { password: _, ...userData } = user._doc;
+
     res.status(201).json({
       message: "User registered successfully",
-      user
+      user: userData
     });
 
   } catch (err) {
@@ -47,25 +49,25 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Wrong password" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
       const token = jwt.sign(
-  { id: user._id, role: user.role }, // ✅ add role here
-  process.env.JWT_SECRET,
-  { expiresIn: "1d" }
-);
+      { id: user._id, role: user.role }, 
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
     const { password: _, ...userData } = user._doc;
 
     res.json({
-      message: "Login successful 😎",
+      message: "Login successful!",
       token,
       user: userData
     });

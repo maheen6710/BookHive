@@ -6,19 +6,26 @@ import "./HomePage.css";
 import { useNavigate } from "react-router-dom";
 
 export default function HomePage({ setCurrentPage, user }) {
-  const [books, setBooks] = useState([]); // array of LISTINGS now
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   //  Fetch listings from backend
-  useEffect(() => {
+   useEffect(() => {
     const fetchBooks = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const res = await axios.get(
           "http://localhost:5000/api/books"
         );
         setBooks(res.data);
       } catch (err) {
         console.log(err);
+        setError("Couldn't load books right now. Please try again later.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -34,7 +41,11 @@ export default function HomePage({ setCurrentPage, user }) {
         <h2 className="section-title">Available Books</h2>
 
         <div className="books-grid">
-          {books.length > 0 ? (
+          {loading ? (
+            <p>Loading books...</p>
+          ) : error ? (
+            <p className="error-text">{error}</p>
+          ) : books.length > 0 ? (
             books.map((listing) => (
               <BookCard
                 key={listing._id}
@@ -46,7 +57,7 @@ export default function HomePage({ setCurrentPage, user }) {
               />
             ))
           ) : (
-            <p>Loading books...</p>
+            <p>No books available yet.</p>
           )}
         </div>
       </section>
