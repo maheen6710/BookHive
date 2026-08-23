@@ -12,10 +12,8 @@ const categories = [
 
 export default function Navbar({ user, setCurrentPage, onLogout }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const navigate = useNavigate(); //adding it here cuz it suggested
+  const navigate = useNavigate(); 
   const location = useLocation();
-
-  // if we're on /category/:categoryName, decode it so we can match + highlight the right nav link
   const activeCategory = location.pathname.startsWith("/category/")
     ? decodeURIComponent(location.pathname.split("/category/")[1])
     : null;
@@ -25,16 +23,12 @@ export default function Navbar({ user, setCurrentPage, onLogout }) {
       <div className="container">
         <div className="navbar-top">
 
-        {/* Logo */}
           <div className="logo" onClick={() => navigate("/")}>
             <img src="/BookHive logo.jpeg" alt="BookHive Logo" className="logo-img" />
-            <span className="logo-orange">Book</span>
-            <span className="logo-dark">Hive</span>
+            <span className="logo-orange">Book</span><span className="logo-dark">Hive</span>
           </div>
-          {/* Search Bar */}
          <NavbarSearch user={user} />
 
-          {/* Auth Buttons or User Menu */}
           <div className="nav-actions">
             {!user ? (
               <div className="auth-buttons">
@@ -43,7 +37,6 @@ export default function Navbar({ user, setCurrentPage, onLogout }) {
               </div>
             ) : (
               <div className="user-menu">
-                {/* User dropdown */}
                 <div
                   className="user-dropdown-trigger"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -78,7 +71,6 @@ export default function Navbar({ user, setCurrentPage, onLogout }) {
           </div>
         </div>
 
-        {/* Category Links */}
         <div className="category-menu">
           {categories.map((cat) => (
             <a

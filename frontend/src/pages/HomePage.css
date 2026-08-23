@@ -20,7 +20,6 @@
   margin-bottom: 20px;
 }
 
-/* Countdown */
 .countdown {
   display: flex;
   align-items: center;
@@ -54,14 +53,12 @@
 
 .sep { color: var(--blue-bright); font-weight: 700; }
 
-/* Books grid */
 .books-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 16px;
 }
 
-/* Categories grid */
 .categories-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -102,7 +99,6 @@
   box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
 }
 
-/* Dark versions of category icon colors */
 .cat-blue   { background: rgba(37,99,235,0.2);  color: #60a5fa; }
 .cat-green  { background: rgba(22,163,74,0.2);  color: #4ade80; }
 .cat-purple { background: rgba(124,58,237,0.2); color: #a78bfa; }
@@ -110,7 +106,6 @@
 .cat-red    { background: rgba(220,38,38,0.2);  color: #f87171; }
 .cat-orange { background: rgba(59,130,246,0.2); color: #60a5fa; }
 
-/* Login cards (role selector) */
 .login-cards {
   display: flex;
   gap: 20px;

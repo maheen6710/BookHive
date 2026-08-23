@@ -3,17 +3,6 @@ import "react-image-crop/dist/ReactCrop.css";
 import { useRef, useState } from "react";
 import "./ImageCropper.css";
 
-/**
- * Reusable crop modal. Handles the crop UI + canvas-to-File conversion.
- *
- * Props:
- *  - rawImageSrc: base64 string of the image to crop (required, controls visibility)
- *  - aspect: crop aspect ratio, e.g. 2/3 for book covers, 1 for profile pics
- *  - outputFileName: filename given to the resulting cropped File (e.g. "cover.jpg")
- *  - title / subtitle: text shown in the modal header
- *  - onCropComplete(file, previewDataUrl): called with the cropped File + preview
- *  - onCancel(): called when the user cancels
- */
 export default function ImageCropper({
   rawImageSrc,
   aspect = 1,

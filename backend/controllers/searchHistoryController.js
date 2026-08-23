@@ -1,6 +1,5 @@
 import SearchHistory from '../models/SearchHistory.js';
 
-// Save a search (upsert)
 export const saveSearch = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -22,20 +21,18 @@ export const saveSearch = async (req, res) => {
   }
 };
 
-// Get all searches for the logged-in user
 export const getSearchHistory = async (req, res) => {
   try {
     const userId = req.user.id;
     const history = await SearchHistory.find({ userId })
-      .sort({ updatedAt: -1 })
-      .select('query updatedAt');
+    .sort({ updatedAt: -1 })
+    .select('query updatedAt');
     res.json(history);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// Delete a single search by ID
 export const deleteSearch = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -56,7 +53,6 @@ export const deleteSearch = async (req, res) => {
   }
 };
 
-// Clear all searches for the user
 export const clearAllSearches = async (req, res) => {
   try {
     const userId = req.user.id;

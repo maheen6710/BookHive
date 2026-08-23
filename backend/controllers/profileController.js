@@ -1,5 +1,4 @@
 import User from "../models/User.js";
-import bcrypt from "bcrypt";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -7,12 +6,10 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// GET /api/users/:id — public profile view (used by SellerProfilePage)
 export const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select(
       "name role shopName shopAddress location profileImage latitude longitude"
-      // 🔥 deliberately NOT sending email/password — public view only
     );
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
@@ -21,7 +18,6 @@ export const getUserById = async (req, res) => {
   }
 };
 
-// GET /api/users/me — logged-in user's own full profile
 export const getMyProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -32,9 +28,6 @@ export const getMyProfile = async (req, res) => {
   }
 };
 
-// PUT /api/users/me/location — set shop coordinates directly from device GPS
-// (called from the frontend after navigator.geolocation captures the seller's
-// current position while they're standing at their shop)
 export const setShopLocation = async (req, res) => {
   try {
     const { latitude, longitude } = req.body;
@@ -56,13 +49,11 @@ export const setShopLocation = async (req, res) => {
 };
 export const updateMyProfile = async (req, res) => {
   try {
-    const { name, username, shopName, shopAddress, location, password } = req.body;
+    const { name, username, shopName, shopAddress, location } = req.body;
 
     const updateData = { name, username, shopName, shopAddress, location };
 
-    // 🔥 multer puts the uploaded file on req.file (same pattern as book covers)
     if (req.file) {
-      // delete the old profile pic file from disk before pointing at the new one
       const currentUser = await User.findById(req.user.id).select("profileImage");
       if (currentUser?.profileImage) {
         const oldPath = path.join(__dirname, "..", currentUser.profileImage);
@@ -74,12 +65,6 @@ export const updateMyProfile = async (req, res) => {
       updateData.profileImage = `/uploads/${req.file.filename}`;
     }
 
-    // only re-hash + update password if the user actually sent a new one
-    if (password) {
-      updateData.password = await bcrypt.hash(password, 10);
-    }
-
-    // strip undefined keys so we don't overwrite existing fields with undefined
     Object.keys(updateData).forEach((key) => {
       if (updateData[key] === undefined) delete updateData[key];
     });

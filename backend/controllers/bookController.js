@@ -1,7 +1,6 @@
 import Book from "../models/Book.js";
 import BookListing from "../models/BookListing.js";
 
-// 🔥 ADD BOOK (creates/reuses Book, always creates a new Listing)
 export const addBook = async (req, res) => {
   try {
     const { title, author, edition, price, condition, category, shopLocation } = req.body;
@@ -45,11 +44,6 @@ export const addBook = async (req, res) => {
   }
 };
 
-// 🔥 GET ALL LISTINGS — supports ?search= query param (searches Book fields)
-// (getBooks removed — GET /api/books is now fully handled by
-// searchController.js's searchListings, which also covers the no-search case)
-
-// 🔥 GET LISTINGS BY SELLER (for dashboard)
 export const getSellerBooks = async (req, res) => {
   try {
     const listings = await BookListing.find({ seller: req.params.id })
@@ -60,11 +54,6 @@ export const getSellerBooks = async (req, res) => {
   }
 };
 
-// 🔥 UPDATE LISTING + book identity fields.
-// Editing title/author/edition/category NEVER mutates the shared Book doc
-// directly (that would silently change other sellers' listings too).
-// Instead: look for a matching existing Book and merge into it, or create
-// a brand new Book if no match — then re-point this listing at it.
 export const updateBook = async (req, res) => {
   try {
     const { price, condition, shopLocation, title, author, edition, category } = req.body;
@@ -81,7 +70,6 @@ export const updateBook = async (req, res) => {
 
     const oldBookId = currentListing.book;
 
-    // apply listing-level field changes
     Object.assign(currentListing, listingUpdate);
 
     const bookFieldsChanged =
@@ -95,7 +83,6 @@ export const updateBook = async (req, res) => {
       const normEdition = (edition !== undefined ? edition : (oldBook.edition || "")).trim();
       const newCategory = category !== undefined ? category : oldBook.category;
 
-      // 🔎 does a DIFFERENT Book already match these values?
       const matchedBook = await Book.findOne({
         _id: { $ne: oldBookId },
         title: { $regex: `^${normTitle}$`, $options: "i" },
@@ -104,10 +91,8 @@ export const updateBook = async (req, res) => {
       });
 
       if (matchedBook) {
-        // 🔥 merge into the existing matching Book — no data changes, just re-point
         currentListing.book = matchedBook._id;
       } else {
-        // 🔥 no match — spin off a BRAND NEW Book, never touch the old shared one
         const newBook = new Book({
           title: normTitle,
           author: normAuthor,
@@ -117,8 +102,6 @@ export const updateBook = async (req, res) => {
         await newBook.save();
         currentListing.book = newBook._id;
       }
-
-      // clean up the old Book doc if nothing else points to it anymore
       const remainingListings = await BookListing.countDocuments({
         book: oldBookId,
         _id: { $ne: currentListing._id },
@@ -138,31 +121,20 @@ export const updateBook = async (req, res) => {
   }
 };
 
-// 🔥 DELETE LISTING
 export const deleteBook = async (req, res) => {
   try {
-    const listing = await BookListing.findByIdAndDelete(req.params.id);
-    if (!listing) {
-      return res.status(404).json({ message: "Listing not found" });
-    }
-
-    const remainingListings = await BookListing.countDocuments({ book: listing.book });
-    if (remainingListings === 0) {
-      await Book.findByIdAndDelete(listing.book);
-    }
-
+    await BookListing.findByIdAndDelete(req.params.id);
     res.json({ message: "Listing deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// 🔥 GET SINGLE LISTING (for product page)
 export const getBookById = async (req, res) => {
   try {
     const listing = await BookListing.findById(req.params.id)
       .populate("book")
-      .populate("seller", "name location profileImage latitude longitude"); // 🔥 added lat/lng for map
+      .populate("seller", "name location profileImage latitude longitude");
     if (!listing) return res.status(404).json({ message: "Not found" });
     res.json(listing);
   } catch (err) {
@@ -170,17 +142,13 @@ export const getBookById = async (req, res) => {
   }
 };
 
-// for listing books by category
 export const getBooksByCategory = async (req, res) => {
   try {
     const { categoryName } = req.params;
 
-    // find shared Book docs that match this category
     const books = await Book.find({ category: categoryName });
     const bookIds = books.map((b) => b._id);
 
-    // find seller listings pointing at those books, populated with book info
-    // (same shape as getSellerBooks / getBookById, so BookCard renders it the same way)
     const listings = await BookListing.find({ book: { $in: bookIds } })
       .populate("book")
       .populate("seller", "name location profileImage");

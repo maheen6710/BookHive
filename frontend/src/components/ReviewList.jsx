@@ -56,12 +56,10 @@ export default function ReviewList({ reviews, loading, showBookTitle = false }) 
                 })}
               </span>
             </div>
-
-            {/* ✅ Show book title only when used in Seller Dashboard */}
+            
             {showBookTitle && r.bookTitle && (
               <p className="rl-book-title">📖 {r.bookTitle}</p>
             )}
-
             <p className="rl-comment">{r.comment}</p>
           </div>
         ))}

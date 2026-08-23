@@ -1,6 +1,4 @@
 import dotenv from "dotenv";
-dotenv.config();
-
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
@@ -14,9 +12,10 @@ import orderRoutes from "./routes/orderRoutes.js";
 import locationRoutes from "./routes/locationRoutes.js";
 import imageSearchRoutes from "./routes/imageSearchRoutes.js";
 import searchHistoryRoutes from './routes/searchHistoryRoutes.js';
-
 import path from "path";
 import { fileURLToPath } from "url";
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,34 +27,25 @@ app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// routes
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);  
 app.use("/api/location", locationRoutes);
-
-//conversation routes
 app.use("/api/conversations", conversationRoutes);
-
-//order routes
 app.use("/api/orders", orderRoutes);
 app.use("/api/imagesearch", imageSearchRoutes);
-
 app.use('/api/search-history', searchHistoryRoutes);
 
-// test route
 app.get("/", (req, res) => {
-  res.send("API is running...finally 😭🔥");
+  res.send("API is running...finally!");
 });
 
-// DB connection
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected 😌"))
+  .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.log(err));
 
-// start server
 app.listen(5000, () => {
   console.log("Server running on port 5000 🚀");
 });

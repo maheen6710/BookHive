@@ -1,18 +1,14 @@
 import Conversation from "../models/Conversation.js";
 
-// POST /api/conversations/start
 const startConversation = async (req, res) => {
   try {
-    const { bookId, sellerId } = req.body; // 🔥 bookId is now optional
+    const { bookId, sellerId } = req.body;
     const buyerId = req.user.id;
 
     if (buyerId.toString() === sellerId) {
       return res.status(400).json({ message: "You can't chat with yourself." });
     }
 
-    // 🔥 if no bookId, look for an existing GENERAL conversation (book: null)
-    // between this buyer and seller, so clicking "chat" repeatedly doesn't
-    // spam new empty conversations
     const findQuery = {
       buyer: buyerId,
       seller: sellerId,
@@ -36,7 +32,6 @@ const startConversation = async (req, res) => {
   }
 };
 
-// GET /api/conversations/
 const getMyConversations = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -49,8 +44,8 @@ const getMyConversations = async (req, res) => {
     })
       .populate({
         path: "book",
-        select: "coverImage book", // listing fields
-        populate: { path: "book", select: "title" }, // 🔥 nested — actual Book title
+        select: "coverImage book",
+        populate: { path: "book", select: "title" }, 
       })
       .populate("buyer", "name profileImage")
       .populate("seller", "name profileImage")
@@ -62,7 +57,6 @@ const getMyConversations = async (req, res) => {
   }
 };
 
-// GET /api/conversations/:id
 const getConversation = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -70,7 +64,7 @@ const getConversation = async (req, res) => {
       .populate({
         path: "book",
         select: "coverImage price book",
-        populate: { path: "book", select: "title" }, // 🔥 nested
+        populate: { path: "book", select: "title" }, 
       })
       .populate("buyer", "name profileImage")
       .populate("seller", "name profileImage")
@@ -95,7 +89,6 @@ const getConversation = async (req, res) => {
   }
 };
 
-// POST /api/conversations/:id/message
 const sendMessage = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -122,7 +115,6 @@ const sendMessage = async (req, res) => {
   }
 };
 
-// DELETE /api/conversations/:id
 const deleteConversation = async (req, res) => {
   try {
     const userId = req.user.id;

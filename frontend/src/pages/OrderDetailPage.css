@@ -57,7 +57,6 @@
   font-family: "Cinzel", serif;
 }
 
-/* Book row */
 .od-book-row {
   display: flex;
   gap: 14px;
@@ -99,7 +98,6 @@
   margin-top: 6px;
 }
 
-/* Info grid */
 .od-info-grid {
   display: flex;
   flex-direction: column;
@@ -142,7 +140,6 @@
   font-size: 1rem !important;
 }
 
-/* Loading */
 .od-loading {
   display: flex;
   flex-direction: column;
@@ -181,7 +178,6 @@
   font-family: inherit;
 }
 
-/* badge-red for cancelled */
 .badge-red {
   background: rgba(220,38,38,0.15);
   color: #f87171;
@@ -208,7 +204,7 @@
 }
 
 .od-btn {
-   background: none;
+  background: none;
   border: 1.5px solid #0173ff ;
   margin-top: 20px;
   color: #ffff;
@@ -253,7 +249,6 @@
   align-items: center;
   margin-top: 24px;
 }
-/* ─── Toast ─── */
 .od-toast {
   position: fixed;
   bottom: 32px;
@@ -288,15 +283,13 @@
   to   { opacity: 0; }
 }
 
-/* ─── Custom Confirm Modal ─── */
-/* ─── Custom Confirm Modal ─── */
 .od-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);        /* reduced opacity (was 0.7) */
+  background: rgba(0, 0, 0, 0.5);       
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -306,7 +299,7 @@
 }
 .od-modal {
   background: #151929;
-  border: 1.5px solid #0173ff;            /* blue border */
+  border: 1.5px solid #0173ff;          
   border-radius: 16px;
   padding: 32px 36px;
   max-width: 440px;

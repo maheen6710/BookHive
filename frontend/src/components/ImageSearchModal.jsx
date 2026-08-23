@@ -3,15 +3,12 @@ import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import "./ImageSearchModal.css";
 
-// STAGES: "choose" -> "loading" -> "results"
 export default function ImageSearchModal({ onClose }) {
   const [stage, setStage] = useState("choose");
   const [previewUrl, setPreviewUrl] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const navigate = useNavigate();
-
   const uploadInputRef = useRef(null);
-
   const handleFileSelected = async (file) => {
     if (!file) return;
 
@@ -44,7 +41,6 @@ export default function ImageSearchModal({ onClose }) {
         return;
       }
 
-      // Nothing identified — show the "not found" state
       setErrorMsg(data.message || "Couldn't identify this book — try a clearer photo");
       setStage("results");
     } catch (err) {

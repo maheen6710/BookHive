@@ -1,7 +1,3 @@
-/* ═══════════════════════════════════════════
-   SellerProfilePage — dark BookHive theme
-   ═══════════════════════════════════════════ */
-
 .spp-page {
   min-height: 100vh;
   background: #0f1117;
@@ -26,7 +22,6 @@
 }
 .spp-back:hover { background: #2e3350; color: #fff; }
 
-/* ── layout ──────────────────────────────────── */
 .spp-layout {
   display: grid;
   grid-template-columns: 260px 1fr;
@@ -34,9 +29,6 @@
   align-items: start;
 }
 
-/* ══════════════════════════════════════════════
-   SIDEBAR
-   ══════════════════════════════════════════════ */
 .spp-sidebar {
   background: #151929;
   border: 1.5px solid #1e2437;
@@ -50,7 +42,6 @@
   top: 24px;
 }
 
-/* avatar */
 .spp-avatar-wrap {
   display: flex;
   flex-direction: column;
@@ -89,7 +80,6 @@
   margin: 0;
 }
 
-/* meta list */
 .spp-meta-list {
   width: 100%;
   display: flex;
@@ -112,7 +102,6 @@
   flex-shrink: 0;
 }
 
-/* rating box */
 .spp-rating-box {
   width: 100%;
   display: flex;
@@ -136,7 +125,6 @@
 .star-empty  { color: #2e3350; font-size: 0.85rem; }
 .spp-review-count { font-size: 0.72rem; color: #475569; }
 
-/* chat button */
 .spp-chat-btn {
   width: 100%;
   padding: 11px;
@@ -158,9 +146,6 @@
   transform: translateY(-2px);
 }
 
-/* ══════════════════════════════════════════════
-   MAIN CONTENT
-   ══════════════════════════════════════════════ */
 .spp-main {
   display: flex;
   flex-direction: column;
@@ -170,7 +155,6 @@
 .spp-section {
   margin: 0;
 }
-
 
 .spp-section-title {
   font-size: 1rem;
@@ -185,7 +169,6 @@
 
 .spp-none { color: #475569; font-size: 0.85rem; }
 
-/* ── books grid ──────────────────────────────── */
 .spp-books-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -227,7 +210,6 @@
   color: #2e3350;
 }
 
-/* condition badge */
 .spp-condition {
   position: absolute;
   top: 6px; left: 6px;
@@ -275,7 +257,6 @@
   margin: 0;
 }
 
-/* ── reviews ─────────────────────────────────── */
 .spp-reviews-list {
   display: flex;
   flex-direction: column;
@@ -327,7 +308,6 @@
   line-height: 1.5;
 }
 
-/* ── loading / not found ─────────────────────── */
 .spp-loading, .spp-notfound {
   min-height: 60vh;
   display: flex; flex-direction: column;
@@ -342,7 +322,6 @@
   animation: spp-spin 0.7s linear infinite;
 }
 
-/* Toast notification — floating message for chat/action feedback */
 .spp-toast {
   position: fixed;
   bottom: 32px;
@@ -359,9 +338,7 @@
   z-index: 1000;
   animation: sppToastIn 0.25s ease, sppToastOut 0.25s ease 2.6s;
 }
-/* ══════════ OWNER EDIT MODE ══════════ */
 
-/* small pencil next to a display value */
 .spp-avatar img {
   width: 100%;
   height: 100%;
@@ -384,7 +361,6 @@
   background: rgba(245, 158, 11, 0.1);
 }
 
-/* avatar edit badge */
 .spp-avatar-pencil {
   position: absolute;
   top: 6px;
@@ -409,7 +385,7 @@
   position: relative;
   display: inline-block;
 }
-/* name inline edit row */
+
 .spp-name-edit {
   display: flex;
   align-items: center;
@@ -417,7 +393,6 @@
   margin: 4px 0;
 }
 
-/* generic inline edit input + buttons, reused in meta rows and name */
 .spp-inline-input {
   flex: 1;
   padding: 6px 10px;
@@ -462,7 +437,6 @@
   gap: 8px;
 }
 
-/* Toast notification — floating message for chat/action feedback */
 .spp-toast {
   position: fixed;
   bottom: 32px;
@@ -480,17 +454,16 @@
   animation: sppToastIn 0.25s ease, sppToastOut 0.25s ease 2.6s;
 }
 
-/* ══════════ OWNER EDIT MODE ══════════ */
-
-/* GPS shop location capture row */
 .spp-location-capture {
   gap: 8px;
 }
+
 .spp-location-capture span {
   flex: 1;
   font-size: 0.85rem;
   color: var(--text-dim);
 }
+
 .spp-capture-btn {
   background: none;
   border: 1px solid var(--blue);
@@ -513,16 +486,11 @@
   cursor: not-allowed;
 }
 
-/* anchor point for the avatar pencil badge — must be relative or the
-   pencil's position:absolute escapes to the nearest OTHER positioned
-   ancestor instead of sitting on the avatar circle */
 .spp-avatar-wrap {
   position: relative;
   display: inline-block;
 }
 
-/* fix: profile pic img was rendering at full natural size instead of
-   filling the circular avatar container */
 .spp-avatar img {
   width: 100%;
   height: 100%;
@@ -530,7 +498,6 @@
   object-fit: cover;
 }
 
-/* small pencil next to a display value */
 .spp-pencil {
   background: none;
   border: none;
@@ -547,7 +514,6 @@
   background: rgba(245, 158, 11, 0.1);
 }
 
-/* avatar edit badge */
 .spp-avatar-pencil {
   position: absolute;
   top: 6px;
@@ -569,7 +535,6 @@
   transform: scale(1.1);
 }
 
-/* name inline edit row */
 .spp-name-edit {
   display: flex;
   align-items: center;
@@ -577,7 +542,6 @@
   margin: 4px 0;
 }
 
-/* generic inline edit input + buttons, reused in meta rows and name */
 .spp-inline-input {
   flex: 1;
   padding: 6px 10px;
@@ -622,7 +586,6 @@
   gap: 8px;
 }
 
-/* Toast notification — floating message for chat/action feedback */
 .spp-toast {
   position: fixed;
   bottom: 32px;
@@ -676,7 +639,6 @@
   border-radius: 8px; cursor: pointer; font-size: 0.85rem;
 }
 
-/* ── responsive ──────────────────────────────── */
 @media (max-width: 768px) {
   .spp-page   { padding: 20px 18px 60px; }
   .spp-layout { grid-template-columns: 1fr; }

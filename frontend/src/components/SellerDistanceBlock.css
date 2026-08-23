@@ -1,6 +1,4 @@
 .sdb-box {
-  /* sits in ONE grid slot, same as other .bpp-detail-item boxes —
-     matches the exact orange border style used there */
   background: #151929;
   border: 1.5px solid #f59e0b;
   border-radius: 10px;
@@ -49,7 +47,6 @@
   color: var(--text-dim, #64748b);
 }
 
-/* small map preview — matches the compact scale of the other boxes */
 .sdb-box .slm-wrap {
   height: 90px !important;
 }

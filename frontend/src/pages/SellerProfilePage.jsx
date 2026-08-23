@@ -10,7 +10,7 @@ export default function SellerProfilePage() {
   const navigate     = useNavigate();
 
   const [seller, setSeller]         = useState(null);
-  const [books, setBooks]           = useState([]); // array of LISTINGS now
+  const [books, setBooks]           = useState([]);
   const [reviews, setReviews]       = useState([]);
   const [loading, setLoading]       = useState(true);
   const [reviewsLoading, setReviewsLoading] = useState(true);
@@ -20,10 +20,10 @@ export default function SellerProfilePage() {
   // ── owner / edit state ──
   const currentUser = JSON.parse(localStorage.getItem("user") || "null");
   const isOwner = currentUser?._id === sellerId;
-  const [editingField, setEditingField] = useState(null); // "name" | "shopName" | "shopAddress" | "location" | null
+  const [editingField, setEditingField] = useState(null);
   const [fieldValue, setFieldValue]     = useState("");
   const [saving, setSaving]             = useState(false);
-  const [rawImageSrc, setRawImageSrc]   = useState(null); // controls cropper visibility
+  const [rawImageSrc, setRawImageSrc]   = useState(null); 
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -36,7 +36,6 @@ export default function SellerProfilePage() {
         setSeller(sellerRes.data);
         setBooks(booksRes.data);
 
-        // fetch reviews for all seller's listings in parallel
         const listingIds = booksRes.data.map((b) => b._id);
         const reviewRequests = listingIds.map((id) =>
           axios.get(`http://localhost:5000/api/reviews/${id}`)
@@ -93,7 +92,6 @@ export default function SellerProfilePage() {
     }
   }
 
-  // ── owner edit handlers ──
   function startEdit(field, currentValue) {
     setEditingField(field);
     setFieldValue(currentValue || "");
@@ -194,11 +192,11 @@ export default function SellerProfilePage() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setRawImageSrc(reader.result); // opens the cropper
+      setRawImageSrc(reader.result);
     };
     reader.readAsDataURL(file);
 
-    e.target.value = ""; // allow re-selecting the same file later
+    e.target.value = "";
   }
 
   async function handlePicCropComplete(croppedFile) {
@@ -249,7 +247,6 @@ export default function SellerProfilePage() {
     ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
     : null;
 
-  // small reusable inline-edit renderer for text fields
   function EditableField({ field, value, icon }) {
     if (editingField === field) {
       return (
@@ -320,7 +317,6 @@ export default function SellerProfilePage() {
             <span className="spp-verified"><i className="fas fa-store"></i> Seller</span>
           </div>
 
-          {/* Name — editable if owner */}
           {editingField === "name" ? (
             <div className="spp-name-edit">
               <input
@@ -381,7 +377,6 @@ export default function SellerProfilePage() {
             </div>
           </div>
 
-          {/* rating summary — only show if real reviews exist */}
           {avgRating && (
             <div className="spp-rating-box">
               <span className="spp-avg">{avgRating}</span>
@@ -396,7 +391,6 @@ export default function SellerProfilePage() {
             </div>
           )}
 
-          {/* only show chat button to non-owners */}
           {!isOwner && (
             <button className="spp-chat-btn" onClick={handleChatWithSeller}>
               <i className="fas fa-comment-dots"></i> Chat with Seller
@@ -405,10 +399,8 @@ export default function SellerProfilePage() {
 
         </aside>
 
-        {/* ── RIGHT: books + reviews ── */}
         <div className="spp-main">
 
-          {/* listed books */}
           <section className="spp-section">
             <h3 className="spp-section-title">
               <i className="fas fa-book-open"></i> Listed Books
@@ -452,7 +444,6 @@ export default function SellerProfilePage() {
             )}
           </section>
 
-          {/* reviews — real data, no dummy */}
           <section className="spp-section">
             <h3 className="spp-section-title">
               <i className="fas fa-star"></i> Reviews

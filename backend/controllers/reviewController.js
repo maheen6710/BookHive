@@ -1,6 +1,5 @@
 import Review from "../models/Review.js";
 
-// POST /api/reviews — finder adds a review
 export async function addReview(req, res) {
   const { bookId, rating, comment, username } = req.body;
 
@@ -28,7 +27,6 @@ export async function addReview(req, res) {
   }
 }
 
-// GET /api/reviews/:bookId — anyone can read reviews
 export async function getReviewsByBook(req, res) {
   try {
     const reviews = await Review.find({ bookId: req.params.bookId }).sort({

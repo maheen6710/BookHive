@@ -38,13 +38,11 @@ export default function SignupPage({ onLogin }) {
     setForm({ ...form, profilePic: e.target.files[0] });
   }
 
-  // Step 1 → Step 2
   function handleStep1(e) {
     e.preventDefault();
     setStep(2);
   }
 
-  // Step 2 → Step 3 (sellers) OR submit (buyers)
   function handleStep2(e) {
     e.preventDefault();
     setError("");
@@ -61,7 +59,6 @@ export default function SignupPage({ onLogin }) {
     }
   }
 
-  // Final submit (called from step 2 for buyers, step 3 for sellers)
   async function handleSubmit(e) {
     if (e) e.preventDefault();
     setError("");
@@ -79,13 +76,11 @@ export default function SignupPage({ onLogin }) {
           sellerId: form.sellerId,
           shopAddress: form.shopAddress,
           location: form.location,
-          // profilePic skipped for now, we'll add multer separately
         }
       );
 
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      // ── show custom success overlay instead of browser alert ──
       setShowSuccess(true);
       setTimeout(() => {
         onLogin(form.name, form.email, form.accountType);
@@ -103,7 +98,6 @@ export default function SignupPage({ onLogin }) {
 
         {error && <div className="auth-error">{error}</div>}
 
-        {/* ───── STEP 1: Pick Role ───── */}
         {step === 1 && (
           <form onSubmit={handleStep1} className="auth-form">
             <div className="form-group">
@@ -138,7 +132,6 @@ export default function SignupPage({ onLogin }) {
           </form>
         )}
 
-        {/* ───── STEP 2: Common Fields ───── */}
         {step === 2 && (
           <form onSubmit={handleStep2} className="auth-form">
             <div className="form-group">
@@ -224,7 +217,6 @@ export default function SignupPage({ onLogin }) {
           </form>
         )}
 
-        {/* ───── STEP 3: Seller-Only Fields ───── */}
         {step === 3 && (
           <form onSubmit={handleSubmit} className="auth-form">
 
@@ -250,18 +242,6 @@ export default function SignupPage({ onLogin }) {
                 required
               />
             </div>
-
-            {/* <div className="form-group">
-              <label>Seller ID</label>
-              <input
-                type="text"
-                name="sellerId"
-                placeholder="Enter your seller ID"
-                value={form.sellerId}
-                onChange={handleChange}
-                required
-              />
-            </div> */}
 
             <div className="form-group">
               <label>Shop Address</label>
@@ -320,7 +300,6 @@ export default function SignupPage({ onLogin }) {
         </p>
       </div>
 
-      {/* ── SUCCESS OVERLAY ── */}
       {showSuccess && (
         <div className="signup-success-overlay">
           <div className="signup-success-card">

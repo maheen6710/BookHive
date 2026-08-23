@@ -19,7 +19,7 @@ export const signup = async (req, res) => {
 
     const user = new User({
       name,
-      username,       // only sellers will send this, buyers send undefined (schema allows it)
+      username,      
       email,
       password: hashedPassword,
       role,

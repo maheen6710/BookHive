@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   password: {
   type: String,
   select: false
-},
+  },
   role: {
     type: String,
     enum: ["seller", "finder"],
@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema({
   location: String,
   latitude: Number,
   longitude: Number,
-
   profileImage: String,
 preferences: {
   emailNotifications: { type: Boolean, default: true }

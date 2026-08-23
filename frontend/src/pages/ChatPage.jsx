@@ -10,11 +10,8 @@ const ChatPage = ({ id, onBack }) => {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const bottomRef = useRef(null);
-
-  // ── modal & toast state ──
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "" });
-
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -94,7 +91,6 @@ const ChatPage = ({ id, onBack }) => {
     }
   };
 
-  // ── NO window.confirm here ──
   const handleDelete = openDeleteModal;
 
   if (loading) return <div className="chat-loading">Loading conversation...</div>;
@@ -150,12 +146,10 @@ const ChatPage = ({ id, onBack }) => {
         </button>
       </form>
 
-      {/* ── TOAST ── */}
       {toast.show && (
         <div className="chat-toast">{toast.message}</div>
       )}
 
-      {/* ── DELETE MODAL ── */}
       {deleteModalOpen && (
         <div className="chat-modal-overlay" onClick={closeDeleteModal}>
           <div className="chat-modal" onClick={(e) => e.stopPropagation()}>

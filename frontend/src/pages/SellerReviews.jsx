@@ -19,13 +19,11 @@ export default function SellerReviews() {
       if (!user?._id) return;
 
       try {
-        // Step 1: get all seller's books
         const booksRes = await axios.get(
           `http://localhost:5000/api/books/seller/${user._id}`
         );
         const books = booksRes.data;
 
-        // Step 2: for each book, fetch its reviews
         const reviewPromises = books.map((book) =>
           axios
             .get(`http://localhost:5000/api/reviews/${book._id}`)
@@ -36,12 +34,11 @@ export default function SellerReviews() {
                 bookTitle: book.book?.title,
               }))
             )
-            .catch(() => []) // if one book fails, don't break everything
+            .catch(() => []) 
         );
 
         const results = await Promise.all(reviewPromises);
 
-        // Step 3: flatten into one array, newest first
         const combined = results
           .flat()
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

@@ -41,7 +41,6 @@ export default function SearchHistoryPage() {
     }
   };
 
-  // ── updated clearAll: no confirm, direct delete ──
   const clearAll = async () => {
     try {
       const token = localStorage.getItem('token');

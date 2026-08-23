@@ -9,12 +9,10 @@ export default function SearchResultsPage() {
   const [searchParams] = useSearchParams();
   const query          = searchParams.get("q") || "";
   const navigate       = useNavigate();
-
-  const [results, setResults]   = useState([]); // array of LISTINGS
+  const [results, setResults]   = useState([]);
   const [loading, setLoading]   = useState(false);
   const [searched, setSearched] = useState(false);
   const [showMap, setShowMap]   = useState(false);
-
   const { location: finderLocation, status: geoStatus, error: geoError } = useGeolocation();
 
   useEffect(() => {
@@ -30,7 +28,6 @@ export default function SearchResultsPage() {
       if (finderLocation) {
         params.lat = finderLocation.lat;
         params.lng = finderLocation.lng;
-        // no radiusKm — backend returns everything, sorted nearest-first
       }
 
       const res = await axios.get("http://localhost:5000/api/books", { params });
@@ -49,7 +46,6 @@ export default function SearchResultsPage() {
     return map[condition] || "";
   }
 
-  // build the seller list for the map from current results
   const sellersForMap = results
     .filter((l) => l.seller?.latitude != null && l.seller?.longitude != null)
     .map((l) => ({

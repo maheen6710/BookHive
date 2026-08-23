@@ -8,18 +8,13 @@ export default function Settings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
-  // password state
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordLoading, setPasswordLoading] = useState(false);
-
-  // preferences state
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [prefLoading, setPrefLoading] = useState(false);
 
-  // fetch current user preferences on mount
   useEffect(() => {
     async function fetchPrefs() {
       try {
@@ -44,7 +39,6 @@ export default function Settings() {
     fetchPrefs();
   }, [navigate]);
 
-  // handle password change
   async function handlePasswordChange(e) {
     e.preventDefault();
     setError("");
@@ -78,7 +72,6 @@ export default function Settings() {
     }
   }
 
-  // handle preference toggle
   async function handlePrefChange(e) {
     const newValue = e.target.checked;
     setEmailNotifications(newValue);

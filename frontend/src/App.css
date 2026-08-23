@@ -1,36 +1,29 @@
-/* ===== CSS Variables (Dark Animetic Theme) ===== */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Nunito:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Core blues replacing orange */
   --blue: #3b82f6;
   --blue-bright: #60a5fa;
   --blue-glow: #2563eb;
   --blue-hover: #1d4ed8;
 
-  /* Golden hover effects */
   --gold: #f59e0b;
   --gold-bright: #fbbf24;
   --gold-glow: #d97706;
 
-  /* Dark backgrounds */
-  --bg-void: #020617;         /* deepest black */
-  --bg-deep: #0a0f1e;         /* main bg navy */
-  --bg-surface: #0f172a;      /* card/panel bg */
-  --bg-elevated: #1e293b;     /* hover/active surface */
-  --bg-overlay: #334155;      /* borders, dividers */
+  --bg-void: #020617;         
+  --bg-deep: #0a0f1e;         
+  --bg-surface: #0f172a;    
+  --bg-elevated: #1e293b;    
+  --bg-overlay: #334155;      
 
-  /* Text */
   --white: #f8fafc;
   --text-primary: #e2e8f0;
   --text-muted: #94a3b8;
   --text-dim: #64748b;
 
-  /* Borders */
   --border: #1e293b;
   --border-bright: #334155;
 
-  /* Shadows — now glow-based */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 8px rgba(59, 130, 246, 0.05);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.08);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 40px rgba(59, 130, 246, 0.12);
@@ -40,14 +33,12 @@
   --radius: 10px;
   --radius-sm: 6px;
 
-  /* Legacy compat aliases (so you don't have to rename everything) */
   --orange: var(--blue);
   --orange-hover: var(--blue-hover);
   --gray-bg: var(--bg-elevated);
   --text-dark: var(--text-primary);
 }
 
-/* ===== Reset & Base ===== */
 * {
   margin: 0;
   padding: 0;
@@ -97,7 +88,6 @@ textarea::placeholder {
   opacity: 1;
 }
 
-/* Kill browser autofill white flash globally */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -122,14 +112,12 @@ main {
   flex: 1;
 }
 
-/* ===== Shared / Reusable ===== */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 16px;
 }
 
-/* ===== Primary Button — Electric Blue with glow ===== */
 .btn-orange {
   background: linear-gradient(135deg, var(--blue) 0%, var(--blue-glow) 100%);
   color: #ffffff;
@@ -149,7 +137,6 @@ main {
   color: #0f172a;
 }
 
-/* ===== Outline Button ===== */
 .btn-outline {
   background: transparent;
   border: 1px solid #3b82f6;
@@ -167,7 +154,6 @@ main {
   background: rgba(245, 158, 11, 0.05);
 }
 
-/* ===== Section Title ===== */
 .section-title {
   font-size: 1.4rem;
   font-weight: 800;

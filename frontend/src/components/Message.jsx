@@ -1,6 +1,5 @@
 import "./Message.css";
 
-// Renders a single chat bubble. Parent decides isMine (needs currentUser).
 const Message = ({ msg, isMine }) => {
   return (
     <div className={`chat-bubble-wrap ${isMine ? "mine" : "theirs"}`}>

@@ -7,13 +7,9 @@ export default function WishlistPage() {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading]   = useState(true);
   const navigate                = useNavigate();
-
-  // ── modal state ──
   const [modalOpen, setModalOpen] = useState(false);
   const [modalBookTitle, setModalBookTitle] = useState("");
   const [modalListingId, setModalListingId] = useState(null);
-
-  // ── toast state ──
   const [toast, setToast] = useState({ show: false, message: "" });
 
   useEffect(() => {
@@ -34,14 +30,12 @@ export default function WishlistPage() {
     }
   }
 
-  // ── open modal with book info ──
   function openRemoveModal(listingId, bookTitle) {
     setModalListingId(listingId);
     setModalBookTitle(bookTitle || "this book");
     setModalOpen(true);
   }
 
-  // ── confirm removal ──
   async function confirmRemove() {
     if (!modalListingId) return;
     try {
@@ -60,13 +54,11 @@ export default function WishlistPage() {
     }
   }
 
-  // ── close modal ──
   function closeModal() {
     setModalOpen(false);
     setModalListingId(null);
   }
 
-  // ── show toast ──
   function showToast(message) {
     setToast({ show: true, message });
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
@@ -164,14 +156,12 @@ export default function WishlistPage() {
         </div>
       )}
 
-      {/* ── TOAST ── */}
       {toast.show && (
         <div className="wl-toast">
           {toast.message}
         </div>
       )}
 
-      {/* ── CONFIRM MODAL ── */}
       {modalOpen && (
         <div className="wl-modal-overlay" onClick={closeModal}>
           <div className="wl-modal" onClick={(e) => e.stopPropagation()}>

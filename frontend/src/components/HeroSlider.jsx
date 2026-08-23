@@ -13,19 +13,16 @@ const slides = [
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
 
-  // Auto-advance every 3 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 3000);
 
-    // Cleanup: clears interval when component unmounts
     return () => clearInterval(timer);
   }, []);
 
   return (
     <div className="slider-container">
-      {/* Slides wrapper — shifts left/right via transform */}
       <div
         className="slider-track"
         style={{ transform: `translateX(-${current * 100}%)` }}
@@ -39,7 +36,6 @@ export default function HeroSlider() {
         ))}
       </div>
 
-      {/* Dot navigation */}
       <div className="slider-dots">
         {slides.map((_, i) => (
           <button

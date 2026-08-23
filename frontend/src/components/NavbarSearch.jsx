@@ -5,7 +5,7 @@ import { FaCamera } from "react-icons/fa";
 import ImageSearchModal from "./ImageSearchModal";
 import "./NavbarSearch.css";
 
-export default function NavbarSearch({ user }) {  // ✅ added user prop
+export default function NavbarSearch({ user }) { 
   const [query, setQuery]         = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading]     = useState(false);
@@ -16,7 +16,6 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
   const debounceRef = useRef(null);
   const navigate    = useNavigate();
 
-  // close dropdown when clicking outside the search bar
   useEffect(() => {
     function onOutside(e) {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target))
@@ -26,9 +25,8 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
     return () => document.removeEventListener("mousedown", onOutside);
   }, []);
 
-  // ── save search history ──
   async function saveSearchQuery(queryStr) {
-    if (!user || user.role !== "finder") return; // only finders
+    if (!user || user.role !== "finder") return;
     const token = localStorage.getItem("token");
     if (!token) return;
 
@@ -39,12 +37,10 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
         { headers: { Authorization: `Bearer ${token}` } }
       );
     } catch (err) {
-      // non‑critical – just log
       console.error("Failed to save search history:", err);
     }
   }
 
-  // debounced typing handler — waits 300ms before hitting the API
   function handleChange(e) {
     const val = e.target.value;
     setQuery(val);
@@ -59,7 +55,6 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
     debounceRef.current = setTimeout(() => fetchSuggestions(val.trim()), 300);
   }
 
-  // calls the /api/books/suggestions endpoint — returns unique title strings
   async function fetchSuggestions(term) {
     try {
       setLoading(true);
@@ -76,11 +71,10 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
     }
   }
 
-  // clicking a suggestion fills the input and navigates to results page
   function handleSelect(title) {
     setQuery(title);
     setShowDrop(false);
-    saveSearchQuery(title); // ✅ save before navigation
+    saveSearchQuery(title); 
     navigate(`/search?q=${encodeURIComponent(title)}`);
   }
 
@@ -88,13 +82,12 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
     if (e.key === "Enter" && query.trim()) {
       setShowDrop(false);
       const q = query.trim();
-      saveSearchQuery(q); // ✅ save before navigation
+      saveSearchQuery(q);
       navigate(`/search?q=${encodeURIComponent(q)}`);
     }
     if (e.key === "Escape") setShowDrop(false);
   }
 
-  // bolds the matched part of the title
   function highlightMatch(title) {
     const lc  = title.toLowerCase();
     const qt  = query.toLowerCase().trim();
@@ -111,8 +104,6 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
 
   return (
     <div className="ns-wrapper" ref={wrapperRef}>
-
-      {/* search input + button */}
       <div className="ns-input-row">
         <input
           className="ns-input"
@@ -130,15 +121,13 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
             if (query.trim()) {
               setShowDrop(false);
               const q = query.trim();
-              saveSearchQuery(q); // ✅ save before navigation
+              saveSearchQuery(q);
               navigate(`/search?q=${encodeURIComponent(q)}`);
             }
           }}
         >
           <i className="fas fa-search"></i>
         </button>
-
-        {/* camera icon for image search */}
         <button
           className="ns-camera-btn"
           type="button"
@@ -150,7 +139,6 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
         </button>
       </div>
 
-      {/* dropdown suggestions */}
       {showDrop && (
         <div className="ns-dropdown">
 
@@ -178,7 +166,6 @@ export default function NavbarSearch({ user }) {  // ✅ added user prop
         </div>
       )}
 
-      {/* image search popup */}
       {showImageSearch && (
         <ImageSearchModal onClose={() => setShowImageSearch(false)} />
       )}

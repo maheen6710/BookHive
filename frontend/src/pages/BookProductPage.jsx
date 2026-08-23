@@ -38,7 +38,6 @@ useEffect(() => {
           setWishlisted(alreadySaved);
         } catch (wlErr) {
           console.warn("Wishlist check failed:", wlErr.response?.status);
-          // silently fail — user just won't see wishlisted state
         }
       }
 
@@ -157,10 +156,7 @@ function showMessage(msg) {
 
   return (
     <div className="bpp-page">
-
       <div className="bpp-layout">
-
-        {/* LEFT */}
         <div className="bpp-left">
           <div className="bpp-cover-wrap">
             {book.coverImage ? (
@@ -193,7 +189,6 @@ function showMessage(msg) {
           </div>
         </div>
 
-        {/* RIGHT */}
         <div className="bpp-right">
           <div className="bpp-hero">
             <h1 className="bpp-title">{book.book?.title}</h1>

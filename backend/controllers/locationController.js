@@ -1,9 +1,6 @@
 import User from "../models/User.js";
 import { haversineDistanceKm } from "../utils/geoUtils.js";
 
-// GET /api/location/nearby-sellers?lat=..&lng=..
-// Returns all sellers who have coordinates set, sorted nearest-first,
-// each annotated with distanceKm from the finder's current location.
 export const getNearbySellers = async (req, res) => {
   try {
     const { lat, lng } = req.query;
@@ -15,7 +12,6 @@ export const getNearbySellers = async (req, res) => {
     const finderLat = parseFloat(lat);
     const finderLng = parseFloat(lng);
 
-    // only sellers who actually have coordinates set can be located
     const sellers = await User.find({
       role: "seller",
       latitude: { $exists: true, $ne: null },

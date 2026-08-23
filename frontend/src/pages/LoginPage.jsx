@@ -35,14 +35,11 @@ export default function LoginPage({ setCurrentPage, onLogin }) {
       const user = res.data.user;
       const token = res.data.token;
 
-      // store token + user
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-     // send data to parent
       onLogin(user.name, user.email, user.role);
 
-    // redirect back to where they were trying to go
       navigate(from);
 
     } catch (err) {

@@ -20,8 +20,6 @@ export default function SellerDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-
-  // ── modal state for book deletion ──
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [bookToDelete, setBookToDelete] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -60,7 +58,6 @@ export default function SellerDashboard() {
     }
   };
 
-  // Read tab from URL
   useEffect(() => {
     const tab = searchParams.get("tab");
     if (tab === "orders") setActiveNav("orders");
@@ -71,14 +68,12 @@ export default function SellerDashboard() {
     }
   }, [searchParams]);
 
-  // Initial data fetch
   useEffect(() => {
     fetchBooks();
     fetchOrders();
   }, []);
 
-  // Read tab from URL (fully synced both ways — back button works)
-useEffect(() => {
+  useEffect(() => {
   const tab = searchParams.get("tab");
   const convoId = searchParams.get("convo");
 
@@ -105,19 +100,17 @@ useEffect(() => {
 
   setActiveChatId(null);
 }, [searchParams]);
-  // ── show toast ──
+  
   function showToast(message) {
     setToast({ show: true, message });
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   }
 
-  // ── open delete modal ──
   function openDeleteModal(bookId) {
     setBookToDelete(bookId);
     setDeleteModalOpen(true);
   }
 
-  // ── confirm delete ──
   async function confirmDelete() {
     if (!bookToDelete) return;
     setDeleteLoading(true);
@@ -138,7 +131,6 @@ useEffect(() => {
     }
   }
 
-  // ── close modal ──
   function closeDeleteModal() {
     setDeleteModalOpen(false);
     setBookToDelete(null);
@@ -149,7 +141,6 @@ useEffect(() => {
     setActiveNav("edit-book");
   }
 
-  // ── removed window.confirm, now using modal ──
   function handleDelete(bookId) {
     openDeleteModal(bookId);
   }

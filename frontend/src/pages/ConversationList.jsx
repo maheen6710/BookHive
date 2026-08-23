@@ -3,15 +3,11 @@ import axios from "axios";
 import { FaTrashAlt } from "react-icons/fa";
 import "./ConversationList.css";
 
-// ✅ onSelectConvo prop — called when user clicks a convo row
 const ConversationList = ({ onSelectConvo }) => {
   const [convos, setConvos] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // ── modal & toast state ──
-  const [deleteTarget, setDeleteTarget] = useState(null); // convoId pending deletion
+  const [deleteTarget, setDeleteTarget] = useState(null); 
   const [toast, setToast] = useState({ show: false, message: "" });
-
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -37,7 +33,6 @@ const ConversationList = ({ onSelectConvo }) => {
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   }
 
-  // ── opens modal instead of window.confirm ──
   const handleDelete = (e, convoId) => {
     e.stopPropagation();
     setDeleteTarget(convoId);
@@ -76,7 +71,6 @@ const ConversationList = ({ onSelectConvo }) => {
       ) : (
         <div className="cl-list">
           {convos.map((convo) => {
-            // 🔥 guard against missing/deleted buyer or seller so it never crashes
             if (!convo.buyer || !convo.seller) return null;
 
             const isBuyer = convo.buyer._id === currentUser._id;
@@ -87,7 +81,7 @@ const ConversationList = ({ onSelectConvo }) => {
               <div
                 key={convo._id}
                 className="cl-item"
-                onClick={() => onSelectConvo(convo._id)} // ✅ uses prop instead of navigate
+                onClick={() => onSelectConvo(convo._id)}
               >
                 <div className="cl-avatar">
                   {otherUser.profileImage ? (
@@ -131,10 +125,8 @@ const ConversationList = ({ onSelectConvo }) => {
         </div>
       )}
 
-      {/* ── TOAST ── */}
       {toast.show && <div className="cl-toast">{toast.message}</div>}
 
-      {/* ── DELETE MODAL ── */}
       {deleteTarget && (
         <div className="cl-modal-overlay" onClick={closeDeleteModal}>
           <div className="cl-modal" onClick={(e) => e.stopPropagation()}>

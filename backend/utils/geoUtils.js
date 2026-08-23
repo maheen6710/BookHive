@@ -1,10 +1,6 @@
-/**
- * Haversine formula — great-circle distance between two lat/lng points, in km.
- * Used to compute "X km away" between a finder and a seller's shop location.
- */
 export function haversineDistanceKm(lat1, lon1, lat2, lon2) {
   const toRad = (deg) => (deg * Math.PI) / 180;
-  const R = 6371; // Earth's radius in km
+  const R = 6371;
 
   const dLat = toRad(lat2 - lat1);
   const dLon = toRad(lon2 - lon1);

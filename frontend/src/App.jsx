@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate  } from "react-router-dom";
-
-
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
@@ -40,7 +38,6 @@ function AppContent() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  //  login handler
   function handleLogin(name, email, accountType, from) {
     const newUser = {
       name: name || email.split("@")[0],
@@ -50,7 +47,6 @@ function AppContent() {
 
     setUser(newUser);
 
-    // if came from a specific page, go back there
     if (from && from !== "/") {
       navigate(from);
     } else if (accountType === "seller") {
@@ -101,7 +97,6 @@ function AppContent() {
         </Routes>
       </main>
 
-      {/* hide footer in dashboards */}
      {!["/login", "/signup", "/buyerdashboard"].includes(location.pathname) && (
   <Footer />
 )}

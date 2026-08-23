@@ -247,7 +247,7 @@
   border-radius: 50%;
   animation: wl-spin 0.7s linear infinite;
 }
-/* ─── Toast ─── */
+
 .wl-toast {
   position: fixed;
   bottom: 32px;
@@ -274,8 +274,6 @@
   to   { opacity: 0; }
 }
 
-/* ─── Custom Confirm Modal ─── */
-/* ─── Custom Confirm Modal ─── */
 .wl-modal-overlay {
   position: fixed;
   top: 0;

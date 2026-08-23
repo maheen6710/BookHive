@@ -11,7 +11,6 @@ export default function HomePage({ setCurrentPage, user }) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  //  Fetch listings from backend
    useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -36,7 +35,6 @@ export default function HomePage({ setCurrentPage, user }) {
     <div className="home-page">
       <HeroSlider />
 
-      {/* REAL BOOKS FROM DATABASE */}
       <section className="container section">
         <h2 className="section-title">Available Books</h2>
 
@@ -61,7 +59,7 @@ export default function HomePage({ setCurrentPage, user }) {
           )}
         </div>
       </section>
-{/* LOGIN CARDS */}<section className="container section">
+      <section className="container section">
   {!user && <h2 className="section-title">Get Started</h2>}
   
   <div className="login-cards">

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import BookCard from "../components/BookCard"; // 🔥 adjust path/name if your card component is named differently
+import BookCard from "../components/BookCard";
 import "./CategoryPage.css";
 
 export default function CategoryPage() {

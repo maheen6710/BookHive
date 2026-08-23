@@ -9,7 +9,6 @@
   border-right: 1px solid #1e2a3a;
 }
 
-/* ---- Header ---- */
 .chat-header {
   display: flex;
   align-items: center;
@@ -107,7 +106,6 @@
   color: #fff;
 }
 
-/* ---- Messages Area ---- */
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -135,7 +133,6 @@
   font-size: 0.9rem;
 }
 
-/* ---- Input Area ---- */
 .chat-input-area {
   display: flex;
   gap: 10px;
@@ -187,7 +184,6 @@
   transform: none;
 }
 
-/* ---- Loading ---- */
 .chat-loading {
   display: flex;
   align-items: center;
@@ -197,7 +193,6 @@
   font-size: 0.95rem;
 }
 
-/* ---- Toast ---- */
 .chat-toast {
   position: fixed;
   bottom: 32px;
@@ -224,7 +219,6 @@
   to   { opacity: 0; }
 }
 
-/* ---- Delete Confirmation Modal ---- */
 .chat-modal-overlay {
   position: fixed;
   top: 0;

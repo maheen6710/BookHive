@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom"; // changed
+import { useNavigate, useSearchParams } from "react-router-dom";
 import BookCard from "../components/BookCard";
 import WishlistPage from "./WishlistPage";
 import ConversationList from "../pages/ConversationList";
@@ -13,12 +13,11 @@ export default function BuyerDashboard() {
   const [books, setBooks] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams(); // new
+  const [searchParams] = useSearchParams(); 
 
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
 
-  // Read tab from URL query params
   useEffect(() => {
     const tab = searchParams.get("tab");
     if (tab === "orders") setActiveNav("orders");
@@ -27,10 +26,8 @@ export default function BuyerDashboard() {
       const convoId = searchParams.get("convo");
       if (convoId) setActiveChatId(convoId);
     }
-    // if tab is not set, default to "discover" (already the default)
   }, [searchParams]);
 
-  // Fetch books (same as before)
   useEffect(() => {
     fetch("http://localhost:5000/api/books")
       .then((res) => res.json())
@@ -38,7 +35,6 @@ export default function BuyerDashboard() {
       .catch((err) => console.error("Failed to fetch books:", err));
   }, []);
 
-  // Fetch orders (same as before)
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -51,7 +47,6 @@ export default function BuyerDashboard() {
     }
   }, []);
 
-  // Read tab from URL query params (now fully synced both ways — back button works)
 useEffect(() => {
   const tab = searchParams.get("tab");
   const convoId = searchParams.get("convo");
@@ -72,7 +67,7 @@ useEffect(() => {
     case "conversations":
       setActiveNav("conversations");
       setActiveChatId(convoId || null);
-      return; // skip the chat reset below
+      return; 
     default:
       setActiveNav("discover");
   }
@@ -82,7 +77,6 @@ useEffect(() => {
 
   return (
     <div className="dashboard-layout">
-      {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-header">
           <h2>Finder Dashboard</h2>
@@ -102,7 +96,6 @@ useEffect(() => {
               onClick={() => {
                 setActiveNav(item.key);
                 setActiveChatId(null);
-                // Optionally update URL when user clicks tab (optional)
                 navigate(`?tab=${item.key}`);
               }}
             >
@@ -113,7 +106,6 @@ useEffect(() => {
         </nav>
       </aside>
 
-      {/* Main content */}
       <div className="dashboard-main">
         {activeNav === "discover" && (
           <>

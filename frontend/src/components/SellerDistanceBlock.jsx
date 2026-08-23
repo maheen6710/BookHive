@@ -2,13 +2,6 @@ import SellerLocationMap from "./SellerLocationMap";
 import useGeolocation from "../hooks/useGeolocation";
 import "./SellerDistanceBlock.css";
 
-/**
- * Shared "distance to seller + map" block. Used on BookProductPage (single
- * listing) and SellerProfilePage (seller's own shop location).
- *
- * Props:
- *  - seller: { _id, name, latitude, longitude, shopAddress? }
- */
 export default function SellerDistanceBlock({ seller }) {
   const { location: finderLocation, status: geoStatus } = useGeolocation();
 
@@ -16,8 +9,6 @@ export default function SellerDistanceBlock({ seller }) {
 
   function openInGoogleMaps() {
     if (!hasSellerLocation) return;
-    // destination-only link if we don't have finder's location, or full
-    // directions (origin + destination) if we do
     const destination = `${seller.latitude},${seller.longitude}`;
     const url = finderLocation
       ? `https://www.google.com/maps/dir/?api=1&origin=${finderLocation.lat},${finderLocation.lng}&destination=${destination}`

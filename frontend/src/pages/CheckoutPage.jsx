@@ -6,15 +6,12 @@ import "./CheckoutPage.css";
 export default function CheckoutPage() {
   const { bookId }  = useParams();
   const navigate    = useNavigate();
-
-  const [book, setBook]       = useState(null); // this is actually the LISTING now
+  const [book, setBook]       = useState(null); 
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
   const [message, setMessage] = useState("");
-const [phoneError, setPhoneError] = useState("");
-
+  const [phoneError, setPhoneError] = useState("");
   const currentUser = JSON.parse(localStorage.getItem("user"));
-
   const [form, setForm] = useState({
     name:    currentUser?.name || "",
     phone:   "",
@@ -22,7 +19,6 @@ const [phoneError, setPhoneError] = useState("");
     paymentMethod: "COD",
   });
 
-  // fetch book details
   useEffect(() => {
     async function fetchBook() {
       try {
@@ -131,7 +127,6 @@ const [phoneError, setPhoneError] = useState("");
           </div>
         </div>
 
-        {/* RIGHT — Buyer Details Form */}
         <div className="co-form">
           <h3 className="co-section-title">Delivery Details</h3>
 

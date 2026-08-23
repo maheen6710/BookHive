@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
 
-/**
- * Requests the browser's geolocation on mount. Returns:
- *  - location: { lat, lng } | null
- *  - status: "loading" | "granted" | "denied" | "unsupported"
- *  - error: string | null
- */
 export default function useGeolocation() {
   const [location, setLocation] = useState(null);
   const [status, setStatus] = useState("loading");

@@ -2,14 +2,12 @@ import mongoose from "mongoose";
 
 const bookListingSchema = new mongoose.Schema(
   {
-    // 🔥 link to the actual book (title/author/edition/category live there now)
     book: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Book",
       required: true,
     },
 
-    // 🔥 link listing to seller
     seller: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

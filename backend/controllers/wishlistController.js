@@ -1,6 +1,5 @@
 import Wishlist from "../models/Wishlist.js";
 
-// GET /api/wishlist — get current buyer's wishlist
 export const getWishlist = async (req, res) => {
   try {
     if (req.user.role !== "finder") {
@@ -10,7 +9,7 @@ export const getWishlist = async (req, res) => {
     const wishlist = await Wishlist.findOne({ user: req.user.id }).populate({
       path: "listings",
       populate: [
-        { path: "book" },                         // 🔥 nested — actual Book (title/author/etc)
+        { path: "book" },                        
         { path: "seller", select: "name location" },
       ],
     });
@@ -21,7 +20,6 @@ export const getWishlist = async (req, res) => {
   }
 };
 
-// POST /api/wishlist/:listingId — add a listing to wishlist
 export const addToWishlist = async (req, res) => {
   try {
     if (req.user.role !== "finder") {
@@ -48,7 +46,6 @@ export const addToWishlist = async (req, res) => {
   }
 };
 
-// DELETE /api/wishlist/:listingId — remove a listing from wishlist
 export const removeFromWishlist = async (req, res) => {
   try {
     if (req.user.role !== "finder") {

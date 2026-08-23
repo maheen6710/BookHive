@@ -1,6 +1,6 @@
 import express from "express";
 import protect from "../middleware/auth.js";
-import upload from "../middleware/upload.js"; // 🔥 same multer setup as book covers
+import upload from "../middleware/upload.js";
 import {
   getUserById,
   getMyProfile,
@@ -14,14 +14,10 @@ import {
 
 const router = express.Router();
 
-// 🔥 specific routes BEFORE the /:id catch-all, or "/me" gets swallowed as an id
 router.get("/me", protect, getMyProfile);
 router.put("/me", protect, upload.single("profileImage"), updateMyProfile);
 router.put("/me/location", protect, setShopLocation);
-
-// GET /api/users/:id — public profile view (used by SellerProfilePage)
 router.get("/:id", getUserById);
-
 router.put("/me/password", protect, changePassword);
 router.put("/me/preferences", protect, updatePreferences);
 

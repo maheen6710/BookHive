@@ -21,7 +21,7 @@ export default function AddBookForm({ onBookAdded, bookToEdit }) {
       ? `http://localhost:5000${bookToEdit.coverImage}`
       : null
   );
-  const [rawImageSrc, setRawImageSrc] = useState(null); // controls cropper visibility
+  const [rawImageSrc, setRawImageSrc] = useState(null); 
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState({});
 

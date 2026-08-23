@@ -25,7 +25,6 @@
   object-fit: contain;
 }
 
-/* Top row: logo + search + auth */
 .navbar-top {
   display: flex;
   align-items: center;
@@ -52,7 +51,6 @@
 }
 .logo-dark { color: var(--text-primary); }
 
-/* Auth / User area */
 .nav-actions { display: flex; align-items: center; }
 
 .auth-buttons {
@@ -143,7 +141,6 @@
   box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
 }
 
-/* Category menu */
 .category-menu {
   display: flex;
   gap: 24px;

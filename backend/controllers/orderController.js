@@ -1,7 +1,6 @@
 import Order from "../models/Order.js";
 import BookListing from "../models/BookListing.js";
 
-// ─── Place Order (buyer) ──────────────────────────────────────
 export async function placeOrder(req, res) {
   try {
     const { bookId, buyerDetails, paymentMethod } = req.body;
@@ -14,7 +13,7 @@ export async function placeOrder(req, res) {
     }
 
     if (req.user.id === listing.seller.toString()) {
-      return res.status(400).json({ message: "You cannot buy your own book." });
+      return res.status(400).json({ message: "This is your own book listing." });
     }
 
     const order = new Order({
@@ -35,7 +34,6 @@ export async function placeOrder(req, res) {
   }
 }
 
-// ─── Get Buyer Orders ─────────────────────────────────────────
 export async function getBuyerOrders(req, res) {
   try {
     const orders = await Order.find({ buyer: req.user.id })
@@ -53,7 +51,6 @@ export async function getBuyerOrders(req, res) {
   }
 }
 
-// ─── Get Seller Orders ────────────────────────────────────────
 export async function getSellerOrders(req, res) {
   try {
     const orders = await Order.find({ seller: req.user.id })
@@ -126,7 +123,6 @@ export async function cancelOrder(req, res) {
     const order = await Order.findById(req.params.orderId);
     if (!order) return res.status(404).json({ message: "Order not found." });
 
-    // Normalize buyer ID (it could be populated or just a string)
     const buyerId = order.buyer?._id ? order.buyer._id.toString() : order.buyer?.toString();
     if (!buyerId || buyerId !== req.user.id) {
       return res.status(403).json({ message: "Not authorized to cancel this order." });
@@ -147,7 +143,6 @@ export async function cancelOrder(req, res) {
   }
 }
 
-// ─── Delete Order (buyer or seller, delivered/cancelled only) ─
 export async function deleteOrder(req, res) {
   try {
     const order = await Order.findById(req.params.orderId);
@@ -155,7 +150,6 @@ export async function deleteOrder(req, res) {
 
     const userId = req.user.id;
 
-    // Normalize buyer/seller IDs
     const buyerId = order.buyer?._id ? order.buyer._id.toString() : order.buyer?.toString();
     const sellerId = order.seller?._id ? order.seller._id.toString() : order.seller?.toString();
 

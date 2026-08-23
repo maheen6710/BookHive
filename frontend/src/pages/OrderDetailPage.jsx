@@ -10,18 +10,13 @@ export default function OrderDetailPage() {
   const [loading, setLoading] = useState(true);
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
-
-  // ── custom modal state ──
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalMessage, setModalMessage] = useState("");
   const [modalConfirmText, setModalConfirmText] = useState("Confirm");
   const [modalCancelText, setModalCancelText] = useState("Cancel");
   const [onConfirm, setOnConfirm] = useState(null);
-
-  // ── toast state ──
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
-
   const currentUser = JSON.parse(localStorage.getItem("user") || "null");
 
   useEffect(() => {
@@ -42,13 +37,11 @@ export default function OrderDetailPage() {
     fetchOrder();
   }, [orderId]);
 
-  // ── helper: show toast ──
   function showToast(message, type = "success") {
     setToast({ show: true, message, type });
     setTimeout(() => setToast({ show: false, message: "", type: "" }), 4000);
   }
 
-  // ── helper: open confirm modal ──
   function openConfirmModal(title, message, confirmText, cancelText, onConfirmFn) {
     setModalTitle(title);
     setModalMessage(message);
@@ -68,15 +61,12 @@ export default function OrderDetailPage() {
     closeModal();
   }
 
-  // ── ROBUST buyer/seller ID checks ──
   const buyerId = order?.buyer?._id ? order.buyer._id.toString() : order?.buyer?.toString();
   const sellerId = order?.seller?._id ? order.seller._id.toString() : order?.seller?.toString();
   const currentUserId = currentUser?._id?.toString();
-
   const isBuyerOwner = currentUserId && buyerId === currentUserId;
   const isSellerOwner = currentUserId && sellerId === currentUserId;
 
-  // ── status update (seller) ──
   async function handleStatusChange(e) {
     const newStatus = e.target.value;
     setUpdatingStatus(true);
@@ -97,7 +87,6 @@ export default function OrderDetailPage() {
     }
   }
 
-  // ── cancel order (buyer) ──
   async function handleCancel() {
     setActionLoading(true);
     try {
@@ -117,7 +106,6 @@ export default function OrderDetailPage() {
     }
   }
 
-  // ── delete order (buyer/seller) ──
   async function handleDelete() {
     setActionLoading(true);
     try {
@@ -140,7 +128,6 @@ export default function OrderDetailPage() {
     }
   }
 
-  // ── wrapper: open confirm for cancel ──
   function promptCancel() {
     openConfirmModal(
       "Cancel Order",
@@ -151,7 +138,6 @@ export default function OrderDetailPage() {
     );
   }
 
-  // ── wrapper: open confirm for delete ──
   function promptDelete() {
     openConfirmModal(
       "Delete Order",
@@ -162,7 +148,6 @@ export default function OrderDetailPage() {
     );
   }
 
-  // ── handle "on the way" cancel attempt ──
   function handleOnTheWayCancel() {
     showToast("Can't cancel the order. The order is on its way.", "error");
   }
@@ -181,13 +166,11 @@ export default function OrderDetailPage() {
     </div>
   );
 
-  // ── NEW LOGIC for Cancel button ──
   const isCancellable = ["pending", "unavailable" ].includes(order.status);
   const showCancel = isBuyerOwner && !["delivered", "cancelled"].includes(order.status); // show for pending, on the way, unavailable
   const showDelete = (isBuyerOwner || isSellerOwner) && ["delivered", "cancelled"].includes(order.status);
   const showStatusDropdown = isSellerOwner && !["delivered", "cancelled"].includes(order.status);
 
-  // Determine cancel button handler and class
   let cancelHandler = null;
   let cancelDisabled = false;
   let cancelButtonClass = "od-btn od-btn-cancel";
@@ -197,7 +180,7 @@ export default function OrderDetailPage() {
     cancelButtonClass += " od-btn-cancel-active";
   } else {
     cancelHandler = handleOnTheWayCancel;
-    cancelButtonClass += " od-btn-cancel-disabled"; // will apply opacity
+    cancelButtonClass += " od-btn-cancel-disabled"; 
   }
 
   return (
@@ -207,7 +190,6 @@ export default function OrderDetailPage() {
       </h2>
 
       <div className="od-layout">
-        {/* Book Info */}
         <div className="od-card">
           <h3 className="od-card-title">📚 Book</h3>
           <div className="od-book-row">
@@ -229,7 +211,6 @@ export default function OrderDetailPage() {
           </div>
         </div>
 
-        {/* Buyer Info */}
         <div className="od-card">
           <h3 className="od-card-title">👤 Buyer Details</h3>
           <div className="od-info-grid">
@@ -251,8 +232,6 @@ export default function OrderDetailPage() {
             </div>
           </div>
         </div>
-
-        {/* Order Meta */}
         <div className="od-card">
           <h3 className="od-card-title">🧾 Order Info</h3>
           <div className="od-info-grid">
@@ -275,7 +254,6 @@ export default function OrderDetailPage() {
           </div>
         </div>
 
-        {/* Order Status */}
         <div className="od-card">
           <h3 className="od-card-title">📦 Order Status</h3>
           <div className="od-status-row">
@@ -337,14 +315,12 @@ export default function OrderDetailPage() {
         </div>
       </div>
 
-      {/* ── TOAST NOTIFICATION ── */}
       {toast.show && (
         <div className={`od-toast ${toast.type}`}>
           {toast.message}
         </div>
       )}
 
-      {/* ── CUSTOM CONFIRM MODAL ── */}
       {modalOpen && (
         <div className="od-modal-overlay" onClick={closeModal}>
           <div className="od-modal" onClick={(e) => e.stopPropagation()}>
